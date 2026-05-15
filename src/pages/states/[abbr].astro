@@ -15,53 +15,45 @@ if (!state) {
   return Astro.redirect("/states/");
 }
 
-const title = `${state.name} per diem (GSA CONUS hub)`;
-const description = `Explore General Services Administration (GSA) CONUS per diem context for ${state.name}: standard rate notes and locality list (data wiring in progress).`;
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: title,
-  description
-};
+const title = `${state.name} per diem rates (GSA CONUS)`;
+const description = `GSA CONUS per diem for ${state.name}: standard rate, high-cost localities, and calculator links.`;
+const calcHref = `/calculator/gsa/?state=${state.abbr}`;
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
-  <nav class="text-sm text-zinc-600">
-    <a class="underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900" href="/"
-      >Home</a
-    >
-    <span class="mx-2 text-zinc-400">/</span>
-    <a
-      class="underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
-      href="/states/">States</a
-    >
-    <span class="mx-2 text-zinc-400">/</span>
-    <span class="text-zinc-900">{state.name}</span>
+<BaseLayout title={title} description={description}>
+  <nav class="text-sm text-[var(--color-ink-muted)]">
+    <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
+    <span class="mx-2">/</span>
+    <a class="hover:text-[var(--color-primary)]" href="/states/">States</a>
+    <span class="mx-2">/</span>
+    <span class="text-[var(--color-ink)]">{state.name}</span>
   </nav>
 
-  <h1 class="mt-6 text-3xl font-semibold tracking-tight text-zinc-950">
-    {state.name} ({state.abbr})
+  <h1 class="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)]">
+    {state.name} per diem
   </h1>
-  <p class="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-700">
-    Hub page for GSA-listed localities in this state plus the CONUS <strong>standard</strong> rate
-    where no specific locality applies. The list and seasonal lodging amounts will be populated
-    from official cached data.
+  <p class="mt-3 max-w-2xl text-[var(--color-ink-muted)]">
+    GSA publishes a <strong>standard CONUS rate</strong> for {state.name} plus higher rates for
+    listed counties and cities. Use the calculator to pick a locality and see seasonal lodging.
   </p>
 
-  <div class="mt-8 rounded-lg border border-dashed border-zinc-300 bg-white p-6 text-sm text-zinc-700">
-    <p class="font-medium text-zinc-900">Next step (executor backlog)</p>
-    <p class="mt-2">
-      Render NSA rows for <span class="font-mono">{state.abbr}</span> from Supabase (synced from the
-      GSA Per Diem API) and link each row into the calculator with pre-filled destination context.
-    </p>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <a
+      href={calcHref}
+      class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[var(--color-primary-hover)]"
+      >Calculate for {state.abbr}</a
+    >
+    <a
+      href="/methodology/"
+      class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
+      >Methodology</a
+    >
   </div>
 
-  <p class="mt-8">
-    <a
-      href="/calculator/gsa/"
-      class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800"
-      >Open calculator</a
-    >
-  </p>
+  <div
+    class="mt-10 rounded-2xl border border-dashed border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 text-sm text-[var(--color-ink-muted)]"
+  >
+    Locality list for {state.abbr} appears here after GSA data sync. Open the calculator to search
+    all synced destinations for this state.
+  </div>
 </BaseLayout>

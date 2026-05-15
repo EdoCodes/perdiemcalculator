@@ -1,13 +1,14 @@
 # Project Status Board
 
 - [done] Scaffold Astro + React + Netlify + Supabase placeholders + CI — evidence: `npm run build` OK (55 pages), sitemap emitted when `PUBLIC_SITE_URL` is set.
-- [pending] Wire calculator island to rate data (GSA sync / Supabase schema)
-- [pending] Implement per-day GSA logic (FY, meals, first/last day)
+- [in_progress] Wire calculator island to rate data (Supabase schema + GSA sync pipeline)
+- [pending] Implement per-day GSA logic (FY, meals, first/last day) and connect it to the UI
 
 # Executor's Feedback or Assistance Requests
 
-- Awaiting your confirmation before picking up the next status-board item (rates wiring).
 - Set `PUBLIC_SITE_URL` in Netlify (and locally via `.env`) so canonical URLs and `@astrojs/sitemap` use your real domain.
+- Create a Supabase project and share (or add) `PUBLIC_SUPABASE_URL` + `PUBLIC_SUPABASE_ANON_KEY` in Netlify so the UI can read cached rates.
+- Register for a GSA Per Diem API key (free) so the sync script can import official data.
 
 # Lessons
 

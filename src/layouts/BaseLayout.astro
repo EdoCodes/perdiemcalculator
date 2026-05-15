@@ -1,18 +1,24 @@
 ---
 import "../styles/global.css";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 type Props = {
   title: string;
   description: string;
-  /** Optional JSON-LD object or array of objects (serialized as application/ld+json). */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  hero?: boolean;
 };
 
-const { title, description, jsonLd } = Astro.props;
+const { title, description, jsonLd, hero = false } = Astro.props;
 
 const canonical = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).href
   : new URL(Astro.url.pathname, Astro.url.origin).href;
+
+const navLink =
+  "text-sm font-medium text-[var(--color-ink-muted)] transition hover:text-[var(--color-ink)]";
+const navActive = "text-sm font-semibold text-[var(--color-primary)]";
+const path = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -26,51 +32,72 @@ const canonical = Astro.site
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    {
-      jsonLd ? (
-        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-      ) : null
-    }
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const dark =
+          stored === "dark" ||
+          (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) document.documentElement.classList.add("dark");
+      })();
+    </script>
+    {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}
   </head>
-  <body class="min-h-dvh bg-zinc-50 text-zinc-900 antialiased">
+  <body class:list={["min-h-dvh antialiased", hero ? "bg-mesh" : "bg-[var(--color-surface)]"]}>
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:shadow"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-[var(--color-surface-elevated)] focus:px-3 focus:py-2 focus:shadow"
       >Skip to content</a
     >
 
-    <header class="border-b border-zinc-200 bg-white">
-      <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4">
-        <a href="/" class="text-base font-semibold tracking-tight text-zinc-900">
-          Per diem calculator
+    <header class="glass sticky top-0 z-40 border-b border-[var(--color-border)]">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+        <a href="/" class="flex items-center gap-2.5">
+          <span
+            class="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--color-primary)] text-sm font-bold text-white shadow-md shadow-[var(--color-primary)]/30"
+            >PD</span
+          >
+          <span class="text-base font-bold tracking-tight text-[var(--color-ink)]">PerDiem</span>
         </a>
-        <nav class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-zinc-700">
-          <a href="/calculator/gsa/" class="hover:text-zinc-950">GSA calculator</a>
-          <a href="/methodology/" class="hover:text-zinc-950">Methodology</a>
-          <a href="/states/" class="hover:text-zinc-950">States</a>
+        <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <a
+            href="/calculator/gsa/"
+            class={path.startsWith("/calculator") ? navActive : navLink}>Calculator</a
+          >
+          <a href="/states/" class={path.startsWith("/states") ? navActive : navLink}>States</a>
+          <a href="/methodology/" class={path.startsWith("/methodology") ? navActive : navLink}
+            >Methodology</a
+          >
+          <ThemeToggle client:load />
         </nav>
       </div>
     </header>
 
-    <main id="main" class="mx-auto max-w-5xl px-4 py-10">
+    <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <slot />
     </main>
 
-    <footer class="border-t border-zinc-200 bg-white">
-      <div class="mx-auto max-w-5xl px-4 py-8 text-sm text-zinc-600">
-        <p>
-          This site is a planning aid. Reimbursement rules are governed by your agency and the
+    <footer class="border-t border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
+      <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-sm text-[var(--color-ink-muted)]">
+            Planning aid only · Rates from
+            <a
+              class="font-medium text-[var(--color-primary)] hover:underline"
+              href="https://www.gsa.gov/travel/plan-book/per-diem-rates">GSA</a
+            >
+            · Rules per
+            <a
+              class="font-medium text-[var(--color-primary)] hover:underline"
+              href="https://www.ecfr.gov/current/title-41/subtitle-F">FTR</a
+            >
+          </p>
           <a
-            class="text-zinc-900 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
-            href="https://www.ecfr.gov/current/title-41/subtitle-F"
-            >Federal Travel Regulation</a
-          >. Official CONUS rates are published by
-          <a
-            class="text-zinc-900 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
-            href="https://www.gsa.gov/travel/plan-book/per-diem-rates"
-            >GSA</a
-          >.
-        </p>
+            href="/calculator/gsa/"
+            class="text-sm font-semibold text-[var(--color-primary)] hover:underline"
+            >Open calculator →</a
+          >
+        </div>
       </div>
     </footer>
   </body>

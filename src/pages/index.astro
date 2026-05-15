@@ -4,7 +4,7 @@ import { US_STATES } from "../data/usStates";
 
 const title = "Federal GSA per diem calculator (CONUS)";
 const description =
-  "Estimate CONUS per diem totals using General Services Administration (GSA) lodging and meals & incidental expenses (M&IE) concepts, with state-by-state locality context.";
+  "Estimate CONUS per diem with official GSA lodging and M&IE rates, travel-day adjustments, and day-by-day breakdowns.";
 
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
 
@@ -12,57 +12,91 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Per diem calculator",
+    name: "PerDiem",
     url: siteUrl,
     description
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Per diem calculator",
-    url: siteUrl
   }
 ];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
-  <section class="space-y-4">
-    <h1 class="text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
-      Federal GSA per diem calculator
-    </h1>
-    <p class="max-w-2xl text-lg leading-relaxed text-zinc-700">
-      Build a fast, static-first utility for CONUS travel: state hub pages for discovery, a
-      dedicated calculator UI, and methodology written as real HTML for search and AI summaries.
-    </p>
-    <div class="flex flex-wrap gap-3 pt-2">
-      <a
-        href="/calculator/gsa/"
-        class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800"
-        >Open GSA calculator</a
+<BaseLayout title={title} description={description} jsonLd={jsonLd} hero>
+  <section class="relative overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-6 py-14 shadow-xl shadow-black/5 sm:px-12 sm:py-16">
+    <div class="relative z-10 max-w-2xl">
+      <p
+        class="inline-flex items-center rounded-full bg-[var(--color-primary-muted)] px-3 py-1 text-xs font-semibold text-[var(--color-primary)]"
       >
-      <a
-        href="/methodology/"
-        class="inline-flex items-center justify-center rounded-md border border-zinc-300 bg-white px-4 py-2 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50"
-        >Read methodology</a
-      >
+        Official GSA CONUS data
+      </p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight text-[var(--color-ink)] sm:text-5xl">
+        Per diem, calculated with precision
+      </h1>
+      <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
+        Seasonal lodging, M&IE tiers, travel-day rules, and meal deductions — in one modern
+        calculator built for federal travelers and contractors.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="/calculator/gsa/"
+          class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[var(--color-primary)]/30 transition hover:bg-[var(--color-primary-hover)]"
+          >Start calculating</a
+        >
+        <a
+          href="/methodology/"
+          class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-6 py-3 text-sm font-semibold text-[var(--color-ink)] transition hover:bg-[var(--color-surface-elevated)]"
+          >How it works</a
+        >
+      </div>
     </div>
   </section>
 
-  <section class="mt-14">
-    <h2 class="text-xl font-semibold text-zinc-950">Browse by state</h2>
-    <p class="mt-2 max-w-2xl text-sm text-zinc-600">
-      Each page is a lightweight hub for that state’s standard rate context and locality list
-      (data wiring comes next).
-    </p>
-    <ul class="mt-6 columns-1 gap-x-10 gap-y-2 sm:columns-2 md:columns-3">
+  <section class="mt-16 grid gap-6 sm:grid-cols-3">
+    {
+      [
+        {
+          title: "Real GSA rates",
+          body: "Localities, monthly lodging caps, and M&IE synced from the federal Per Diem API."
+        },
+        {
+          title: "FTR-aware options",
+          body: "75% travel days, meal deductions, optional 150% lodging display."
+        },
+        {
+          title: "Day-by-day clarity",
+          body: "Transparent breakdown for audits, vouchers, and trip planning."
+        }
+      ].map((item) => (
+        <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 shadow-sm">
+          <h2 class="font-semibold text-[var(--color-ink)]">{item.title}</h2>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">{item.body}</p>
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="mt-16">
+    <div class="flex items-end justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-bold text-[var(--color-ink)]">Browse by state</h2>
+        <p class="mt-1 text-sm text-[var(--color-ink-muted)]">
+          Open a state hub or jump straight into the calculator.
+        </p>
+      </div>
+      <a href="/states/" class="hidden text-sm font-semibold text-[var(--color-primary)] sm:inline hover:underline"
+        >View all</a
+      >
+    </div>
+    <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {
         US_STATES.map((s) => (
-          <li class="mb-2 break-inside-avoid">
+          <li>
             <a
-              class="text-sm font-medium text-zinc-800 underline decoration-zinc-300 underline-offset-4 hover:text-zinc-950 hover:decoration-zinc-900"
               href={`/states/${s.abbr.toLowerCase()}/`}
+              class="group flex items-center justify-between rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-4 py-3.5 transition hover:border-[var(--color-primary)]/40 hover:shadow-md"
             >
-              {s.name}
+              <span class="font-medium text-[var(--color-ink)] group-hover:text-[var(--color-primary)]">
+                {s.name}
+              </span>
+              <span class="text-xs font-bold text-[var(--color-ink-muted)]">{s.abbr}</span>
             </a>
           </li>
         ))

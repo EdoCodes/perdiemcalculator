@@ -2,26 +2,28 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { US_STATES } from "../../data/usStates";
 
-const title = "Per diem by state (CONUS hubs)";
+const title = "Per diem by state (CONUS)";
 const description =
-  "Index of state hub pages for General Services Administration (GSA) CONUS per diem localities and standard-rate context.";
+  "State hub pages for GSA CONUS per diem localities and standard-rate context.";
 ---
 
 <BaseLayout title={title} description={description}>
-  <h1 class="text-3xl font-semibold tracking-tight text-zinc-950">States</h1>
-  <p class="mt-2 max-w-2xl text-sm text-zinc-700">
-    Pick a state to open its hub page. Locality lists and rates will be populated from cached GSA
-    data.
+  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-ink)]">States</h1>
+  <p class="mt-2 max-w-2xl text-[var(--color-ink-muted)]">
+    Choose a state to learn more, then open the calculator with your destination pre-selected.
   </p>
-  <ul class="mt-8 columns-1 gap-x-10 gap-y-2 sm:columns-2 md:columns-3">
+  <ul class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
     {
       US_STATES.map((s) => (
-        <li class="mb-2 break-inside-avoid">
+        <li>
           <a
-            class="text-sm font-medium text-zinc-800 underline decoration-zinc-300 underline-offset-4 hover:text-zinc-950 hover:decoration-zinc-900"
             href={`/states/${s.abbr.toLowerCase()}/`}
+            class="flex items-center justify-between rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-4 py-4 transition hover:border-[var(--color-primary)]/40 hover:shadow-md"
           >
-            {s.name}
+            <span class="font-semibold text-[var(--color-ink)]">{s.name}</span>
+            <span class="rounded-lg bg-[var(--color-surface-muted)] px-2 py-1 text-xs font-bold text-[var(--color-ink-muted)]">
+              {s.abbr}
+            </span>
           </a>
         </li>
       ))

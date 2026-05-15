@@ -7,8 +7,8 @@ const description =
 ---
 
 <BaseLayout title={title} description={description}>
-  <article class="mx-auto max-w-3xl space-y-6 text-base leading-relaxed text-zinc-800">
-    <h1 class="text-3xl font-semibold tracking-tight text-zinc-950">Methodology and sources</h1>
+  <article class="mx-auto max-w-3xl space-y-6 text-base leading-relaxed text-[var(--color-ink-muted)]">
+    <h1 class="text-3xl font-bold tracking-tight text-[var(--color-ink)]">Methodology and sources</h1>
     <p>
       This project aims to mirror the <strong>General Services Administration (GSA)</strong>{" "}
       <strong>Continental United States (CONUS)</strong> per diem structure: a{" "}
@@ -18,23 +18,23 @@ const description =
       default CONUS model.
     </p>
 
-    <h2 class="text-xl font-semibold text-zinc-950">Official sources</h2>
+    <h2 class="text-xl font-semibold text-[var(--color-ink)]">Official sources</h2>
     <ul class="list-disc space-y-2 pl-5">
       <li>
         <a
-          class="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
+          class="font-medium text-[var(--color-primary)] hover:underline"
           href="https://www.gsa.gov/travel/plan-book/per-diem-rates">GSA per diem rates</a>{" "}
         (authoritative published rates and bulletins).
       </li>
       <li>
         <a
-          class="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
+          class="font-medium text-[var(--color-primary)] hover:underline"
           href="https://open.gsa.gov/api/perdiem/">GSA Per Diem API</a>{" "}
         (machine-readable access for building a cached dataset).
       </li>
       <li>
         <a
-          class="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
+          class="font-medium text-[var(--color-primary)] hover:underline"
           href="https://www.ecfr.gov/current/title-41/subtitle-F">Federal Travel Regulation</a>{" "}
         (FTR) for reimbursement methods, first and last day of travel, and meal deductions.
       </li>
