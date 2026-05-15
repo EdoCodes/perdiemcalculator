@@ -3,5 +3,5 @@
   publish = "dist"
 
 [build.environment]
-  # Pin a current LTS for reproducible Netlify builds.
-  NODE_VERSION = "20"
+  # Astro 6 requires Node >= 22.12.0
+  NODE_VERSION = "22.12.0"
