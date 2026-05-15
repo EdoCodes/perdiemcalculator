@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { PerDiemCalculator } from "../../components/calculator/PerDiemCalculator";
+
+const title = "GSA CONUS per diem calculator";
+const description =
+  "Interactive federal CONUS per diem estimate: trip dates, locality selection, and day-by-day lodging and M&IE breakdown (rates integration in progress).";
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="space-y-3">
+    <h1 class="text-3xl font-semibold tracking-tight text-zinc-950">GSA CONUS calculator</h1>
+    <p class="max-w-2xl text-sm leading-relaxed text-zinc-700">
+      Client-side calculator shell. Official GSA rates will be loaded from a cached store (Supabase)
+      or static build artifacts to keep the UI fast and keys private.
+    </p>
+  </div>
+
+  <div class="mt-8">
+    <PerDiemCalculator client:load />
+  </div>
+</BaseLayout>

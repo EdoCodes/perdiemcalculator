@@ -1,0 +1,67 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getStateByAbbr, US_STATES } from "../../data/usStates";
+
+export function getStaticPaths() {
+  return US_STATES.map((s) => ({
+    params: { abbr: s.abbr.toLowerCase() }
+  }));
+}
+
+const abbrParam = Astro.params.abbr ?? "";
+const state = getStateByAbbr(abbrParam);
+
+if (!state) {
+  return Astro.redirect("/states/");
+}
+
+const title = `${state.name} per diem (GSA CONUS hub)`;
+const description = `Explore General Services Administration (GSA) CONUS per diem context for ${state.name}: standard rate notes and locality list (data wiring in progress).`;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav class="text-sm text-zinc-600">
+    <a class="underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900" href="/"
+      >Home</a
+    >
+    <span class="mx-2 text-zinc-400">/</span>
+    <a
+      class="underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
+      href="/states/">States</a
+    >
+    <span class="mx-2 text-zinc-400">/</span>
+    <span class="text-zinc-900">{state.name}</span>
+  </nav>
+
+  <h1 class="mt-6 text-3xl font-semibold tracking-tight text-zinc-950">
+    {state.name} ({state.abbr})
+  </h1>
+  <p class="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-700">
+    Hub page for GSA-listed localities in this state plus the CONUS <strong>standard</strong> rate
+    where no specific locality applies. The list and seasonal lodging amounts will be populated
+    from official cached data.
+  </p>
+
+  <div class="mt-8 rounded-lg border border-dashed border-zinc-300 bg-white p-6 text-sm text-zinc-700">
+    <p class="font-medium text-zinc-900">Next step (executor backlog)</p>
+    <p class="mt-2">
+      Render NSA rows for <span class="font-mono">{state.abbr}</span> from Supabase (synced from the
+      GSA Per Diem API) and link each row into the calculator with pre-filled destination context.
+    </p>
+  </div>
+
+  <p class="mt-8">
+    <a
+      href="/calculator/gsa/"
+      class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800"
+      >Open calculator</a
+    >
+  </p>
+</BaseLayout>

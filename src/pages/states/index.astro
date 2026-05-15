@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { US_STATES } from "../../data/usStates";
+
+const title = "Per diem by state (CONUS hubs)";
+const description =
+  "Index of state hub pages for General Services Administration (GSA) CONUS per diem localities and standard-rate context.";
+---
+
+<BaseLayout title={title} description={description}>
+  <h1 class="text-3xl font-semibold tracking-tight text-zinc-950">States</h1>
+  <p class="mt-2 max-w-2xl text-sm text-zinc-700">
+    Pick a state to open its hub page. Locality lists and rates will be populated from cached GSA
+    data.
+  </p>
+  <ul class="mt-8 columns-1 gap-x-10 gap-y-2 sm:columns-2 md:columns-3">
+    {
+      US_STATES.map((s) => (
+        <li class="mb-2 break-inside-avoid">
+          <a
+            class="text-sm font-medium text-zinc-800 underline decoration-zinc-300 underline-offset-4 hover:text-zinc-950 hover:decoration-zinc-900"
+            href={`/states/${s.abbr.toLowerCase()}/`}
+          >
+            {s.name}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

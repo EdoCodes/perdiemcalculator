@@ -1,0 +1,72 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { US_STATES } from "../data/usStates";
+
+const title = "Federal GSA per diem calculator (CONUS)";
+const description =
+  "Estimate CONUS per diem totals using General Services Administration (GSA) lodging and meals & incidental expenses (M&IE) concepts, with state-by-state locality context.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Per diem calculator",
+    url: siteUrl,
+    description
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Per diem calculator",
+    url: siteUrl
+  }
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <section class="space-y-4">
+    <h1 class="text-3xl font-semibold tracking-tight text-zinc-950 sm:text-4xl">
+      Federal GSA per diem calculator
+    </h1>
+    <p class="max-w-2xl text-lg leading-relaxed text-zinc-700">
+      Build a fast, static-first utility for CONUS travel: state hub pages for discovery, a
+      dedicated calculator UI, and methodology written as real HTML for search and AI summaries.
+    </p>
+    <div class="flex flex-wrap gap-3 pt-2">
+      <a
+        href="/calculator/gsa/"
+        class="inline-flex items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800"
+        >Open GSA calculator</a
+      >
+      <a
+        href="/methodology/"
+        class="inline-flex items-center justify-center rounded-md border border-zinc-300 bg-white px-4 py-2 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50"
+        >Read methodology</a
+      >
+    </div>
+  </section>
+
+  <section class="mt-14">
+    <h2 class="text-xl font-semibold text-zinc-950">Browse by state</h2>
+    <p class="mt-2 max-w-2xl text-sm text-zinc-600">
+      Each page is a lightweight hub for that state’s standard rate context and locality list
+      (data wiring comes next).
+    </p>
+    <ul class="mt-6 columns-1 gap-x-10 gap-y-2 sm:columns-2 md:columns-3">
+      {
+        US_STATES.map((s) => (
+          <li class="mb-2 break-inside-avoid">
+            <a
+              class="text-sm font-medium text-zinc-800 underline decoration-zinc-300 underline-offset-4 hover:text-zinc-950 hover:decoration-zinc-900"
+              href={`/states/${s.abbr.toLowerCase()}/`}
+            >
+              {s.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

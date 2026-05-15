@@ -1,0 +1,7 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Pin a current LTS for reproducible Netlify builds.
+  NODE_VERSION = "20"

@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Methodology and sources (GSA CONUS per diem)";
+const description =
+  "How this calculator interprets General Services Administration (GSA) CONUS per diem rates, what is included, and what official sources govern reimbursement.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl space-y-6 text-base leading-relaxed text-zinc-800">
+    <h1 class="text-3xl font-semibold tracking-tight text-zinc-950">Methodology and sources</h1>
+    <p>
+      This project aims to mirror the <strong>General Services Administration (GSA)</strong>{" "}
+      <strong>Continental United States (CONUS)</strong> per diem structure: a{" "}
+      <strong>maximum lodging</strong> allowance and a <strong>meals and incidental expenses</strong>{" "}
+      (<strong>M&amp;IE</strong>) component for official travel. CONUS excludes certain non-CONUS
+      locations; Alaska, Hawaii, and U.S. territories are handled under separate rules outside the
+      default CONUS model.
+    </p>
+
+    <h2 class="text-xl font-semibold text-zinc-950">Official sources</h2>
+    <ul class="list-disc space-y-2 pl-5">
+      <li>
+        <a
+          class="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
+          href="https://www.gsa.gov/travel/plan-book/per-diem-rates">GSA per diem rates</a>{" "}
+        (authoritative published rates and bulletins).
+      </li>
+      <li>
+        <a
+          class="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
+          href="https://open.gsa.gov/api/perdiem/">GSA Per Diem API</a>{" "}
+        (machine-readable access for building a cached dataset).
+      </li>
+      <li>
+        <a
+          class="font-medium text-zinc-900 underline decoration-zinc-300 underline-offset-4 hover:decoration-zinc-900"
+          href="https://www.ecfr.gov/current/title-41/subtitle-F">Federal Travel Regulation</a>{" "}
+        (FTR) for reimbursement methods, first and last day of travel, and meal deductions.
+      </li>
+    </ul>
+
+    <h2 class="text-xl font-semibold text-zinc-950">What the on-site calculator will do (planned)</h2>
+    <ol class="list-decimal space-y-2 pl-5">
+      <li>Resolve the <strong>federal fiscal year</strong> applicable to each trip date.</li>
+      <li>
+        Look up the traveler’s <strong>primary destination</strong> (locality or ZIP-based mapping
+        where appropriate).
+      </li>
+      <li>
+        Apply <strong>monthly lodging caps</strong> for non-standard areas when GSA publishes
+        seasonal lodging.
+      </li>
+      <li>
+        Apply <strong>M&amp;IE</strong> for the locality and fiscal year, including optional
+        handling for provided meals and first/last day policies, with explicit toggles where agency
+        practice varies.
+      </li>
+    </ol>
+
+    <h2 class="text-xl font-semibold text-zinc-950">What this site is not</h2>
+    <ul class="list-disc space-y-2 pl-5">
+      <li>It is not legal, payroll, or financial advice.</li>
+      <li>It does not replace your agency’s travel office or internal policy.</li>
+      <li>It may omit edge cases until explicitly modeled and tested.</li>
+    </ul>
+
+    <h2 class="text-xl font-semibold text-zinc-950">AI summaries (Google AI Overviews)</h2>
+    <p>
+      This page is intentionally written as plain, citable HTML so automated summaries can extract
+      scope and limitations. Always verify totals against GSA’s published tables for your dates and
+      destination.
+    </p>
+  </article>
+</BaseLayout>
