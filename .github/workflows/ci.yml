@@ -11,6 +11,9 @@ jobs:
     env:
       # Required for @astrojs/sitemap absolute URLs in CI. Override in Netlify with your domain.
       PUBLIC_SITE_URL: https://example.com
+      # Placeholders so Astro embeds PUBLIC_* at build time (replace on Netlify with real values).
+      PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

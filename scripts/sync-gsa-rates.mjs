@@ -12,6 +12,9 @@
  */
 
 import { createClient } from "@supabase/supabase-js";
+import { loadDotenv } from "./load-dotenv.mjs";
+
+loadDotenv();
 
 const CONUS_STATES = [
   "AL", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "ID", "IL", "IN", "IA", "KS",
@@ -170,7 +173,14 @@ async function syncZipcodes(supabase, year, apiKey) {
 
 async function main() {
   const apiKey = requireEnv("GSA_API_KEY");
-  const supabase = createClient(requireEnv("SUPABASE_URL"), requireEnv("SUPABASE_SERVICE_ROLE_KEY"));
+  const supabaseUrl =
+    process.env.SUPABASE_URL?.trim() || process.env.PUBLIC_SUPABASE_URL?.trim();
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!supabaseUrl || !serviceKey) {
+    console.error("Missing SUPABASE_URL (or PUBLIC_SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY in .env");
+    process.exit(1);
+  }
+  const supabase = createClient(supabaseUrl, serviceKey);
   const years = parseYearsArg();
 
   console.log(`Syncing FY: ${years.join(", ")}`);

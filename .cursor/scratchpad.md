@@ -1,8 +1,9 @@
 # Project Status Board
 
 - [done] Scaffold Astro + React + Netlify + Supabase placeholders + CI — evidence: `npm run build` OK (55 pages), sitemap emitted when `PUBLIC_SITE_URL` is set.
-- [in_progress] Wire calculator island to rate data (Supabase schema + GSA sync pipeline)
-- [pending] Implement per-day GSA logic (FY, meals, first/last day) and connect it to the UI
+- [done] Design pass B (tokens, dark mode, calculator UX, homepage hero) — pushed to main
+- [in_progress] Wire calculator island to rate data (Supabase schema + GSA sync pipeline) — UI wired; needs GSA sync + Netlify env
+- [done] Per-day GSA logic connected to calculator UI
 
 # Executor's Feedback or Assistance Requests
 

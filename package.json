@@ -9,7 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test:supabase": "node scripts/test-supabase-connection.mjs",
+    "sync:gsa": "node scripts/sync-gsa-rates.mjs --years=2025,2026"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.5",

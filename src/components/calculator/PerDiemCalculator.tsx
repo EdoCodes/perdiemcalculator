@@ -3,6 +3,7 @@ import { US_STATES } from "../../data/usStates";
 import { calculateTrip } from "../../lib/perdiem/calculate";
 import { eachTripDay, fiscalYearForDate } from "../../lib/perdiem/fiscalYear";
 import type { CalculatorOptions, TripResult } from "../../lib/perdiem/types";
+import { checkSupabaseHealth, type SupabaseHealth } from "../../lib/supabaseHealth";
 import { getSupabaseBrowserClient } from "../../lib/supabase";
 import {
   fetchLocalitiesForState,
@@ -46,7 +47,19 @@ export function PerDiemCalculator() {
     dinner: false
   });
 
-  const supabaseReady = !!getSupabaseBrowserClient();
+  const [dbHealth, setDbHealth] = useState<SupabaseHealth | "checking">("checking");
+
+  const supabaseReady = dbHealth === "ok";
+
+  useEffect(() => {
+    let cancelled = false;
+    checkSupabaseHealth().then((health) => {
+      if (!cancelled) setDbHealth(health);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const pickerFy = useMemo(() => {
     if (start) return fiscalYearForDate(new Date(start + "T12:00:00"));
@@ -185,17 +198,16 @@ export function PerDiemCalculator() {
     }
   };
 
-  if (!supabaseReady) {
+  if (dbHealth === "checking") {
     return (
-      <Card className="border-dashed border-[var(--color-primary)]/40 bg-[var(--color-primary-muted)]/30">
-        <h2 className="text-lg font-semibold text-[var(--color-ink)]">Rates database not connected</h2>
-        <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-          Add <code className="rounded bg-[var(--color-surface-muted)] px-1.5 py-0.5 text-xs">PUBLIC_SUPABASE_URL</code>{" "}
-          and <code className="rounded bg-[var(--color-surface-muted)] px-1.5 py-0.5 text-xs">PUBLIC_SUPABASE_ANON_KEY</code>{" "}
-          in Netlify, then run the GSA sync to populate localities.
-        </p>
+      <Card className="border-dashed border-[var(--color-border)]">
+        <p className="text-sm text-[var(--color-ink-muted)]">Checking connection to rate database…</p>
       </Card>
     );
+  }
+
+  if (dbHealth !== "ok") {
+    return <ConnectionHelp health={dbHealth} />;
   }
 
   return (
@@ -427,4 +439,54 @@ function formatLocalityLabel(l: LocalityListItem): string {
   if (l.isStandard) return `${l.state} — Standard CONUS rate`;
   const county = l.county ? ` (${l.county})` : "";
   return `${l.city}${county}`;
+}
+
+function ConnectionHelp({ health }: { health: Exclude<SupabaseHealth, { status: "ok" }> }) {
+  if (health.status === "missing_env") {
+    return (
+      <Card className="border-dashed border-[var(--color-primary)]/40 bg-[var(--color-primary-muted)]/30">
+        <h2 className="text-lg font-semibold text-[var(--color-ink)]">Supabase not configured in this build</h2>
+        <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
+          Set these in <strong>Netlify → Environment variables</strong>, then{" "}
+          <strong>trigger a new deploy</strong> (Astro embeds them at build time):
+        </p>
+        <ul className="mt-3 list-inside list-disc text-sm text-[var(--color-ink-muted)]">
+          <li>
+            <code className="text-xs">PUBLIC_SUPABASE_URL</code> — Project URL (ends with{" "}
+            <code className="text-xs">.supabase.co</code>)
+          </li>
+          <li>
+            <code className="text-xs">PUBLIC_SUPABASE_ANON_KEY</code> — anon public key (not service_role)
+          </li>
+        </ul>
+      </Card>
+    );
+  }
+
+  if (health.status === "empty") {
+    return (
+      <Card className="border-dashed border-[var(--color-accent)]/50 bg-[var(--color-accent-muted)]/20">
+        <h2 className="text-lg font-semibold text-[var(--color-ink)]">Database connected — no rates yet</h2>
+        <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
+          Tables exist but <code className="text-xs">localities</code> is empty. On your computer, add{" "}
+          <code className="text-xs">GSA_API_KEY</code> and <code className="text-xs">SUPABASE_SERVICE_ROLE_KEY</code>{" "}
+          to <code className="text-xs">.env</code>, then run:{" "}
+          <code className="text-xs">npm run sync:gsa</code>
+        </p>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="border-dashed border-red-300/50 bg-red-50/80 dark:bg-red-950/30">
+      <h2 className="text-lg font-semibold text-[var(--color-ink)]">Database connection failed</h2>
+      <p className="mt-2 text-sm text-red-800 dark:text-red-200">{health.message}</p>
+      {health.hint ? <p className="mt-1 text-xs text-red-700 dark:text-red-300">{health.hint}</p> : null}
+      <ul className="mt-3 list-inside list-disc text-sm text-[var(--color-ink-muted)]">
+        <li>Confirm SQL migration ran in Supabase SQL Editor.</li>
+        <li>Use the anon key, not the service_role key, for PUBLIC_SUPABASE_ANON_KEY.</li>
+        <li>Redeploy Netlify after changing environment variables.</li>
+      </ul>
+    </Card>
+  );
 }
