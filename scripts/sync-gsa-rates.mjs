@@ -16,13 +16,6 @@ import { loadDotenv } from "./load-dotenv.mjs";
 
 loadDotenv();
 
-const CONUS_STATES = [
-  "AL", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "ID", "IL", "IN", "IA", "KS",
-  "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM",
-  "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA",
-  "WA", "WV", "WI", "WY"
-];
-
 const MONTH_KEYS = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
@@ -98,22 +91,35 @@ async function upsertMieTiers(supabase, year) {
   if (error) throw error;
 }
 
-async function syncState(supabase, state, year, apiKey) {
-  const data = await gsaFetch(`/rates/state/${state}/year/${year}`, apiKey);
-  const rows = Array.isArray(data) ? data : data?.rates ?? data?.data ?? [];
+/** Flat lodging rows from GET /rates/conus/lodging/{year} (includes DID + monthly caps). */
+function parseConusLodgingRows(data) {
+  if (Array.isArray(data)) {
+    return data.filter((r) => r && (r.DID ?? r.did) && (r.State ?? r.state));
+  }
+  if (data && typeof data === "object") {
+    return Object.values(data).filter(
+      (r) => r && typeof r === "object" && (r.DID ?? r.did) && (r.State ?? r.state)
+    );
+  }
+  return [];
+}
+
+async function syncConusLodging(supabase, year, apiKey) {
+  const data = await gsaFetch(`/rates/conus/lodging/${year}`, apiKey);
+  const rows = parseConusLodgingRows(data);
   if (!rows.length) {
-    console.warn(`  ${state} FY${year}: no rows`);
-    return 0;
+    throw new Error("No lodging rows returned (GSA API format may have changed)");
   }
 
   let count = 0;
   for (const row of rows) {
     const did = String(row.DID ?? row.did ?? "");
-    const st = String(row.State ?? row.state ?? state).toUpperCase();
+    const st = String(row.State ?? row.state ?? "").toUpperCase();
     const city = String(row.City ?? row.city ?? "Standard");
     const county = row.County ?? row.county ?? null;
     const mieTotal = Number(row.Meals ?? row.meals ?? row.M_IE ?? 0);
     const isStandard = did === "10000" || city.toLowerCase().includes("standard");
+    if (!did || !st) continue;
 
     const { data: locality, error: locErr } = await supabase
       .from("localities")
@@ -155,18 +161,27 @@ async function syncZipcodes(supabase, year, apiKey) {
   const rows = Array.isArray(data) ? data : data?.rates ?? [];
   if (!rows.length) return 0;
 
-  const batch = rows.map((row) => ({
-    zip: String(row.Zip ?? row.zip ?? "").padStart(5, "0").slice(0, 5),
-    did: String(row.DID ?? row.did ?? ""),
-    state: String(row.ST ?? row.state ?? "").toUpperCase(),
-    fiscal_year: year
-  })).filter((r) => r.zip.length === 5 && r.did);
+  const byZip = new Map();
+  for (const row of rows) {
+    const zip = String(row.Zip ?? row.zip ?? "")
+      .padStart(5, "0")
+      .slice(0, 5);
+    const did = String(row.DID ?? row.did ?? "");
+    const state = String(row.ST ?? row.state ?? "").toUpperCase();
+    if (zip.length !== 5 || !did || !state) continue;
+    byZip.set(zip, { zip, did, state, fiscal_year: year });
+  }
+  const batch = [...byZip.values()];
 
   const chunk = 500;
   for (let i = 0; i < batch.length; i += chunk) {
     const slice = batch.slice(i, i + chunk);
     const { error } = await supabase.from("zip_locality").upsert(slice, { onConflict: "zip,fiscal_year" });
     if (error) throw error;
+    const done = Math.min(i + chunk, batch.length);
+    if (done % 5000 === 0 || done === batch.length) {
+      process.stdout.write(`\n    zips ${done}/${batch.length} `);
+    }
   }
   return batch.length;
 }
@@ -190,25 +205,21 @@ async function main() {
     await supabase.from("fiscal_years").upsert({ year, ...bounds });
     await upsertMieTiers(supabase, year);
 
+    process.stdout.write(`  CONUS lodging FY${year}... `);
     let localityCount = 0;
-    for (const state of CONUS_STATES) {
-      process.stdout.write(`  ${state} FY${year}... `);
-      try {
-        const n = await syncState(supabase, state, year, apiKey);
-        localityCount += n;
-        console.log(`${n} localities`);
-      } catch (e) {
-        console.log(`failed: ${e.message}`);
-      }
-      await new Promise((r) => setTimeout(r, 120));
+    try {
+      localityCount = await syncConusLodging(supabase, year, apiKey);
+      console.log(`${localityCount} localities`);
+    } catch (e) {
+      console.log(`failed: ${e.message}`);
     }
 
     process.stdout.write(`  ZIP index FY${year}... `);
     try {
       const z = await syncZipcodes(supabase, year, apiKey);
-      console.log(`${z} zips`);
+      console.log(`${z} unique zips`);
     } catch (e) {
-      console.log(`skipped: ${e.message}`);
+      console.log(`failed: ${e.message}`);
     }
 
     console.log(`FY ${year}: ${localityCount} locality rows.`);

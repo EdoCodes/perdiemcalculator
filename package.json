@@ -12,6 +12,7 @@
     "astro": "astro",
     "check:env": "node scripts/check-env.mjs",
     "test:supabase": "node scripts/test-supabase-connection.mjs",
+    "verify:db": "node scripts/verify-db.mjs",
     "sync:gsa": "node scripts/sync-gsa-rates.mjs --years=2025,2026",
     "setup:rates": "node scripts/check-env.mjs && node scripts/sync-gsa-rates.mjs --years=2025,2026"
   },
