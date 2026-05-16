@@ -48,7 +48,18 @@ const path = Astro.url.pathname;
         if (dark) document.documentElement.classList.add("dark");
       })();
     </script>
-    {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}
+    {
+      jsonLd ? (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(
+            Array.isArray(jsonLd)
+              ? { "@context": "https://schema.org", "@graph": jsonLd }
+              : jsonLd
+          )}
+        />
+      ) : null
+    }
   </head>
   <body class:list={["min-h-dvh antialiased", hero ? "bg-mesh" : "bg-[var(--color-surface)]"]}>
     <a
@@ -64,7 +75,9 @@ const path = Astro.url.pathname;
             class="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--color-primary)] text-sm font-bold text-white shadow-md shadow-[var(--color-primary)]/30"
             >PD</span
           >
-          <span class="text-base font-bold tracking-tight text-[var(--color-ink)]">PerDiem</span>
+          <span class="text-sm font-bold tracking-tight text-[var(--color-ink)] sm:text-base"
+            >PerDiemCalculator</span
+          >
         </a>
         <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
           <a

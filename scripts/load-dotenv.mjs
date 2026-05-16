@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 /** Load `.env` from project root into process.env (simple parser, no dependency). */
-export function loadDotenv(cwd = process.cwd()) {
+export function loadDotenv(cwd = process.cwd(), { override = false } = {}) {
   const path = resolve(cwd, ".env");
   if (!existsSync(path)) return false;
 
@@ -20,7 +20,7 @@ export function loadDotenv(cwd = process.cwd()) {
     ) {
       value = value.slice(1, -1);
     }
-    if (!(key in process.env)) process.env[key] = value;
+    if (override || !(key in process.env)) process.env[key] = value;
   }
   return true;
 }

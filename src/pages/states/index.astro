@@ -1,32 +1,59 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { US_STATES } from "../../data/usStates";
+import { fiscalYearForDate } from "../../lib/perdiem/fiscalYear";
+import { fetchLocalitiesByStateForBuild } from "../../lib/rates/buildTimeStateData";
 
-const title = "Per diem by state (CONUS)";
+const fiscalYear = fiscalYearForDate(new Date());
+const localitiesByState = await fetchLocalitiesByStateForBuild(fiscalYear);
+
+const title = `GSA per diem by state (FY ${fiscalYear})`;
 const description =
-  "State hub pages for GSA CONUS per diem localities and standard-rate context.";
+  "Browse all 50 states and D.C. for GSA CONUS per diem summaries—standard rates, high-cost localities, and links to the trip calculator.";
 ---
 
 <BaseLayout title={title} description={description}>
-  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-ink)]">States</h1>
-  <p class="mt-2 max-w-2xl text-[var(--color-ink-muted)]">
-    Choose a state to learn more, then open the calculator with your destination pre-selected.
+  <h1 class="text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+    Per diem by state
+  </h1>
+  <p class="mt-3 max-w-2xl text-base leading-relaxed text-[var(--color-ink-muted)]">
+    Each state page lists GSA <strong>CONUS</strong> localities for federal fiscal year {fiscalYear}:
+    the standard rate where it applies, plus higher-cost destinations with M&amp;IE and peak lodging
+    caps. Open a state, then jump to the calculator with your destination pre-selected.
   </p>
+  <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+    Alaska and Hawaii use separate OCONUS tables and may show limited CONUS data here.
+  </p>
+
   <ul class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
     {
-      US_STATES.map((s) => (
-        <li>
-          <a
-            href={`/states/${s.abbr.toLowerCase()}/`}
-            class="flex items-center justify-between rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-4 py-4 transition hover:border-[var(--color-primary)]/40 hover:shadow-md"
-          >
-            <span class="font-semibold text-[var(--color-ink)]">{s.name}</span>
-            <span class="rounded-lg bg-[var(--color-surface-muted)] px-2 py-1 text-xs font-bold text-[var(--color-ink-muted)]">
-              {s.abbr}
-            </span>
-          </a>
-        </li>
-      ))
+      US_STATES.map((s) => {
+        const locs = localitiesByState.get(s.abbr) ?? [];
+        const nsaCount = locs.filter((l) => !l.isStandard).length;
+        const meta =
+          locs.length === 0
+            ? "Rates pending"
+            : nsaCount > 0
+              ? `${nsaCount} high-cost area${nsaCount === 1 ? "" : "s"}`
+              : "Standard CONUS";
+
+        return (
+          <li>
+            <a
+              href={`/states/${s.abbr.toLowerCase()}/`}
+              class="flex items-center justify-between gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-4 py-4 transition hover:border-[var(--color-primary)]/40 hover:shadow-md"
+            >
+              <span>
+                <span class="block font-semibold text-[var(--color-ink)]">{s.name}</span>
+                <span class="mt-0.5 block text-xs text-[var(--color-ink-muted)]">{meta}</span>
+              </span>
+              <span class="shrink-0 rounded-lg bg-[var(--color-surface-muted)] px-2 py-1 text-xs font-bold text-[var(--color-ink-muted)]">
+                {s.abbr}
+              </span>
+            </a>
+          </li>
+        );
+      })
     }
   </ul>
 </BaseLayout>

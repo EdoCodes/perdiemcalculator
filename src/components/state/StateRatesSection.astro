@@ -1,0 +1,117 @@
+---
+import type { StateLocalitySummary } from "../../lib/rates/buildTimeStateData";
+import { formatUsd } from "../../lib/format";
+
+type Props = {
+  stateName: string;
+  stateAbbr: string;
+  fiscalYear: number;
+  localities: StateLocalitySummary[];
+  calcHref: string;
+};
+
+const { stateName, stateAbbr, fiscalYear, localities, calcHref } = Astro.props;
+
+const standard = localities.find((l) => l.isStandard);
+const nsas = localities.filter((l) => !l.isStandard);
+const hasData = localities.length > 0;
+---
+
+<section class="mt-10 space-y-8" aria-labelledby="rates-heading">
+  <h2 id="rates-heading" class="text-xl font-semibold text-[var(--color-ink)]">
+    GSA rates for {stateName} (FY {fiscalYear})
+  </h2>
+
+  {
+    !hasData ? (
+      <div class="rounded-2xl border border-dashed border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 text-sm text-[var(--color-ink-muted)]">
+        <p>
+          {stateAbbr === "AK" || stateAbbr === "HI" ? (
+            <>
+              {stateName} uses <strong>non-CONUS</strong> per diem tables, not the GSA CONUS locality
+              list in this database. Use the{" "}
+              <a class="font-medium text-[var(--color-primary)] hover:underline" href={calcHref}>
+                calculator
+              </a>{" "}
+              for CONUS trips, or consult GSA for OCONUS rates.
+            </>
+          ) : (
+            <>
+              Locality data for {stateName} is not loaded yet. Run the GSA sync, or open the{" "}
+              <a class="font-medium text-[var(--color-primary)] hover:underline" href={calcHref}>
+                calculator
+              </a>{" "}
+              after rates are available.
+            </>
+          )}
+        </p>
+      </div>
+    ) : (
+      <>
+        {standard ? (
+          <div class="rounded-2xl border border-[var(--color-primary)]/30 bg-[var(--color-primary-muted)]/25 p-6">
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+              Standard CONUS rate
+            </h3>
+            <p class="mt-2 text-lg font-semibold text-[var(--color-ink)]">
+              {standard.city}
+            </p>
+            <dl class="mt-4 grid gap-3 sm:grid-cols-2">
+              <div>
+                <dt class="text-xs font-medium text-[var(--color-ink-muted)]">M&amp;IE (daily)</dt>
+                <dd class="text-xl font-bold text-[var(--color-ink)]">{formatUsd(standard.mieTotal)}</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-medium text-[var(--color-ink-muted)]">
+                  Peak lodging (monthly cap)
+                </dt>
+                <dd class="text-xl font-bold text-[var(--color-ink)]">
+                  {standard.peakLodging != null ? formatUsd(standard.peakLodging) : "—"}
+                </dd>
+              </div>
+            </dl>
+            <p class="mt-3 text-sm text-[var(--color-ink-muted)]">
+              Applies to most of {stateName} outside listed high-cost areas.
+            </p>
+          </div>
+        ) : null}
+
+        {nsas.length > 0 ? (
+          <div>
+            <h3 class="text-lg font-semibold text-[var(--color-ink)]">
+              Higher-cost localities ({nsas.length})
+            </h3>
+            <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+              GSA publishes elevated caps for these destinations. Lodging varies by month; peak
+              lodging is the highest monthly maximum in FY {fiscalYear}.
+            </p>
+            <div class="mt-4 overflow-x-auto rounded-2xl border border-[var(--color-border)]">
+              <table class="min-w-full text-left text-sm">
+                <thead class="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)]">
+                  <tr>
+                    <th class="px-4 py-3 font-semibold text-[var(--color-ink)]">Locality</th>
+                    <th class="px-4 py-3 font-semibold text-[var(--color-ink)]">County</th>
+                    <th class="px-4 py-3 font-semibold text-[var(--color-ink)]">M&amp;IE</th>
+                    <th class="px-4 py-3 font-semibold text-[var(--color-ink)]">Peak lodging</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-[var(--color-border)]">
+                  {nsas.map((loc) => (
+                    <tr class="bg-[var(--color-surface-elevated)]">
+                      <td class="px-4 py-3 font-medium text-[var(--color-ink)]">{loc.city}</td>
+                      <td class="px-4 py-3 text-[var(--color-ink-muted)]">{loc.county ?? "—"}</td>
+                      <td class="px-4 py-3 text-[var(--color-ink)]">{formatUsd(loc.mieTotal)}</td>
+                      <td class="px-4 py-3 text-[var(--color-ink)]">
+                        {loc.peakLodging != null ? formatUsd(loc.peakLodging) : "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : null}
+      </>
+    )
+  }
+</section>

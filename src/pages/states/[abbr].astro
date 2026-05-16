@@ -1,59 +1,192 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getStateByAbbr, US_STATES } from "../../data/usStates";
+import StateRatesSection from "../../components/state/StateRatesSection.astro";
+import { US_STATES } from "../../data/usStates";
+import { fiscalYearForDate } from "../../lib/perdiem/fiscalYear";
+import { fetchLocalitiesByStateForBuild } from "../../lib/rates/buildTimeStateData";
 
-export function getStaticPaths() {
-  return US_STATES.map((s) => ({
-    params: { abbr: s.abbr.toLowerCase() }
+export async function getStaticPaths() {
+  const fy = fiscalYearForDate(new Date());
+  const localitiesByState = await fetchLocalitiesByStateForBuild(fy);
+  return US_STATES.map((state) => ({
+    params: { abbr: state.abbr.toLowerCase() },
+    props: {
+      state,
+      localities: localitiesByState.get(state.abbr) ?? [],
+      fiscalYear: fy
+    }
   }));
 }
 
-const abbrParam = Astro.params.abbr ?? "";
-const state = getStateByAbbr(abbrParam);
-
-if (!state) {
-  return Astro.redirect("/states/");
+interface Props {
+  state: (typeof US_STATES)[number];
+  localities: import("../../lib/rates/buildTimeStateData").StateLocalitySummary[];
+  fiscalYear: number;
 }
 
-const title = `${state.name} per diem rates (GSA CONUS)`;
-const description = `GSA CONUS per diem for ${state.name}: standard rate, high-cost localities, and calculator links.`;
+const { state, localities, fiscalYear } = Astro.props;
+
+const nsaCount = localities.filter((l) => !l.isStandard).length;
+const title = `${state.name} GSA per diem rates (FY ${fiscalYear})`;
+const description = `Official GSA CONUS per diem for ${state.name}: standard rate, ${nsaCount} higher-cost localities, M&IE and lodging caps for federal fiscal year ${fiscalYear}.`;
 const calcHref = `/calculator/gsa/?state=${state.abbr}`;
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL(`/states/${state.abbr.toLowerCase()}/`, siteUrl).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: pageUrl,
+  about: {
+    "@type": "AdministrativeArea",
+    name: state.name
+  }
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: `What is the GSA per diem rate for ${state.name}?`,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `GSA sets a standard CONUS per diem for most of ${state.name}, plus higher rates for listed cities and counties. Rates include a daily meals and incidental expenses (M&IE) amount and monthly lodging caps that vary by month and destination.`
+      }
+    },
+    {
+      "@type": "Question",
+      name: `How do I find per diem for a city in ${state.name}?`,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `Use the PerDiemCalculator with ${state.name} pre-selected, choose a locality or enter a ZIP code, and select your trip dates. The tool applies the correct federal fiscal year and shows day-by-day lodging and M&IE.`
+      }
+    },
+    {
+      "@type": "Question",
+      name: `Does ${state.name} use the standard CONUS rate?`,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `Most locations in ${state.name} outside GSA's listed high-cost areas use the standard CONUS rate. Destinations in the table on this page have elevated lodging and/or M&IE caps published by GSA.`
+      }
+    }
+  ]
+};
 ---
 
-<BaseLayout title={title} description={description}>
-  <nav class="text-sm text-[var(--color-ink-muted)]">
-    <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
-    <span class="mx-2">/</span>
-    <a class="hover:text-[var(--color-primary)]" href="/states/">States</a>
-    <span class="mx-2">/</span>
-    <span class="text-[var(--color-ink)]">{state.name}</span>
-  </nav>
+<BaseLayout title={title} description={description} jsonLd={[jsonLd, faqJsonLd]}>
+  <article class="max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-primary)]" href="/states/">States</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">{state.name}</span>
+    </nav>
 
-  <h1 class="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)]">
-    {state.name} per diem
-  </h1>
-  <p class="mt-3 max-w-2xl text-[var(--color-ink-muted)]">
-    GSA publishes a <strong>standard CONUS rate</strong> for {state.name} plus higher rates for
-    listed counties and cities. Use the calculator to pick a locality and see seasonal lodging.
-  </p>
+    <h1 class="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+      {state.name} per diem rates
+    </h1>
+    <p class="mt-2 text-sm font-medium text-[var(--color-primary)]">
+      Federal fiscal year {fiscalYear} · GSA CONUS
+    </p>
 
-  <div class="mt-8 flex flex-wrap gap-3">
-    <a
-      href={calcHref}
-      class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[var(--color-primary-hover)]"
-      >Calculate for {state.abbr}</a
-    >
-    <a
-      href="/methodology/"
-      class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
-      >Methodology</a
-    >
-  </div>
+    <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      <p>
+        Federal travelers and contractors use <strong>General Services Administration (GSA)</strong>
+        per diem rates to estimate allowable <strong>lodging</strong> and
+        <strong> meals &amp; incidental expenses (M&amp;IE)</strong> while on official travel in
+        <strong> {state.name}</strong>. GSA publishes a <strong>standard CONUS rate</strong> for
+        much of the state and separate, often higher, caps for designated high-cost localities.
+      </p>
+      <p>
+        This page summarizes published GSA data for FY {fiscalYear}. For trip-specific totals
+        (travel-day rules, meal deductions, and seasonal lodging by month), use the
+        <a class="font-medium text-[var(--color-primary)] hover:underline" href={calcHref}>
+          CONUS calculator
+        </a>
+        with {state.abbr} pre-selected.
+      </p>
+    </div>
 
-  <div
-    class="mt-10 rounded-2xl border border-dashed border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 text-sm text-[var(--color-ink-muted)]"
-  >
-    Locality list for {state.abbr} appears here after GSA data sync. Open the calculator to search
-    all synced destinations for this state.
-  </div>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href={calcHref}
+        class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[var(--color-primary-hover)]"
+      >
+        Calculate {state.abbr} per diem
+      </a>
+      <a
+        href="/methodology/"
+        class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
+      >
+        Methodology &amp; sources
+      </a>
+    </div>
+
+    <StateRatesSection
+      stateName={state.name}
+      stateAbbr={state.abbr}
+      fiscalYear={fiscalYear}
+      localities={localities}
+      calcHref={calcHref}
+    />
+
+    <section class="mt-12 space-y-4" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="text-xl font-semibold text-[var(--color-ink)]">
+        Frequently asked questions
+      </h2>
+      <details
+        class="group rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4"
+      >
+        <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">
+          What is the GSA per diem rate for {state.name}?
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+          GSA sets a standard CONUS per diem for most of {state.name}, plus higher rates for listed
+          cities and counties. Amounts include daily M&amp;IE and monthly lodging caps that change
+          by month and destination.
+        </p>
+      </details>
+      <details
+        class="group rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4"
+      >
+        <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">
+          How do I look up per diem for a specific city or ZIP?
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+          Open the <a class="text-[var(--color-primary)] hover:underline" href={calcHref}>calculator</a
+          >, pick a locality from the dropdown or enter a ZIP code, and enter your travel dates. ZIP
+          lookup maps to the GSA destination ID (DID) for that area.
+        </p>
+      </details>
+      <details
+        class="group rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4"
+      >
+        <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">
+          Is this an official government website?
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+          No. PerDiemCalculator is an independent planning tool. Rates are sourced from
+          <a
+            class="text-[var(--color-primary)] hover:underline"
+            href="https://www.gsa.gov/travel/plan-book/per-diem-rates">GSA published tables</a
+          >. Verify amounts with your agency and the
+          <a
+            class="text-[var(--color-primary)] hover:underline"
+            href="https://www.ecfr.gov/current/title-41/subtitle-F">Federal Travel Regulation</a
+          >.
+        </p>
+      </details>
+    </section>
+
+    <p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+      Planning aid only · Not affiliated with GSA or the U.S. government ·
+      <a class="text-[var(--color-primary)] hover:underline" href="/methodology/">Data methodology</a
+      >
+    </p>
+  </article>
 </BaseLayout>
