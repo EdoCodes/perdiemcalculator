@@ -20,7 +20,10 @@ export async function checkSupabaseHealth(): Promise<SupabaseHealth> {
 
     return { status: "ok", localityCount: count };
   } catch (e) {
-    const message = e instanceof Error ? e.message : "Could not reach Supabase";
+    let message =
+      e instanceof Error ? e.message.trim() : typeof e === "string" ? e : "Could not reach Supabase";
+    if (!message) message = "Could not reach Supabase (network or blocked request)";
+
     const blocked =
       /failed to fetch|networkerror|load failed/i.test(message) ||
       message.includes("NetworkError");

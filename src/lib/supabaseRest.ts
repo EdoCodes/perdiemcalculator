@@ -39,7 +39,7 @@ export async function supabaseRest<T>(pathWithQuery: string, init?: RequestInit)
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(text || `Supabase HTTP ${res.status}`);
+    throw new Error(formatSupabaseError(res.status, text));
   }
 
   if (res.status === 204) {
@@ -49,21 +49,22 @@ export async function supabaseRest<T>(pathWithQuery: string, init?: RequestInit)
   return res.json() as Promise<T>;
 }
 
-export async function countLocalities(): Promise<number> {
-  const { url } = readSupabaseConfig();
-  const res = await fetch(`${url}/rest/v1/localities?select=id`, {
-    headers: {
-      ...authHeaders(),
-      Prefer: "count=exact"
+function formatSupabaseError(status: number, text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return `Supabase HTTP ${status}`;
+  try {
+    const body = JSON.parse(trimmed) as { message?: string; hint?: string };
+    if (body.message) {
+      return body.hint ? `${body.message} (${body.hint})` : body.message;
     }
-  });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `Supabase HTTP ${res.status}`);
+  } catch {
+    /* plain text */
   }
+  return trimmed.length > 180 ? `${trimmed.slice(0, 180)}…` : trimmed;
+}
 
-  const range = res.headers.get("content-range");
-  const total = range?.split("/")[1];
-  return total ? Number(total) : 0;
+/** Row count via response body (Content-Range is often blocked in browsers). */
+export async function countLocalities(): Promise<number> {
+  const data = await supabaseRest<{ id: string }[]>("localities?select=id");
+  return data?.length ?? 0;
 }
