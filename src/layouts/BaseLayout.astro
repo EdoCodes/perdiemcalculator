@@ -22,7 +22,7 @@ const path = Astro.url.pathname;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -42,10 +42,8 @@ const path = Astro.url.pathname;
     <script is:inline>
       (function () {
         const stored = localStorage.getItem("theme");
-        const dark =
-          stored === "dark" ||
-          (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
-        if (dark) document.documentElement.classList.add("dark");
+        const dark = stored !== "light";
+        document.documentElement.classList.toggle("dark", dark);
       })();
     </script>
     {
