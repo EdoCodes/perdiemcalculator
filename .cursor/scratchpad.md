@@ -2,7 +2,7 @@
 
 - [done] Scaffold Astro + React + Netlify + Supabase placeholders + CI — evidence: `npm run build` OK (55 pages), sitemap emitted when `PUBLIC_SITE_URL` is set.
 - [done] Design pass B (tokens, dark mode, calculator UX, homepage hero) — pushed to main
-- [in_progress] Wire calculator island to rate data (Supabase schema + GSA sync pipeline) — UI wired; needs GSA sync + Netlify env
+- [done] Wire calculator island to rate data — **Implementation:** SQL migration, `scripts/sync-gsa-rates.mjs`, GitHub `sync-gsa.yml`, UI queries + calculator; **Remaining (you):** run migration, set Netlify + GitHub secrets, run sync once or schedule workflow.
 - [done] Per-day GSA logic connected to calculator UI
 
 # Executor's Feedback or Assistance Requests
@@ -14,6 +14,7 @@
 # Lessons
 
 - `npm create astro@latest .` refuses a non-empty directory; scaffold into a temp folder and move up, or initialize Astro before adding `.cursor/`.
+- Locality list fetch: drop stale responses when `state` / fiscal year changes; default `localityId` via functional `setState` so in-flight responses cannot overwrite a user's selection. Sync `did` / label in a separate `useEffect` tied to `localities` + `localityId`.
 
 # High-level Task Breakdown
 

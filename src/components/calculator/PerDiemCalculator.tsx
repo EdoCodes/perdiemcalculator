@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { US_STATES } from "../../data/usStates";
 import { calculateTrip } from "../../lib/perdiem/calculate";
 import { eachTripDay, fiscalYearForDate } from "../../lib/perdiem/fiscalYear";
 import type { CalculatorOptions, TripResult } from "../../lib/perdiem/types";
 import { checkSupabaseHealth, type SupabaseHealth } from "../../lib/supabaseHealth";
-import { getSupabaseBrowserClient } from "../../lib/supabase";
 import {
   fetchLocalitiesForState,
   fetchLocalityRatesForTripByDid,
@@ -47,24 +46,39 @@ export function PerDiemCalculator() {
     dinner: false
   });
 
-  const [dbHealth, setDbHealth] = useState<SupabaseHealth | "checking">("checking");
-
-  const supabaseReady = dbHealth === "ok";
-
-  useEffect(() => {
-    let cancelled = false;
-    checkSupabaseHealth().then((health) => {
-      if (!cancelled) setDbHealth(health);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   const pickerFy = useMemo(() => {
     if (start) return fiscalYearForDate(new Date(start + "T12:00:00"));
     return fiscalYearForDate(new Date());
   }, [start]);
+
+  const [dbHealth, setDbHealth] = useState<SupabaseHealth | "checking">("checking");
+
+  const supabaseReady = dbHealth === "ok";
+  const fetchContextRef = useRef({ state, pickerFy });
+  fetchContextRef.current = { state, pickerFy };
+
+  const runHealthCheck = useCallback(() => {
+    setDbHealth("checking");
+    return checkSupabaseHealth().then(setDbHealth);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    runHealthCheck()
+      .catch((e) => {
+        if (!cancelled) {
+          setDbHealth({
+            status: "error",
+            message: e instanceof Error ? e.message : "Connection check failed",
+            hint:
+              "Try a private/incognito window. Ad blockers often block Supabase."
+          });
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [runHealthCheck]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -75,18 +89,22 @@ export function PerDiemCalculator() {
   useEffect(() => {
     if (!supabaseReady) return;
     let cancelled = false;
+    const reqState = state;
+    const reqFy = pickerFy;
     setLoadingLocalities(true);
-    fetchLocalitiesForState(state, pickerFy)
+    fetchLocalitiesForState(reqState, reqFy)
       .then((rows) => {
-        if (!cancelled) {
-          setLocalities(rows);
-          if (rows.length && !localityId) {
-            const standard = rows.find((r) => r.isStandard) ?? rows[0];
-            setLocalityId(standard.id);
-            setDid(standard.did);
-            setLocalityLabel(formatLocalityLabel(standard));
+        if (cancelled) return;
+        const latest = fetchContextRef.current;
+        if (latest.state !== reqState || latest.pickerFy !== reqFy) return;
+        setLocalities(rows);
+        setLocalityId((currentId) => {
+          const stillValid = rows.some((r) => r.id === currentId);
+          if (rows.length && (!currentId || !stillValid)) {
+            return (rows.find((r) => r.isStandard) ?? rows[0]).id;
           }
-        }
+          return currentId;
+        });
       })
       .catch((e) => {
         if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load localities");
@@ -99,13 +117,20 @@ export function PerDiemCalculator() {
     };
   }, [state, pickerFy, supabaseReady]);
 
+  useEffect(() => {
+    if (!localityId) {
+      setDid("");
+      setLocalityLabel("");
+      return;
+    }
+    const loc = localities.find((l) => l.id === localityId);
+    if (!loc) return;
+    setDid(loc.did);
+    setLocalityLabel(formatLocalityLabel(loc));
+  }, [localityId, localities]);
+
   const onLocalityChange = (id: string) => {
     setLocalityId(id);
-    const loc = localities.find((l) => l.id === id);
-    if (loc) {
-      setDid(loc.did);
-      setLocalityLabel(formatLocalityLabel(loc));
-    }
   };
 
   const runCalculation = useCallback(async () => {
@@ -207,7 +232,12 @@ export function PerDiemCalculator() {
   }
 
   if (dbHealth !== "ok") {
-    return <ConnectionHelp health={dbHealth} />;
+    return (
+      <ConnectionHelp
+        health={dbHealth}
+        onRetry={() => runHealthCheck().catch(() => undefined)}
+      />
+    );
   }
 
   return (
@@ -265,7 +295,6 @@ export function PerDiemCalculator() {
                   onChange={(e) => {
                     setState(e.target.value);
                     setLocalityId("");
-                    setDid("");
                   }}
                   className={inputClass}
                 >
@@ -441,7 +470,13 @@ function formatLocalityLabel(l: LocalityListItem): string {
   return `${l.city}${county}`;
 }
 
-function ConnectionHelp({ health }: { health: Exclude<SupabaseHealth, { status: "ok" }> }) {
+function ConnectionHelp({
+  health,
+  onRetry
+}: {
+  health: Exclude<SupabaseHealth, { status: "ok" }>;
+  onRetry?: () => void;
+}) {
   if (health.status === "missing_env") {
     return (
       <Card className="border-dashed border-[var(--color-primary)]/40 bg-[var(--color-primary-muted)]/30">
@@ -480,13 +515,19 @@ function ConnectionHelp({ health }: { health: Exclude<SupabaseHealth, { status: 
   return (
     <Card className="border-dashed border-red-300/50 bg-red-50/80 dark:bg-red-950/30">
       <h2 className="text-lg font-semibold text-[var(--color-ink)]">Database connection failed</h2>
-      <p className="mt-2 text-sm text-red-800 dark:text-red-200">{health.message}</p>
-      {health.hint ? <p className="mt-1 text-xs text-red-700 dark:text-red-300">{health.hint}</p> : null}
-      <ul className="mt-3 list-inside list-disc text-sm text-[var(--color-ink-muted)]">
-        <li>Confirm SQL migration ran in Supabase SQL Editor.</li>
-        <li>Use the anon key, not the service_role key, for PUBLIC_SUPABASE_ANON_KEY.</li>
-        <li>Redeploy Netlify after changing environment variables.</li>
-      </ul>
+      <p className="mt-2 text-sm font-medium text-red-800 dark:text-red-200">
+        {health.message || "Unknown error"}
+      </p>
+      {health.hint ? <p className="mt-1 text-sm text-red-700 dark:text-red-300">{health.hint}</p> : null}
+      <p className="mt-3 text-sm text-[var(--color-ink-muted)]">
+        Your Netlify keys are probably fine if <code className="text-xs">npm run test:supabase</code> works on
+        your PC. Try <strong>Ctrl+Shift+R</strong>, a private window, or turn off ad blockers for this site.
+      </p>
+      {onRetry && health.status === "error" ? (
+        <Button className="mt-4" variant="secondary" onClick={onRetry}>
+          Try again
+        </Button>
+      ) : null}
     </Card>
   );
 }

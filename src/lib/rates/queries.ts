@@ -1,4 +1,4 @@
-import { getSupabaseBrowserClient } from "../supabase";
+import { isSupabaseConfigured, supabaseRest } from "../supabaseRest";
 import type { LocalityRate } from "../perdiem/types";
 
 export type LocalityListItem = {
@@ -12,23 +12,21 @@ export type LocalityListItem = {
   mieTotal: number;
 };
 
-export async function fetchLocalitiesForState(
-  state: string,
-  fiscalYear: number
-): Promise<LocalityListItem[]> {
-  const supabase = getSupabaseBrowserClient();
-  if (!supabase) return [];
+type LocalityRow = {
+  id: string;
+  did: string;
+  state: string;
+  city: string;
+  county: string | null;
+  is_standard: boolean;
+  fiscal_year: number;
+  mie_total: number;
+};
 
-  const { data, error } = await supabase
-    .from("localities")
-    .select("id, did, state, city, county, is_standard, fiscal_year, mie_total")
-    .eq("state", state.toUpperCase())
-    .eq("fiscal_year", fiscalYear)
-    .order("is_standard", { ascending: true })
-    .order("city");
+type LodgingRow = { month: number; max_lodging: number };
 
-  if (error) throw error;
-  return (data ?? []).map((r) => ({
+function mapLocality(r: LocalityRow): LocalityListItem {
+  return {
     id: r.id,
     did: r.did,
     state: r.state,
@@ -37,35 +35,44 @@ export async function fetchLocalitiesForState(
     isStandard: r.is_standard,
     fiscalYear: r.fiscal_year,
     mieTotal: Number(r.mie_total)
-  }));
+  };
 }
 
-export async function fetchLocalityWithLodging(
-  localityId: string
-): Promise<LocalityRate | null> {
-  const supabase = getSupabaseBrowserClient();
-  if (!supabase) return null;
+export async function fetchLocalitiesForState(
+  state: string,
+  fiscalYear: number
+): Promise<LocalityListItem[]> {
+  if (!isSupabaseConfigured()) return [];
 
-  const { data: loc, error: locErr } = await supabase
-    .from("localities")
-    .select("id, did, state, city, county, is_standard, fiscal_year, mie_total")
-    .eq("id", localityId)
-    .maybeSingle();
+  const st = state.toUpperCase();
+  const data = await supabaseRest<LocalityRow[]>(
+    `localities?state=eq.${encodeURIComponent(st)}&fiscal_year=eq.${fiscalYear}&select=id,did,state,city,county,is_standard,fiscal_year,mie_total&order=is_standard.asc,city.asc`
+  );
 
-  if (locErr) throw locErr;
-  if (!loc) return null;
+  return (data ?? []).map(mapLocality);
+}
 
-  const { data: lodging, error: lodErr } = await supabase
-    .from("locality_lodging")
-    .select("month, max_lodging")
-    .eq("locality_id", localityId);
-
-  if (lodErr) throw lodErr;
-
+async function fetchLodgingByMonth(localityId: string): Promise<Record<number, number>> {
+  const lodging = await supabaseRest<LodgingRow[]>(
+    `locality_lodging?locality_id=eq.${encodeURIComponent(localityId)}&select=month,max_lodging`
+  );
   const lodgingByMonth: Record<number, number> = {};
   for (const row of lodging ?? []) {
     lodgingByMonth[row.month] = Number(row.max_lodging);
   }
+  return lodgingByMonth;
+}
+
+export async function fetchLocalityWithLodging(localityId: string): Promise<LocalityRate | null> {
+  if (!isSupabaseConfigured()) return null;
+
+  const rows = await supabaseRest<LocalityRow[]>(
+    `localities?id=eq.${encodeURIComponent(localityId)}&select=id,did,state,city,county,is_standard,fiscal_year,mie_total&limit=1`
+  );
+  const loc = rows[0];
+  if (!loc) return null;
+
+  const lodgingByMonth = await fetchLodgingByMonth(localityId);
 
   return {
     id: loc.id,
@@ -84,43 +91,24 @@ export async function resolveLocalityByZip(
   zip: string,
   fiscalYear: number
 ): Promise<LocalityListItem | null> {
-  const supabase = getSupabaseBrowserClient();
-  if (!supabase) return null;
+  if (!isSupabaseConfigured()) return null;
 
   const normalized = zip.replace(/\D/g, "").slice(0, 5);
   if (normalized.length !== 5) return null;
 
-  const { data: mapping, error: mapErr } = await supabase
-    .from("zip_locality")
-    .select("did, state")
-    .eq("zip", normalized)
-    .eq("fiscal_year", fiscalYear)
-    .maybeSingle();
-
-  if (mapErr) throw mapErr;
+  const mappings = await supabaseRest<{ did: string; state: string }[]>(
+    `zip_locality?zip=eq.${encodeURIComponent(normalized)}&fiscal_year=eq.${fiscalYear}&select=did,state&limit=1`
+  );
+  const mapping = mappings[0];
   if (!mapping) return null;
 
-  const { data: loc, error: locErr } = await supabase
-    .from("localities")
-    .select("id, did, state, city, county, is_standard, fiscal_year, mie_total")
-    .eq("did", mapping.did)
-    .eq("state", mapping.state)
-    .eq("fiscal_year", fiscalYear)
-    .maybeSingle();
-
-  if (locErr) throw locErr;
+  const locs = await supabaseRest<LocalityRow[]>(
+    `localities?did=eq.${encodeURIComponent(mapping.did)}&state=eq.${encodeURIComponent(mapping.state)}&fiscal_year=eq.${fiscalYear}&select=id,did,state,city,county,is_standard,fiscal_year,mie_total&limit=1`
+  );
+  const loc = locs[0];
   if (!loc) return null;
 
-  return {
-    id: loc.id,
-    did: loc.did,
-    state: loc.state,
-    city: loc.city,
-    county: loc.county,
-    isStandard: loc.is_standard,
-    fiscalYear: loc.fiscal_year,
-    mieTotal: Number(loc.mie_total)
-  };
+  return mapLocality(loc);
 }
 
 export async function fetchLocalityRatesForTripByDid(
@@ -128,33 +116,19 @@ export async function fetchLocalityRatesForTripByDid(
   state: string,
   fiscalYears: number[]
 ): Promise<Map<number, LocalityRate>> {
-  const supabase = getSupabaseBrowserClient();
   const map = new Map<number, LocalityRate>();
-  if (!supabase) return map;
+  if (!isSupabaseConfigured()) return map;
+
+  const st = state.toUpperCase();
 
   for (const fy of [...new Set(fiscalYears)]) {
-    const { data: loc, error: locErr } = await supabase
-      .from("localities")
-      .select("id, did, state, city, county, is_standard, fiscal_year, mie_total")
-      .eq("did", did)
-      .eq("state", state.toUpperCase())
-      .eq("fiscal_year", fy)
-      .maybeSingle();
-
-    if (locErr) throw locErr;
+    const locs = await supabaseRest<LocalityRow[]>(
+      `localities?did=eq.${encodeURIComponent(did)}&state=eq.${encodeURIComponent(st)}&fiscal_year=eq.${fy}&select=id,did,state,city,county,is_standard,fiscal_year,mie_total&limit=1`
+    );
+    const loc = locs[0];
     if (!loc) continue;
 
-    const { data: lodging, error: lodErr } = await supabase
-      .from("locality_lodging")
-      .select("month, max_lodging")
-      .eq("locality_id", loc.id);
-
-    if (lodErr) throw lodErr;
-
-    const lodgingByMonth: Record<number, number> = {};
-    for (const row of lodging ?? []) {
-      lodgingByMonth[row.month] = Number(row.max_lodging);
-    }
+    const lodgingByMonth = await fetchLodgingByMonth(loc.id);
 
     map.set(fy, {
       id: loc.id,
