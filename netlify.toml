@@ -3,8 +3,20 @@
   publish = "dist"
 
 [build.environment]
-  # Astro 6 requires Node >= 22.12.0
   NODE_VERSION = "22.12.0"
-  # IMPORTANT: Also set in Netlify UI (Site configuration → Environment variables):
-  # PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SITE_URL
-  # Astro bakes PUBLIC_* into the client at build time — trigger a new deploy after adding them.
+  # Canonical URLs + sitemap (override in Netlify UI if you use a custom domain).
+  PUBLIC_SITE_URL = "https://perdiemproject.netlify.app"
+  # Also set in Netlify UI (required for the calculator):
+  # PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

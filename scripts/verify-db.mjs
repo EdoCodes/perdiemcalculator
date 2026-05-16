@@ -37,15 +37,16 @@ const { data: sample90501 } = await supabase
   .eq("fiscal_year", 2026)
   .maybeSingle();
 
-console.log("localities:", localities ?? 0, localities < 500 ? "(LOW — run npm run sync:gsa)" : "(OK)");
+const localityOk = (localities ?? 0) >= 600;
+console.log(
+  "localities:",
+  localities ?? 0,
+  localityOk ? "(OK)" : "(LOW — run npm run sync:gsa)"
+);
 console.log("zip_locality FY2025:", zips2025 ?? 0, (zips2025 ?? 0) < 30000 ? "(LOW)" : "(OK)");
 console.log("zip_locality FY2026:", zips2026 ?? 0, (zips2026 ?? 0) < 30000 ? "(LOW)" : "(OK)");
 console.log("ZIP 90501 FY2026:", sample90501 ? `found → ${sample90501.state} DID ${sample90501.did}` : "NOT FOUND");
 
-const ok =
-  (localities ?? 0) >= 500 &&
-  (zips2025 ?? 0) >= 30000 &&
-  (zips2026 ?? 0) >= 30000 &&
-  sample90501;
+const ok = localityOk && (zips2025 ?? 0) >= 30000 && (zips2026 ?? 0) >= 30000 && sample90501;
 
 process.exit(ok ? 0 : 2);

@@ -1,43 +1,53 @@
-# Astro Starter Kit: Minimal
+# Per Diem Calculator
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Federal **GSA CONUS** per diem calculator (lodging + M&IE), state hub pages, and methodology. Static site on **Netlify**; rates cached in **Supabase** from the [GSA Per Diem API](https://open.gsa.gov/api/perdiem/).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+**Live site:** https://perdiemproject.netlify.app
 
-## 🚀 Project Structure
+## Commands
 
-Inside of your Astro project, you'll see the following folders and files:
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Local dev at http://localhost:4321 |
+| `npm run build` | Production build → `dist/` |
+| `npm run test:supabase` | Test anon DB read (needs `.env`) |
+| `npm run verify:db` | Check rate/ZIP row counts (needs service role in `.env`) |
+| `npm run sync:gsa` | Import GSA rates into Supabase |
+| `npm run setup:rates` | `check:env` + full sync FY 2025 & 2026 |
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Go-live checklist
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### Netlify (Site configuration → Environment variables)
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+| Variable | Value |
+|----------|--------|
+| `PUBLIC_SITE_URL` | `https://perdiemproject.netlify.app` (or your custom domain) |
+| `PUBLIC_SUPABASE_URL` | `https://YOUR_PROJECT.supabase.co` |
+| `PUBLIC_SUPABASE_ANON_KEY` | Supabase **anon public** key |
 
-Any static assets, like images, can be placed in the `public/` directory.
+Do **not** add `GSA_API_KEY` or `SUPABASE_SERVICE_ROLE_KEY` to Netlify.
 
-## 🧞 Commands
+After any env change: **Deploys → Clear cache and deploy**.
 
-All commands are run from the root of the project, from a terminal:
+### Supabase (one-time)
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+1. Run SQL in `supabase/migrations/001_gsa_rates.sql` (SQL Editor).
+2. Load rates: `npm run setup:rates` locally, or GitHub **Actions → Sync GSA rates** (needs repo secrets: `GSA_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`).
+3. Confirm: `npm run verify:db` → all **(OK)**, sample ZIP found.
 
-## 👀 Want to learn more?
+### GitHub
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Repo connected to Netlify (`main` branch).
+- Optional: enable weekly **Sync GSA rates** workflow after adding Actions secrets.
+
+## Local setup
+
+Copy `.env.example` → `.env` and fill keys from Supabase + GSA.
+
+## Data model
+
+GSA does **not** publish every U.S. city. You get ~346 **localities** per fiscal year (NSAs + state standard rates) and ~40k **ZIP → locality** mappings. Unlisted towns use the **standard CONUS** rate for that state.
+
+## Disclaimer
+
+Planning aid only. Verify amounts against official GSA tables and your agency’s FTR implementation.
