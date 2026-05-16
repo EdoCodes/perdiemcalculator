@@ -4,6 +4,7 @@ import { calculateTrip } from "../../lib/perdiem/calculate";
 import { eachTripDay, fiscalYearForDate } from "../../lib/perdiem/fiscalYear";
 import type { CalculatorOptions, TripResult } from "../../lib/perdiem/types";
 import { checkSupabaseHealth, type SupabaseHealth } from "../../lib/supabaseHealth";
+import { isSupabaseConfigured } from "../../lib/supabaseRest";
 import {
   fetchLocalitiesForState,
   fetchLocalityRatesForTripByDid,
@@ -51,34 +52,33 @@ export function PerDiemCalculator() {
     return fiscalYearForDate(new Date());
   }, [start]);
 
-  const [dbHealth, setDbHealth] = useState<SupabaseHealth | "checking">("checking");
+  const envConfigured = isSupabaseConfigured();
+  const [dbBanner, setDbBanner] = useState<SupabaseHealth | null>(null);
 
-  const supabaseReady = dbHealth === "ok";
+  const supabaseReady = envConfigured;
   const fetchContextRef = useRef({ state, pickerFy });
   fetchContextRef.current = { state, pickerFy };
 
-  const runHealthCheck = useCallback(() => {
-    setDbHealth("checking");
-    return checkSupabaseHealth().then(setDbHealth);
-  }, []);
-
   useEffect(() => {
+    if (!envConfigured) return;
     let cancelled = false;
-    runHealthCheck()
+    checkSupabaseHealth()
+      .then((health) => {
+        if (!cancelled && health.status !== "ok") setDbBanner(health);
+      })
       .catch((e) => {
         if (!cancelled) {
-          setDbHealth({
+          setDbBanner({
             status: "error",
-            message: e instanceof Error ? e.message : "Connection check failed",
-            hint:
-              "Try a private/incognito window. Ad blockers often block Supabase."
+            message: e instanceof Error ? e.message : "Could not verify database",
+            hint: "Try incognito or disable ad blockers. The form below may still work."
           });
         }
       });
     return () => {
       cancelled = true;
     };
-  }, [runHealthCheck]);
+  }, [envConfigured]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -223,26 +223,26 @@ export function PerDiemCalculator() {
     }
   };
 
-  if (dbHealth === "checking") {
-    return (
-      <Card className="border-dashed border-[var(--color-border)]">
-        <p className="text-sm text-[var(--color-ink-muted)]">Checking connection to rate database…</p>
-      </Card>
-    );
-  }
-
-  if (dbHealth !== "ok") {
-    return (
-      <ConnectionHelp
-        health={dbHealth}
-        onRetry={() => runHealthCheck().catch(() => undefined)}
-      />
-    );
+  if (!envConfigured) {
+    return <ConnectionHelp health={{ status: "missing_env" }} />;
   }
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
       <div className="space-y-6">
+        {dbBanner ? (
+          <ConnectionHelp
+            health={dbBanner}
+            onRetry={() => {
+              setDbBanner(null);
+              checkSupabaseHealth()
+                .then((h) => {
+                  if (h.status !== "ok") setDbBanner(h);
+                })
+                .catch(() => undefined);
+            }}
+          />
+        ) : null}
         <Card>
           <StepHeader n={1} title="Trip dates" />
           <div className="mt-4 grid gap-4 sm:grid-cols-2">

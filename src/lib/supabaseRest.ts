@@ -29,13 +29,27 @@ export async function supabaseRest<T>(pathWithQuery: string, init?: RequestInit)
     throw new Error("Supabase not configured");
   }
 
-  const res = await fetch(`${url}/rest/v1/${pathWithQuery}`, {
-    ...init,
-    headers: {
-      ...authHeaders(),
-      ...(init?.headers as Record<string, string> | undefined)
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20_000);
+
+  let res: Response;
+  try {
+    res = await fetch(`${url}/rest/v1/${pathWithQuery}`, {
+      ...init,
+      signal: controller.signal,
+      headers: {
+        ...authHeaders(),
+        ...(init?.headers as Record<string, string> | undefined)
+      }
+    });
+  } catch (e) {
+    if (e instanceof Error && e.name === "AbortError") {
+      throw new Error("Request timed out (20s)");
     }
-  });
+    throw e;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!res.ok) {
     const text = await res.text();
@@ -65,6 +79,6 @@ function formatSupabaseError(status: number, text: string): string {
 
 /** Row count via response body (Content-Range is often blocked in browsers). */
 export async function countLocalities(): Promise<number> {
-  const data = await supabaseRest<{ id: string }[]>("localities?select=id");
+  const data = await supabaseRest<{ id: string }[]>("localities?select=id&limit=1");
   return data?.length ?? 0;
 }
