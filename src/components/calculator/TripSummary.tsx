@@ -15,7 +15,7 @@ export function TripSummary({
   const lodgingPct = 100 - miePct;
 
   return (
-    <div className="sticky top-6 space-y-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 shadow-lg shadow-black/5 dark:shadow-black/30">
+    <div className="sticky top-6 space-y-4 rounded-2xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] p-6 shadow-lg shadow-black/35">
       <div>
         <p className="text-sm font-medium text-[var(--color-ink-muted)]">Estimated trip total</p>
         <p className="mt-1 text-4xl font-bold tracking-tight text-[var(--color-ink)]">

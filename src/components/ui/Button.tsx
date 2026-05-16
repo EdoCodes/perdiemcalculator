@@ -1,10 +1,12 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "action" | "secondary" | "ghost";
 
 const variants: Record<Variant, string> = {
   primary:
     "bg-[var(--color-primary)] text-white shadow-md shadow-[var(--color-primary)]/25 hover:bg-[var(--color-primary-hover)]",
+  action:
+    "bg-[var(--color-action)] text-[var(--color-action-fg)] shadow-md shadow-[var(--color-action)]/30 hover:bg-[var(--color-action-hover)] focus-visible:outline-[var(--color-action)]",
   secondary:
     "bg-[var(--color-surface-elevated)] text-[var(--color-ink)] ring-1 ring-[var(--color-border)] hover:bg-[var(--color-surface-muted)]",
   ghost: "text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-ink)]"

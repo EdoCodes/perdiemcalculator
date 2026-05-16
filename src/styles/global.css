@@ -21,6 +21,12 @@
   --color-primary-muted: #ccfbf1;
   --color-accent: #f59e0b;
   --color-accent-muted: #fef3c7;
+  --color-action: #0d9488;
+  --color-action-hover: #0f766e;
+  --color-action-fg: #ffffff;
+  --color-error-border: #fecaca;
+  --color-error-bg: #fef2f2;
+  --color-error-text: #991b1b;
 }
 
 .dark {
@@ -61,5 +67,45 @@
   .glass {
     background: color-mix(in srgb, var(--color-surface-elevated) 88%, transparent);
     backdrop-filter: blur(12px);
+  }
+
+  /* Calculator: always dark, brighter accents, distinct CTA buttons */
+  .calculator-theme {
+    --color-surface: #070b14;
+    --color-surface-elevated: #0f1628;
+    --color-surface-muted: #182238;
+    --color-border: #2a3a56;
+    --color-border-strong: #3d5278;
+    --color-ink: #f1f5f9;
+    --color-ink-muted: #94a8c9;
+    --color-primary: #52dcff;
+    --color-primary-hover: #8ae8ff;
+    --color-primary-muted: #0c3344;
+    --color-accent: #fbbf24;
+    --color-accent-muted: #3d2e0a;
+    --color-action: #f97316;
+    --color-action-hover: #fb923c;
+    --color-action-fg: #0f172a;
+    --color-error-border: #7f1d1d;
+    --color-error-bg: #1c0a0a;
+    --color-error-text: #fecaca;
+    color: var(--color-ink);
+  }
+
+  .calculator-theme .calc-breakdown-table thead tr {
+    background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface-muted));
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .calculator-theme .calc-breakdown-table tbody tr:nth-child(odd) {
+    background: var(--color-surface-elevated);
+  }
+
+  .calculator-theme .calc-breakdown-table tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--color-surface-muted) 90%, var(--color-surface-elevated));
+  }
+
+  .calculator-theme .calc-breakdown-table tbody tr:hover {
+    background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-elevated));
   }
 }

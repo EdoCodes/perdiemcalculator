@@ -10,10 +10,10 @@ export function DayBreakdownTable({
   showLodging150: boolean;
 }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-[var(--color-border)]">
+    <div className="calc-breakdown-table overflow-x-auto rounded-2xl border border-[var(--color-border-strong)]">
       <table className="w-full min-w-[640px] text-left text-sm">
         <thead>
-          <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)]">
+          <tr>
             <th className="px-4 py-3 font-semibold text-[var(--color-ink)]">Date</th>
             <th className="px-4 py-3 font-semibold text-[var(--color-ink)]">FY</th>
             <th className="px-4 py-3 font-semibold text-[var(--color-ink)]">Lodging</th>
@@ -26,7 +26,7 @@ export function DayBreakdownTable({
           {days.map((day) => (
             <tr
               key={day.date}
-              className="border-b border-[var(--color-border)] last:border-0 odd:bg-[var(--color-surface-elevated)] even:bg-[var(--color-surface-muted)]/40"
+              className="border-b border-[var(--color-border)] last:border-0"
             >
               <td className="px-4 py-3">
                 <div className="font-medium text-[var(--color-ink)]">{formatShortDate(day.date)}</div>

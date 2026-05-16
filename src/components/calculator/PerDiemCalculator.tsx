@@ -277,7 +277,7 @@ export function PerDiemCalculator() {
                 onClick={() => setLocationTab(tab)}
                 className={`flex-1 rounded-lg py-2 text-sm font-semibold transition ${
                   locationTab === tab
-                    ? "bg-[var(--color-surface-elevated)] text-[var(--color-ink)] shadow-sm"
+                    ? "bg-[var(--color-surface-elevated)] text-[var(--color-primary)] shadow-sm ring-1 ring-[var(--color-border-strong)]"
                     : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
                 }`}
               >
@@ -411,6 +411,7 @@ export function PerDiemCalculator() {
         </Card>
 
         <Button
+          variant="action"
           className="w-full sm:w-auto"
           onClick={runCalculation}
           disabled={calculating}
@@ -421,7 +422,7 @@ export function PerDiemCalculator() {
         {error ? (
           <div
             role="alert"
-            className="rounded-xl border border-red-300/50 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950/50 dark:text-red-200"
+            className="rounded-xl border border-[var(--color-error-border)] bg-[var(--color-error-bg)] px-4 py-3 text-sm text-[var(--color-error-text)]"
           >
             {error}
           </div>
@@ -513,12 +514,14 @@ function ConnectionHelp({
   }
 
   return (
-    <Card className="border-dashed border-red-300/50 bg-red-50/80 dark:bg-red-950/30">
+    <Card className="border-dashed border-[var(--color-error-border)] bg-[var(--color-error-bg)]">
       <h2 className="text-lg font-semibold text-[var(--color-ink)]">Database connection failed</h2>
-      <p className="mt-2 text-sm font-medium text-red-800 dark:text-red-200">
+      <p className="mt-2 text-sm font-medium text-[var(--color-error-text)]">
         {health.message || "Unknown error"}
       </p>
-      {health.hint ? <p className="mt-1 text-sm text-red-700 dark:text-red-300">{health.hint}</p> : null}
+      {health.hint ? (
+        <p className="mt-1 text-sm text-[var(--color-error-text)]/80">{health.hint}</p>
+      ) : null}
       <p className="mt-3 text-sm text-[var(--color-ink-muted)]">
         Your Netlify keys are probably fine if <code className="text-xs">npm run test:supabase</code> works on
         your PC. Try <strong>Ctrl+Shift+R</strong>, a private window, or turn off ad blockers for this site.
