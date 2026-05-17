@@ -108,4 +108,23 @@
   .calculator-theme .calc-breakdown-table tbody tr:hover {
     background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-elevated));
   }
+
+  .crew-hub .crew-panel {
+    animation: crew-fade-in 0.2s ease-out;
+  }
+
+  @keyframes crew-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .crew-nav {
+    scrollbar-width: thin;
+  }
 }

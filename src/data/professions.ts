@@ -42,11 +42,15 @@ export const PROFESSIONS: Profession[] = [
     shortName: "Airline crew",
     category: "aviation",
     description:
-      "Estimate trip per diem from your contract daily or hourly rates—domestic and international.",
+      "Contract pay, live GSA M&IE, trip log, calendar, free exports, and 8,800+ airports—built for airline crew.",
     href: "/calculator/crew/",
     available: true,
-    badges: ["Contract rates", "Trip planner"],
-    highlights: ["Per day or per hour", "Domestic / intl", "Day-by-day breakdown"]
+    badges: ["Free exports", "Live GSA"],
+    highlights: [
+      "8,800+ airport search",
+      "Trip log & calendar",
+      "CSV / AI import"
+    ]
   },
   {
     id: "education-teacher",

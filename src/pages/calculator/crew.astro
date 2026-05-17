@@ -1,11 +1,11 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
-import { CrewPerDiemCalculator } from "../../components/calculator/CrewPerDiemCalculator";
+import { CrewHub } from "../../components/crew/CrewHub";
 
 const title = "Airline crew per diem calculator | Per Diem Calculator";
 const description =
-  "Estimate per diem for pilots and cabin crew using your contract daily or hourly rates, with domestic and international trip options.";
+  "Airline crew per diem: contract vs GSA, multi-city layovers, trip log, calendar, and schedule import (CSV or AI).";
 ---
 
 <BaseLayout title={title} description={description}>
@@ -19,11 +19,11 @@ const description =
         Airline crew per diem
       </h1>
       <p class="mt-3 text-[var(--color-ink-muted)]">
-        Pilots and flight attendants: enter your CBA or employer rates for time away from base. This is a
-        planning tool—not payroll advice.
+        Built for pilots and cabin crew: live GSA rates, contract comparison, 8,800+ airports, trip log,
+        calendar, and free CSV/PDF exports. Not payroll or tax advice.
       </p>
     </div>
 
-    <CrewPerDiemCalculator client:load />
+    <CrewHub client:load />
   </section>
 </BaseLayout>

@@ -16,6 +16,7 @@
     "prelaunch": "node scripts/check-env.mjs && node scripts/verify-db.mjs",
     "sync:gsa": "node scripts/sync-gsa-rates.mjs --years=2025,2026",
     "sync:lea": "node scripts/sync-nces-lea.mjs",
+    "sync:airports": "node scripts/sync-crew-airports.mjs",
     "setup:rates": "node scripts/check-env.mjs && node scripts/sync-gsa-rates.mjs --years=2025,2026"
   },
   "dependencies": {
