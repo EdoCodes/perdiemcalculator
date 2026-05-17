@@ -19,7 +19,7 @@ export function CalculatorProfessionBar({ professionId }: Props) {
 
   return (
     <nav
-      className="mb-8 flex flex-col gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-muted)]/60 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+      className="calc-step-bar mb-8 flex flex-col gap-4 rounded-2xl px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
       aria-label="Calculator steps"
     >
       <ol className="flex flex-wrap items-center gap-2 text-sm">
@@ -34,7 +34,7 @@ export function CalculatorProfessionBar({ professionId }: Props) {
         <li className="text-[var(--color-ink-muted)]" aria-hidden>
           /
         </li>
-        <li className="font-semibold text-[var(--color-ink)]" aria-current="step">
+        <li className="font-semibold text-[var(--color-accent)]" aria-current="step">
           2. {profession.shortName}
         </li>
       </ol>

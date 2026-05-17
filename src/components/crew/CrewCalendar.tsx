@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { formatUsd } from "../../lib/format";
+import { calcSelect } from "../../lib/calcUi";
 import { useCrewTripLog } from "../../hooks/useCrewTripLog";
 import { Card } from "../ui/Card";
 
@@ -27,8 +28,7 @@ export function CrewCalendar({ year: statsYear }: Props) {
     for (const trip of trips) {
       for (const seg of trip.daySegments) {
         const prev = map.get(seg.date);
-        const amount =
-          view === "gsa" ? seg.gsaAmount : seg.contractAmount;
+        const amount = view === "gsa" ? seg.gsaAmount : seg.contractAmount;
         if (prev) {
           map.set(seg.date, {
             airportCode: seg.airportCode,
@@ -81,8 +81,8 @@ export function CrewCalendar({ year: statsYear }: Props) {
   if (!trips.length) {
     return (
       <Card padding="lg">
-        <h2 className="text-lg font-semibold text-[var(--color-ink)]">Trip calendar</h2>
-        <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
+        <h2 className="calc-section-title">Trip calendar</h2>
+        <p className="mt-3 text-sm text-[var(--color-ink-muted)]">
           Save trips from the calculator to see per-day amounts on the calendar.
         </p>
       </Card>
@@ -93,77 +93,92 @@ export function CrewCalendar({ year: statsYear }: Props) {
     <Card padding="lg">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-semibold text-[var(--color-ink)]">Trip calendar</h2>
-          <p className="mt-1 text-sm text-[var(--color-ink-muted)]">
-            {monthLabel} · {formatUsd(monthTotal)} {view === "gsa" ? "GSA M&IE" : "contract"}
+          <h2 className="calc-section-title">Trip calendar</h2>
+          <p className="mt-3 text-sm text-[var(--color-ink-muted)]">
+            <span className="font-semibold text-[var(--color-primary)]">{monthLabel}</span>
+            <span className="mx-2 text-[var(--color-border-strong)]">·</span>
+            <span className="font-semibold tabular-nums text-[var(--color-accent)]">
+              {formatUsd(monthTotal)}
+            </span>{" "}
+            {view === "gsa" ? "GSA M&IE" : "contract"}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="calc-calendar-toolbar flex flex-wrap items-center gap-2">
           <select
-            className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3 py-2 text-sm"
+            className={calcSelect}
             value={view}
             onChange={(e) => setView(e.target.value as "gsa" | "contract")}
+            aria-label="Calendar amount type"
           >
             <option value="gsa">GSA M&IE</option>
             <option value="contract">Contract pay</option>
           </select>
           <button
             type="button"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-muted)]"
+            className="calc-calendar-nav-btn"
             onClick={() => shiftMonth(-1)}
+            aria-label="Previous month"
           >
             ←
           </button>
           <button
             type="button"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-muted)]"
+            className="calc-calendar-nav-btn"
             onClick={() => shiftMonth(1)}
+            aria-label="Next month"
           >
             →
           </button>
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-7 gap-1 text-center text-xs">
-        {WEEKDAYS.map((w) => (
-          <div key={w} className="py-2 font-medium text-[var(--color-ink-muted)]">
-            {w}
-          </div>
-        ))}
-        {cells.map((cell, i) => {
-          if (!cell.iso) {
-            return <div key={`pad-${i}`} className="min-h-[4.5rem] rounded-lg bg-transparent" />;
-          }
-          const data = dayMap.get(cell.iso);
-          const dayNum = parseInt(cell.iso.slice(8), 10);
-          const isToday =
-            cell.iso ===
-            new Date().toISOString().slice(0, 10);
-          return (
-            <div
-              key={cell.iso}
-              className={`min-h-[4.5rem] rounded-lg border p-1.5 text-left ${
-                isToday
-                  ? "border-[var(--color-primary)] bg-[var(--color-primary)]/10"
-                  : "border-[var(--color-border)]/60 bg-[var(--color-surface-muted)]/30"
-              }`}
-            >
-              <span className="text-[10px] font-medium text-[var(--color-ink-muted)]">
-                {dayNum}
-              </span>
-              {data && data.amount > 0 && (
-                <div className="mt-1">
-                  <span className="block font-mono text-[10px] font-semibold text-[var(--color-ink)]">
-                    {data.airportCode}
-                  </span>
-                  <span className="block text-[10px] text-[var(--color-ink-muted)]">
-                    {formatUsd(data.amount)}
-                  </span>
-                </div>
-              )}
+      <div className="calc-calendar mt-6">
+        <div className="grid grid-cols-7 gap-1.5 text-center">
+          {WEEKDAYS.map((w) => (
+            <div key={w} className="calc-calendar-weekday">
+              {w}
             </div>
-          );
-        })}
+          ))}
+          {cells.map((cell, i) => {
+            if (!cell.iso) {
+              return <div key={`pad-${i}`} className="min-h-[4.75rem] rounded-lg" />;
+            }
+            const data = dayMap.get(cell.iso);
+            const dayNum = parseInt(cell.iso.slice(8), 10);
+            const isToday = cell.iso === new Date().toISOString().slice(0, 10);
+            const hasTrip = Boolean(data && data.amount > 0);
+            return (
+              <div
+                key={cell.iso}
+                className={`calc-calendar-cell ${
+                  isToday
+                    ? "calc-calendar-cell--today"
+                    : hasTrip
+                      ? "calc-calendar-cell--has-trip"
+                      : ""
+                }`}
+              >
+                <span
+                  className={`text-[11px] font-bold ${
+                    isToday ? "text-[var(--color-primary)]" : "text-[var(--color-ink-muted)]"
+                  }`}
+                >
+                  {dayNum}
+                </span>
+                {hasTrip && data && (
+                  <div className="mt-1">
+                    <span className="block font-mono text-[11px] font-bold text-[var(--color-accent)]">
+                      {data.airportCode}
+                    </span>
+                    <span className="block text-[11px] font-semibold tabular-nums text-[var(--color-ink)]">
+                      {formatUsd(data.amount)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </Card>
   );

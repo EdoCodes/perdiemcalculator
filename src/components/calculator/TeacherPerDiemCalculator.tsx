@@ -25,8 +25,7 @@ import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 
-const inputClass =
-  "mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] shadow-sm transition focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20";
+import { calcInput } from "../../lib/calcUi";
 
 type RateMode = "gsa" | "custom";
 type AnyResult = TeacherGsaTripResult | TeacherCustomTripResult;
@@ -437,7 +436,7 @@ function PurposeSelect({
 }) {
   return (
     <select
-      className={inputClass}
+      className={calcInput}
       value={purpose}
       onChange={(e) => setPurpose(e.target.value as TeacherTripPurpose)}
     >
@@ -484,7 +483,7 @@ function GsaFields(props: {
         <label className="block text-sm font-medium text-[var(--color-ink)]">
           School / employer state
           <select
-            className={inputClass}
+            className={calcInput}
             value={props.employerState}
             onChange={(e) => props.setEmployerState(e.target.value)}
           >
@@ -498,7 +497,7 @@ function GsaFields(props: {
         <label className="block text-sm font-medium text-[var(--color-ink)]">
           Trip destination state
           <select
-            className={inputClass}
+            className={calcInput}
             value={props.destState}
             onChange={(e) => props.setDestState(e.target.value)}
           >
@@ -517,7 +516,7 @@ function GsaFields(props: {
         <label className="block text-sm font-medium text-[var(--color-ink)]">
           Destination ZIP (GSA lookup)
           <input
-            className={inputClass}
+            className={calcInput}
             value={props.zip}
             onChange={(e) => props.setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
             placeholder="e.g. 73301"
@@ -532,7 +531,7 @@ function GsaFields(props: {
       <label className="block text-sm font-medium text-[var(--color-ink)]">
         GSA locality
         <select
-          className={inputClass}
+          className={calcInput}
           value={props.localityId}
           onChange={(e) => props.setLocalityId(e.target.value)}
           disabled={props.loadingLocalities || !props.localities.length}
@@ -619,7 +618,7 @@ function CustomFields(props: {
       <label className="block text-sm font-semibold text-[var(--color-ink)]">
         Rate preset
         <select
-          className={inputClass}
+          className={calcInput}
           value={props.preset}
           onChange={(e) => props.applyPreset(e.target.value)}
         >
@@ -638,7 +637,7 @@ function CustomFields(props: {
             type="number"
             min="0"
             step="0.01"
-            className={inputClass}
+            className={calcInput}
             value={props.dailyRate}
             onChange={(e) => props.setDailyRate(e.target.value)}
           />
@@ -649,7 +648,7 @@ function CustomFields(props: {
             type="number"
             min="0"
             step="0.01"
-            className={inputClass}
+            className={calcInput}
             value={props.lodgingRate}
             onChange={(e) => props.setLodgingRate(e.target.value)}
           />
@@ -688,11 +687,11 @@ function TripDates({
     <div className="grid gap-6 sm:grid-cols-2">
       <label className="block text-sm font-medium text-[var(--color-ink)]">
         Trip start
-        <input type="date" className={inputClass} value={start} onChange={(e) => setStart(e.target.value)} />
+        <input type="date" className={calcInput} value={start} onChange={(e) => setStart(e.target.value)} />
       </label>
       <label className="block text-sm font-medium text-[var(--color-ink)]">
         Trip end
-        <input type="date" className={inputClass} value={end} onChange={(e) => setEnd(e.target.value)} />
+        <input type="date" className={calcInput} value={end} onChange={(e) => setEnd(e.target.value)} />
       </label>
     </div>
   );
@@ -711,7 +710,7 @@ function LodgingNightsFields(props: {
         <input
           type="number"
           min="0"
-          className={inputClass}
+          className={calcInput}
           value={props.lodgingNights}
           onChange={(e) => props.setLodgingNights(e.target.value)}
           disabled={props.autoLodgingNights}

@@ -32,8 +32,7 @@ import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { US_STATES } from "../../data/usStates";
 
-const inputClass =
-  "mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] shadow-sm transition focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20";
+import { calcInput } from "../../lib/calcUi";
 
 type CalcMode = CrewCalcMode;
 
@@ -631,7 +630,7 @@ function TripDates(props: {
           Away from base — start
           <input
             type="date"
-            className={inputClass}
+            className={calcInput}
             value={props.start}
             onChange={(e) => props.setStart(e.target.value)}
           />
@@ -640,7 +639,7 @@ function TripDates(props: {
           Away from base — end
           <input
             type="date"
-            className={inputClass}
+            className={calcInput}
             value={props.end}
             onChange={(e) => props.setEnd(e.target.value)}
           />
@@ -652,7 +651,7 @@ function TripDates(props: {
             Start time
             <input
               type="time"
-              className={inputClass}
+              className={calcInput}
               value={props.startTime}
               onChange={(e) => props.setStartTime(e.target.value)}
             />
@@ -661,7 +660,7 @@ function TripDates(props: {
             End time
             <input
               type="time"
-              className={inputClass}
+              className={calcInput}
               value={props.endTime}
               onChange={(e) => props.setEndTime(e.target.value)}
             />
@@ -718,7 +717,7 @@ function GsaLayoverFields(props: {
             type="number"
             min="0"
             step="1"
-            className={inputClass}
+            className={calcInput}
             value={props.intlMie}
             onChange={(e) => props.setIntlMie(e.target.value)}
           />
@@ -732,7 +731,7 @@ function GsaLayoverFields(props: {
             <label className="block text-sm font-medium text-[var(--color-ink)]">
               State
               <select
-                className={inputClass}
+                className={calcInput}
                 value={props.layoverState}
                 onChange={(e) => {
                   props.setLayoverState(e.target.value);
@@ -754,7 +753,7 @@ function GsaLayoverFields(props: {
                   inputMode="numeric"
                   maxLength={5}
                   placeholder="75201"
-                  className={inputClass + " mt-0 flex-1"}
+                  className={calcInput + " mt-0 flex-1"}
                   value={props.zip}
                   onChange={(e) => props.setZip(e.target.value)}
                 />
@@ -768,7 +767,7 @@ function GsaLayoverFields(props: {
           <label className="block text-sm font-medium text-[var(--color-ink)]">
             GSA locality
             <select
-              className={inputClass}
+              className={calcInput}
               value={props.localityId}
               onChange={(e) => {
                 const id = e.target.value;
@@ -826,7 +825,7 @@ function ContractFields(props: {
       <label className="block text-sm font-medium text-[var(--color-ink)]">
         Rate preset
         <select
-          className={inputClass}
+          className={calcInput}
           value={props.preset}
           onChange={(e) => props.applyPreset(e.target.value)}
         >
@@ -842,7 +841,7 @@ function ContractFields(props: {
         <label className="block text-sm font-medium text-[var(--color-ink)]">
           Pay mode
           <select
-            className={inputClass}
+            className={calcInput}
             value={props.rateMode}
             onChange={(e) => props.setRateMode(e.target.value as CrewRateMode)}
           >
@@ -853,7 +852,7 @@ function ContractFields(props: {
         <label className="block text-sm font-medium text-[var(--color-ink)]">
           Trip type
           <select
-            className={inputClass}
+            className={calcInput}
             value={props.tripType}
             onChange={(e) => props.setTripType(e.target.value as CrewTripType)}
           >
@@ -880,7 +879,7 @@ function ContractFields(props: {
             type="number"
             min="0"
             step="0.01"
-            className={inputClass}
+            className={calcInput}
             value={props.domesticRate}
             onChange={(e) => props.setDomesticRate(e.target.value)}
           />
@@ -891,7 +890,7 @@ function ContractFields(props: {
             type="number"
             min="0"
             step="0.01"
-            className={inputClass}
+            className={calcInput}
             value={props.internationalRate}
             onChange={(e) => props.setInternationalRate(e.target.value)}
           />

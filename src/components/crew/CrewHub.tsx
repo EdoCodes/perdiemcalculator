@@ -3,6 +3,7 @@ import type { CrewImportPrefill } from "./CrewScheduleImport";
 import { CrewScheduleImport } from "./CrewScheduleImport";
 import { CrewCalendar } from "./CrewCalendar";
 import { CrewHome } from "./CrewHome";
+import { calcNavTab, calcNavTabActive } from "../../lib/calcUi";
 
 type HubTab = "home" | "calendar" | "import";
 
@@ -48,20 +49,13 @@ export function CrewHub() {
 
   return (
     <div className="crew-hub mx-auto max-w-5xl space-y-6">
-      <nav
-        className="crew-nav flex gap-1 overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-muted)]/50 p-1.5"
-        aria-label="Crew tools"
-      >
+      <nav className="crew-nav flex overflow-x-auto rounded-2xl" aria-label="Crew tools">
         {TABS.map((t) => (
           <button
             key={t.id}
             type="button"
             onClick={() => goTab(t.id)}
-            className={`min-w-[4.5rem] flex-1 rounded-xl px-3 py-2.5 text-center text-sm font-semibold transition sm:min-w-0 ${
-              tab === t.id
-                ? "bg-[var(--color-surface-elevated)] text-[var(--color-ink)] shadow-sm ring-1 ring-[var(--color-border)]"
-                : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
-            }`}
+            className={tab === t.id ? calcNavTabActive : calcNavTab}
           >
             <span className="hidden sm:inline">{t.label}</span>
             <span className="sm:hidden">{t.short}</span>

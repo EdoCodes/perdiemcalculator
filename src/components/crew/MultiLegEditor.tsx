@@ -3,8 +3,7 @@ import type { CrewLayoverLeg } from "../../lib/crew/types";
 import { newLegId } from "../../lib/crew/types";
 import { AirportPicker } from "./AirportPicker";
 
-const inputClass =
-  "mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] shadow-sm transition focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20";
+import { calcInput } from "../../lib/calcUi";
 
 type Props = {
   legs: CrewLayoverLeg[];
@@ -104,7 +103,7 @@ export function MultiLegEditor({ legs, onChange, tripStart, tripEnd }: Props) {
               Arrival (first day here)
               <input
                 type="date"
-                className={inputClass}
+                className={calcInput}
                 value={leg.arrivalDate}
                 min={tripStart}
                 max={tripEnd}
@@ -115,7 +114,7 @@ export function MultiLegEditor({ legs, onChange, tripStart, tripEnd }: Props) {
               Departure (last day here)
               <input
                 type="date"
-                className={inputClass}
+                className={calcInput}
                 value={leg.departureDate}
                 min={tripStart}
                 max={tripEnd}

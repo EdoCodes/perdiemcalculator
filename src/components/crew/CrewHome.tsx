@@ -16,9 +16,7 @@ import { MultiLegEditor } from "./MultiLegEditor";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { US_STATES } from "../../data/usStates";
-
-const inputClass =
-  "mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] shadow-sm transition focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20";
+import { calcInput, calcPill, calcPillActive, calcSelect } from "../../lib/calcUi";
 
 const MODE_TABS: { id: CrewCalcMode; label: string }[] = [
   { id: "gsa", label: "IRS / GSA" },
@@ -87,32 +85,34 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-muted)]/40 px-4 py-3 text-sm text-[var(--color-ink-muted)]">
+      <div className="rounded-xl border-2 border-[var(--color-border)] border-l-4 border-l-[var(--color-accent)] bg-[var(--color-surface-muted)]/60 px-4 py-3 text-sm text-[var(--color-ink-muted)]">
         <strong className="font-medium text-[var(--color-ink)]">Guest mode</strong> — trips are
         saved in this browser only. No account required. Clearing site data removes your log.
       </div>
 
       <Card padding="lg" className="border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--color-ink)]">Add new trip</h2>
+        <h2 className="calc-section-title">Add new trip</h2>
         <p className="mt-1 text-sm text-[var(--color-ink-muted)]">
           Enter dates and layover city, then add to your log in one step.
         </p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <label className="block text-sm font-medium text-[var(--color-ink)]">
-            Trip start
+          <label className="block">
+            <span className="calc-rubric">Trip dates</span>
+            <span className="block text-sm font-semibold text-[var(--color-ink)]">Start</span>
             <input
               type="date"
-              className={inputClass}
+              className={calcInput}
               value={form.start}
               onChange={(e) => form.setStart(e.target.value)}
             />
           </label>
-          <label className="block text-sm font-medium text-[var(--color-ink)]">
-            Trip end
+          <label className="block">
+            <span className="calc-rubric">Away from base</span>
+            <span className="block text-sm font-semibold text-[var(--color-ink)]">End</span>
             <input
               type="date"
-              className={inputClass}
+              className={calcInput}
               value={form.end}
               onChange={(e) => form.setEnd(e.target.value)}
             />
@@ -143,7 +143,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
         )}
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button type="button" onClick={() => void onAddTrip()} disabled={form.calculating}>
+          <Button type="button" variant="action" onClick={() => void onAddTrip()} disabled={form.calculating}>
             {form.calculating
               ? "Adding…"
               : form.editingId
@@ -168,7 +168,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
         </div>
 
         {flash && (
-          <p className="mt-3 text-sm font-medium text-[var(--color-primary)]" role="status">
+          <p className="mt-3 text-sm font-medium text-[var(--color-accent)]" role="status">
             {flash}
           </p>
         )}
@@ -185,20 +185,14 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
 
           <div className="mt-5 space-y-6 border-t border-[var(--color-border)] pt-6">
             <fieldset>
-              <legend className="text-sm font-semibold text-[var(--color-ink)]">
-                What to calculate
-              </legend>
+              <legend className="calc-rubric">What to calculate</legend>
               <div className="mt-2 flex flex-wrap gap-2">
                 {MODE_TABS.map((tab) => (
                   <button
                     key={tab.id}
                     type="button"
                     onClick={() => form.setCalcMode(tab.id)}
-                    className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
-                      form.calcMode === tab.id
-                        ? "bg-[var(--color-primary)] text-white"
-                        : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)]"
-                    }`}
+                    className={form.calcMode === tab.id ? calcPillActive : calcPill}
                   >
                     {tab.label}
                   </button>
@@ -207,7 +201,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
             </fieldset>
 
             <fieldset>
-              <legend className="text-sm font-semibold text-[var(--color-ink)]">Role</legend>
+              <legend className="calc-rubric">Role</legend>
               <div className="mt-2 flex flex-wrap gap-2">
                 {(
                   [
@@ -220,11 +214,9 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
                     key={id}
                     type="button"
                     onClick={() => form.setRole(id)}
-                    className={`rounded-xl px-4 py-2 text-sm font-medium ${
-                      form.role === id
-                        ? "bg-[var(--color-primary)]/15 text-[var(--color-primary)] ring-1 ring-[var(--color-primary)]/40"
-                        : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)]"
-                    }`}
+                    className={
+                      form.role === id ? `${calcPill} calc-pill--active-accent` : calcPill
+                    }
                   >
                     {label}
                   </button>
@@ -276,7 +268,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
                 International daily M&IE (USD)
                 <input
                   type="number"
-                  className={inputClass}
+                  className={calcInput}
                   value={form.intlMie}
                   onChange={(e) => form.setIntlMie(e.target.value)}
                 />
@@ -288,7 +280,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
                 <label className="block text-sm font-medium text-[var(--color-ink)]">
                   GSA state
                   <select
-                    className={inputClass}
+                    className={calcInput}
                     value={form.layoverState}
                     onChange={(e) => {
                       form.setLayoverState(e.target.value);
@@ -305,7 +297,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
                 <label className="block text-sm font-medium text-[var(--color-ink)]">
                   GSA locality
                   <select
-                    className={inputClass}
+                    className={calcInput}
                     value={form.localityId}
                     onChange={(e) => {
                       const id = e.target.value;
@@ -335,7 +327,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
                   <input
                     type="number"
                     step="0.01"
-                    className={inputClass}
+                    className={calcInput}
                     value={form.domesticRate}
                     onChange={(e) => form.setDomesticRate(e.target.value)}
                   />
@@ -345,7 +337,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
                   <input
                     type="number"
                     step="0.01"
-                    className={inputClass}
+                    className={calcInput}
                     value={form.internationalRate}
                     onChange={(e) => form.setInternationalRate(e.target.value)}
                   />
@@ -357,13 +349,11 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
       </Card>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Card padding="md" className="border-[var(--color-primary)]/30 bg-[var(--color-primary)]/5">
+        <Card padding="md" className="calc-stat-card">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-primary)]">
-              Estimated total for {year}
-            </p>
+            <p className="calc-stat-label">Estimated total for {year}</p>
             <select
-              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-2 py-1 text-sm"
+              className={`${calcSelect} !mt-0 w-auto px-2 py-1`}
               value={year}
               onChange={(e) => onYearChange(Number(e.target.value))}
               aria-label="Tax year"
@@ -375,7 +365,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
               ))}
             </select>
           </div>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--color-primary)]">
+          <p className="calc-stat-value mt-2 text-3xl font-bold tabular-nums">
             {formatUsd(yearGsa)}
           </p>
           <p className="mt-1 text-sm text-[var(--color-ink-muted)]">
@@ -414,7 +404,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
       </div>
 
       <div ref={historyRef}>
-        <h2 className="text-lg font-semibold text-[var(--color-ink)]">Trip history</h2>
+        <h2 className="calc-section-title">Trip history</h2>
 
         {!trips.length ? (
           <Card padding="lg" className="mt-4 text-center">
@@ -422,7 +412,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
               No trips yet. Add a trip above or upload a schedule to get started.
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <Button type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+              <Button type="button" variant="action" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
                 Add trip
               </Button>
               <Button type="button" variant="secondary" onClick={() => setScheduleOpen(true)}>

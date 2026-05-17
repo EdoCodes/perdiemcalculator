@@ -16,13 +16,14 @@
   --color-border-strong: #cbd5e1;
   --color-ink: #0f172a;
   --color-ink-muted: #64748b;
-  --color-primary: #0d9488;
-  --color-primary-hover: #0f766e;
-  --color-primary-muted: #ccfbf1;
-  --color-accent: #f59e0b;
-  --color-accent-muted: #fef3c7;
-  --color-action: #0d9488;
-  --color-action-hover: #0f766e;
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-muted: #dbeafe;
+  --color-accent: #f97316;
+  --color-accent-hover: #ea580c;
+  --color-accent-muted: #ffedd5;
+  --color-action: #f97316;
+  --color-action-hover: #fb923c;
   --color-action-fg: #ffffff;
   --color-error-border: #fecaca;
   --color-error-bg: #fef2f2;
@@ -30,18 +31,22 @@
 }
 
 .dark {
-  --color-surface: #0b1220;
-  --color-surface-elevated: #111827;
+  --color-surface: #0f1419;
+  --color-surface-elevated: #161d28;
   --color-surface-muted: #1e293b;
   --color-border: #334155;
   --color-border-strong: #475569;
   --color-ink: #f8fafc;
   --color-ink-muted: #94a3b8;
-  --color-primary: #2dd4bf;
-  --color-primary-hover: #5eead4;
-  --color-primary-muted: #134e4a;
-  --color-accent: #fbbf24;
-  --color-accent-muted: #422006;
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-muted: #1e3a5f;
+  --color-accent: #fb923c;
+  --color-accent-hover: #fdba74;
+  --color-accent-muted: #431407;
+  --color-action: #f97316;
+  --color-action-hover: #fb923c;
+  --color-action-fg: #ffffff;
 }
 
 @layer base {
@@ -61,7 +66,7 @@
     background-color: var(--color-surface);
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -20%, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent);
+      radial-gradient(ellipse 60% 40% at 100% 0%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent);
   }
 
   .glass {
@@ -69,32 +74,326 @@
     backdrop-filter: blur(12px);
   }
 
-  /* Calculator: always dark, brighter accents, distinct CTA buttons */
+  /*
+   * Calculator shell — TripGain-inspired: slate base, blue primary, orange CTAs.
+   * https://tripgain.com/roi
+   */
   .calculator-theme {
-    --color-surface: #070b14;
-    --color-surface-elevated: #0f1628;
-    --color-surface-muted: #182238;
-    --color-border: #2a3a56;
-    --color-border-strong: #3d5278;
+    --color-surface: #0e1526;
+    --color-surface-elevated: #162036;
+    --color-surface-muted: #1e2d4a;
+    --color-border: #3d5278;
+    --color-border-strong: #5a74a3;
     --color-ink: #f1f5f9;
-    --color-ink-muted: #94a8c9;
-    --color-primary: #52dcff;
-    --color-primary-hover: #8ae8ff;
-    --color-primary-muted: #0c3344;
-    --color-accent: #fbbf24;
-    --color-accent-muted: #3d2e0a;
+    --color-ink-muted: #b0c0dc;
+    --color-primary: #3b82f6;
+    --color-primary-hover: #60a5fa;
+    --color-primary-muted: #1e3a8a;
+    --color-accent: #f97316;
+    --color-accent-hover: #fb923c;
+    --color-accent-muted: #431407;
     --color-action: #f97316;
     --color-action-hover: #fb923c;
-    --color-action-fg: #0f172a;
-    --color-error-border: #7f1d1d;
-    --color-error-bg: #1c0a0a;
+    --color-action-fg: #ffffff;
+    --color-error-border: #b91c1c;
+    --color-error-bg: #2a1215;
     --color-error-text: #fecaca;
+    --color-input-bg: #1a2744;
+    --color-input-border: #4a628a;
+    --color-focus-ring: color-mix(in srgb, var(--color-primary) 45%, transparent);
     color: var(--color-ink);
   }
 
+  .calculator-theme.calc-panel {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+      linear-gradient(
+          135deg,
+          color-mix(in srgb, var(--color-primary) 55%, transparent),
+          color-mix(in srgb, var(--color-accent) 45%, transparent)
+        )
+        border-box;
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-border) 40%, transparent),
+      0 20px 50px -16px color-mix(in srgb, var(--color-primary) 22%, transparent),
+      0 12px 32px -12px color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+
+  /* Section headings with orange accent bar */
+  .calculator-theme .calc-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    padding-left: 0.875rem;
+    border-left: 4px solid var(--color-accent);
+  }
+
+  .calculator-theme .calc-rubric {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 0.375rem;
+  }
+
+  .calculator-theme label:has(.calc-input) > span:first-child,
+  .calculator-theme label:has(.calc-select) > span:first-child {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  /* Search & form fields */
+  .calculator-theme .calc-input,
+  .calculator-theme .calc-select {
+    margin-top: 0.375rem;
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 2px solid var(--color-input-border);
+    background: var(--color-input-bg);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: var(--color-ink);
+    box-shadow: inset 0 1px 2px color-mix(in srgb, black 25%, transparent);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease,
+      background 0.15s ease;
+  }
+
+  .calculator-theme .calc-input::placeholder {
+    color: color-mix(in srgb, var(--color-ink-muted) 85%, transparent);
+  }
+
+  .calculator-theme .calc-input:hover,
+  .calculator-theme .calc-select:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 70%, var(--color-input-border));
+  }
+
+  .calculator-theme .calc-input:focus,
+  .calculator-theme .calc-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow:
+      inset 0 1px 2px color-mix(in srgb, black 20%, transparent),
+      0 0 0 3px var(--color-focus-ring);
+  }
+
+  .calculator-theme .calc-search-field {
+    position: relative;
+  }
+
+  .calculator-theme .calc-search-field .calc-input {
+    padding-left: 2.5rem;
+  }
+
+  .calculator-theme .calc-search-field::before {
+    content: "";
+    position: absolute;
+    left: 0.875rem;
+    top: calc(50% + 0.2rem);
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    opacity: 0.7;
+    background-color: var(--color-accent);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .calculator-theme .calc-dropdown {
+    border: 2px solid var(--color-border-strong);
+    background: var(--color-surface-elevated);
+    box-shadow:
+      0 16px 40px -8px color-mix(in srgb, black 50%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--color-primary) 25%, transparent);
+  }
+
+  /* Hub tabs (Trips / Calendar / Import) */
+  .calculator-theme .crew-nav {
+    scrollbar-width: thin;
+    gap: 0.375rem;
+    padding: 0.5rem;
+    border: 2px solid var(--color-border-strong);
+    background: color-mix(in srgb, var(--color-surface-muted) 90%, var(--color-surface));
+  }
+
+  .calculator-theme .calc-nav-tab {
+    flex: 1;
+    min-width: 4.5rem;
+    border-radius: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink-muted);
+    border: 2px solid transparent;
+    transition:
+      color 0.15s ease,
+      background 0.15s ease,
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .calculator-theme .calc-nav-tab:hover {
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-surface-elevated) 60%, transparent);
+  }
+
+  .calculator-theme .calc-nav-tab--active {
+    color: var(--color-ink);
+    background: var(--color-surface-elevated);
+    border-color: color-mix(in srgb, var(--color-primary) 50%, var(--color-border));
+    box-shadow:
+      inset 0 -3px 0 var(--color-accent),
+      0 4px 12px -4px color-mix(in srgb, var(--color-primary) 35%, transparent);
+  }
+
+  /* Mode / role pills */
+  .calculator-theme .calc-pill {
+    border-radius: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink-muted);
+    background: var(--color-surface-muted);
+    border: 2px solid var(--color-border);
+    transition: all 0.15s ease;
+  }
+
+  .calculator-theme .calc-pill:hover {
+    color: var(--color-ink);
+    border-color: var(--color-border-strong);
+  }
+
+  .calculator-theme .calc-pill--active {
+    color: #fff;
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      color-mix(in srgb, var(--color-primary) 70%, var(--color-accent))
+    );
+    border-color: color-mix(in srgb, var(--color-primary) 80%, white);
+    box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--color-primary) 55%, transparent);
+  }
+
+  .calculator-theme .calc-pill--active-accent {
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface-elevated));
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 35%, transparent);
+  }
+
+  /* Stat / highlight cards */
+  .calculator-theme .calc-stat-card {
+    border: 2px solid color-mix(in srgb, var(--color-primary) 45%, var(--color-border));
+    background: linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-elevated)),
+      color-mix(in srgb, var(--color-accent) 6%, var(--color-surface-elevated))
+    );
+  }
+
+  .calculator-theme .calc-stat-card .calc-stat-value {
+    color: var(--color-primary);
+  }
+
+  .calculator-theme .calc-stat-card .calc-stat-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* Calendar */
+  .calculator-theme .calc-calendar {
+    border: 2px solid var(--color-border-strong);
+    border-radius: 1rem;
+    padding: 1rem;
+    background: color-mix(in srgb, var(--color-surface-muted) 50%, var(--color-surface-elevated));
+  }
+
+  .calculator-theme .calc-calendar-weekday {
+    padding: 0.5rem 0;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface-muted));
+    border-radius: 0.5rem;
+  }
+
+  .calculator-theme .calc-calendar-cell {
+    min-height: 4.75rem;
+    border-radius: 0.625rem;
+    border: 2px solid var(--color-border);
+    background: var(--color-input-bg);
+    padding: 0.375rem;
+    text-align: left;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease;
+  }
+
+  .calculator-theme .calc-calendar-cell--today {
+    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 14%, var(--color-input-bg));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 35%, transparent);
+  }
+
+  .calculator-theme .calc-calendar-cell--has-trip {
+    border-color: color-mix(in srgb, var(--color-accent) 65%, var(--color-border));
+    background: color-mix(in srgb, var(--color-accent) 12%, var(--color-input-bg));
+  }
+
+  .calculator-theme .calc-calendar-toolbar .calc-select {
+    margin-top: 0;
+    font-weight: 600;
+  }
+
+  .calculator-theme .calc-calendar-nav-btn {
+    border-radius: 0.625rem;
+    border: 2px solid var(--color-border-strong);
+    background: var(--color-surface-elevated);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    transition: all 0.15s ease;
+  }
+
+  .calculator-theme .calc-calendar-nav-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface-elevated));
+  }
+
+  /* Profession step bar */
+  .calculator-theme .calc-step-bar {
+    border: 2px solid var(--color-border-strong);
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-muted)),
+      color-mix(in srgb, var(--color-accent) 6%, var(--color-surface-muted))
+    );
+  }
+
+  .calculator-theme .calc-step-bar strong {
+    color: var(--color-accent);
+  }
+
   .calculator-theme .calc-breakdown-table thead tr {
-    background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface-muted));
-    border-bottom: 1px solid var(--color-border-strong);
+    background: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface-muted));
+    border-bottom: 2px solid var(--color-border-strong);
   }
 
   .calculator-theme .calc-breakdown-table tbody tr:nth-child(odd) {
@@ -106,10 +405,10 @@
   }
 
   .calculator-theme .calc-breakdown-table tbody tr:hover {
-    background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-elevated));
+    background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface-elevated));
   }
 
-  .crew-hub .crew-panel {
+  .calculator-theme .crew-hub .crew-panel {
     animation: crew-fade-in 0.2s ease-out;
   }
 
@@ -122,9 +421,5 @@
       opacity: 1;
       transform: translateY(0);
     }
-  }
-
-  .crew-nav {
-    scrollbar-width: thin;
   }
 }

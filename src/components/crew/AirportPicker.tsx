@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CrewAirport } from "../../data/crewAirports";
 import { filterCrewAirports, loadCrewAirports } from "../../lib/crew/loadAirports";
-
-const inputClass =
-  "mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] shadow-sm transition focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20";
+import { calcInput } from "../../lib/calcUi";
 
 type Props = {
   value: CrewAirport | null;
@@ -36,30 +34,35 @@ export function AirportPicker({ value, onChange }: Props) {
 
   return (
     <div className="relative">
-      <label className="block text-sm font-medium text-[var(--color-ink)]">
-        Layover airport
-        <input
-          type="search"
-          className={inputClass}
-          placeholder={loading ? "Loading airports…" : "Search code or city (e.g. DFW, Miami)…"}
-          value={open ? query : displayValue}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setOpen(true);
-            if (!e.target.value) onChange(null);
-          }}
-          onFocus={() => {
-            setOpen(true);
-            setQuery("");
-          }}
-          onBlur={() => {
-            window.setTimeout(() => setOpen(false), 150);
-          }}
-          disabled={loading}
-          autoComplete="off"
-        />
+      <label className="block">
+        <span className="calc-rubric">Layover search</span>
+        <span className="mt-1 block text-sm font-semibold text-[var(--color-ink)]">
+          Airport or city
+        </span>
+        <div className="calc-search-field">
+          <input
+            type="search"
+            className={calcInput}
+            placeholder={loading ? "Loading airports…" : "Search code or city (e.g. DFW, Miami)…"}
+            value={open ? query : displayValue}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setOpen(true);
+              if (!e.target.value) onChange(null);
+            }}
+            onFocus={() => {
+              setOpen(true);
+              setQuery("");
+            }}
+            onBlur={() => {
+              window.setTimeout(() => setOpen(false), 150);
+            }}
+            disabled={loading}
+            autoComplete="off"
+          />
+        </div>
       </label>
-      <p className="mt-1 text-xs text-[var(--color-ink-muted)]">
+      <p className="mt-1.5 text-xs text-[var(--color-ink-muted)]">
         {loading
           ? "Loading airport directory…"
           : totalCount
@@ -69,7 +72,7 @@ export function AirportPicker({ value, onChange }: Props) {
 
       {open && !loading && matches.length > 0 && (
         <ul
-          className="absolute z-20 mt-1 max-h-64 w-full overflow-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] py-1 shadow-xl ring-1 ring-black/10"
+          className="calc-dropdown absolute z-20 mt-2 max-h-64 w-full overflow-auto rounded-xl py-1"
           role="listbox"
         >
           {matches.map((a) => (
@@ -77,7 +80,7 @@ export function AirportPicker({ value, onChange }: Props) {
               <button
                 type="button"
                 role="option"
-                className="w-full px-3.5 py-2.5 text-left text-sm hover:bg-[var(--color-surface-muted)]"
+                className="w-full px-3.5 py-2.5 text-left text-sm transition hover:bg-[var(--color-surface-muted)]"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
                   onChange(a);
@@ -85,9 +88,7 @@ export function AirportPicker({ value, onChange }: Props) {
                   setOpen(false);
                 }}
               >
-                <span className="font-mono font-semibold text-[var(--color-primary)]">
-                  {a.code}
-                </span>
+                <span className="font-mono font-bold text-[var(--color-accent)]">{a.code}</span>
                 <span className="ml-2 text-[var(--color-ink)]">{a.city}</span>
                 <span className="ml-2 text-[var(--color-ink-muted)]">
                   {a.state ? `${a.state} · USA` : a.country}
@@ -99,7 +100,7 @@ export function AirportPicker({ value, onChange }: Props) {
       )}
 
       {open && !loading && query && matches.length === 0 && (
-        <p className="absolute z-20 mt-1 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3 py-2 text-sm text-[var(--color-ink-muted)] shadow-lg">
+        <p className="calc-dropdown absolute z-20 mt-2 w-full rounded-xl px-3 py-2.5 text-sm text-[var(--color-ink-muted)]">
           No airports match &quot;{query}&quot;
         </p>
       )}
@@ -107,7 +108,7 @@ export function AirportPicker({ value, onChange }: Props) {
       {value && (
         <button
           type="button"
-          className="mt-2 text-xs font-medium text-[var(--color-primary)] hover:underline"
+          className="mt-2 text-xs font-semibold text-[var(--color-accent)] hover:underline"
           onClick={() => onChange(null)}
         >
           Clear airport

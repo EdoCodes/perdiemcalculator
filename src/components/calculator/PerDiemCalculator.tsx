@@ -17,8 +17,7 @@ import { Card } from "../ui/Card";
 import { DayBreakdownTable } from "./DayBreakdownTable";
 import { TripSummary } from "./TripSummary";
 
-const inputClass =
-  "mt-1.5 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3.5 py-2.5 text-sm text-[var(--color-ink)] shadow-sm transition focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20";
+import { calcInput } from "../../lib/calcUi";
 
 export function PerDiemCalculator() {
   const [start, setStart] = useState("");
@@ -252,12 +251,12 @@ export function PerDiemCalculator() {
                 type="date"
                 value={start}
                 onChange={(e) => setStart(e.target.value)}
-                className={inputClass}
+                className={calcInput}
               />
             </label>
             <label className="block text-sm font-medium text-[var(--color-ink)]">
               Return
-              <input type="date" value={end} onChange={(e) => setEnd(e.target.value)} className={inputClass} />
+              <input type="date" value={end} onChange={(e) => setEnd(e.target.value)} className={calcInput} />
             </label>
           </div>
           {start ? (
@@ -296,7 +295,7 @@ export function PerDiemCalculator() {
                     setState(e.target.value);
                     setLocalityId("");
                   }}
-                  className={inputClass}
+                  className={calcInput}
                 >
                   {US_STATES.map((s) => (
                     <option key={s.abbr} value={s.abbr}>
@@ -311,7 +310,7 @@ export function PerDiemCalculator() {
                   value={localityId}
                   onChange={(e) => onLocalityChange(e.target.value)}
                   disabled={loadingLocalities}
-                  className={inputClass}
+                  className={calcInput}
                 >
                   {loadingLocalities ? (
                     <option>Loading…</option>
@@ -338,7 +337,7 @@ export function PerDiemCalculator() {
                   value={zip}
                   onChange={(e) => setZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
                   placeholder="90210"
-                  className={inputClass}
+                  className={calcInput}
                 />
               </label>
               <div className="flex items-end">
@@ -370,7 +369,7 @@ export function PerDiemCalculator() {
                   onChange={(e) =>
                     setTravelDayPolicy(e.target.value as CalculatorOptions["travelDayPolicy"])
                   }
-                  className={inputClass}
+                  className={calcInput}
                 >
                   <option value="75-percent-mie">75% of M&IE (FTR default)</option>
                   <option value="pro-rate-incidentals">Pro-rate incidentals only</option>
