@@ -7,89 +7,12 @@ import {
   type ProfessionCategory
 } from "../../data/professions";
 import { Badge } from "../ui/Badge";
-
-function ProfessionIcon({ id, className = "h-7 w-7" }: { id: string; className?: string }) {
-  switch (id) {
-    case "government-federal":
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M4 20V9l8-5 8 5v11"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinejoin="round"
-          />
-          <path d="M9 20v-6h6v6" stroke="currentColor" strokeWidth="1.75" />
-          <path d="M8 12h8" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-        </svg>
-      );
-    case "aviation-crew":
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M3 12h5l2.5-7 2 14 2.5-7H21"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      );
-    case "education-teacher":
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinejoin="round"
-          />
-          <path d="M12 12v9M12 7.5V12" stroke="currentColor" strokeWidth="1.75" />
-          <path d="M8 5.5l8 4.5M16 5.5l-8 4.5" stroke="currentColor" strokeWidth="1.75" />
-        </svg>
-      );
-    case "trucking":
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <rect x="2" y="8" width="13" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.75" />
-          <path d="M15 11h4l3 3v3h-7v-6z" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round" />
-          <circle cx="7" cy="18" r="2" stroke="currentColor" strokeWidth="1.75" />
-          <circle cx="18" cy="18" r="2" stroke="currentColor" strokeWidth="1.75" />
-        </svg>
-      );
-    case "travel-nurse":
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M12 4v16M8 8h8M6 20h12"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-          />
-        </svg>
-      );
-    default:
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-          <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.75" />
-          <path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
-        </svg>
-      );
-  }
-}
+import { ProfessionLogo } from "./ProfessionLogo";
 
 function ProfessionCardTitle({ profession }: { profession: Profession }) {
   return (
     <div className="flex items-start gap-3">
-      <span
-        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
-          profession.available
-            ? "bg-[var(--color-primary-muted)] text-[var(--color-primary)]"
-            : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)]"
-        }`}
-      >
-        <ProfessionIcon id={profession.id} />
-      </span>
+      <ProfessionLogo professionId={profession.id} size="md" available={profession.available} />
       <div>
         <h3 className="font-semibold text-[var(--color-ink)] group-hover:text-[var(--color-primary)]">
           {profession.name}
@@ -177,12 +100,15 @@ function LastProfessionBanner({
 }) {
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-[var(--color-primary)]/30 bg-[var(--color-primary-muted)]/40 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
-          Continue where you left off
-        </p>
-        <p className="mt-1 text-sm font-medium text-[var(--color-ink)]">{profession.shortName}</p>
-      </div>
+      <div className="flex items-center gap-3">
+        <ProfessionLogo professionId={profession.id} size="sm" />
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+            Continue where you left off
+          </p>
+          <p className="mt-1 text-sm font-medium text-[var(--color-ink)]">{profession.shortName}</p>
+        </div>
+        </div>
       <a
         href={profession.href}
         onClick={() => remember(profession)}

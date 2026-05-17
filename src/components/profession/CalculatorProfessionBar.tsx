@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { getProfessionById, STORAGE_KEY_PROFESSION } from "../../data/professions";
+import { ProfessionLogo } from "./ProfessionLogo";
 
 type Props = {
   professionId: string;
@@ -39,6 +40,7 @@ export function CalculatorProfessionBar({ professionId }: Props) {
         </li>
       </ol>
       <div className="flex flex-wrap items-center gap-3">
+        <ProfessionLogo professionId={profession.id} size="sm" />
         <span className="text-sm text-[var(--color-ink-muted)]">
           Calculating for <strong className="text-[var(--color-ink)]">{profession.shortName}</strong>
         </span>

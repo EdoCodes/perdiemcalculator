@@ -1,7 +1,26 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { ProfessionPicker } from "../components/profession/ProfessionPicker";
+import { ProfessionLogo } from "../components/profession/ProfessionLogo";
 import { US_STATES } from "../data/usStates";
+
+const featureProfessions = [
+  {
+    id: "government-federal" as const,
+    title: "Federal GSA rates",
+    body: "Localities, monthly lodging caps, and M&IE synced from the federal Per Diem API."
+  },
+  {
+    id: "aviation-crew" as const,
+    title: "Airline crew",
+    body: "Per day or per hour away from base—domestic and international, with your contract rates."
+  },
+  {
+    id: "education-teacher" as const,
+    title: "Teachers & school staff",
+    body: "Conferences, field trips, and PD—daily M&IE plus lodging from your district policy."
+  }
+];
 
 const title = "Per diem calculator for every profession";
 const description =
@@ -52,23 +71,13 @@ const jsonLd = [
 
   <section class="mt-16 grid gap-6 sm:grid-cols-3">
     {
-      [
-        {
-          title: "Federal GSA rates",
-          body: "Localities, monthly lodging caps, and M&IE synced from the federal Per Diem API."
-        },
-        {
-          title: "Airline crew",
-          body: "Per day or per hour away from base—domestic and international, with your contract rates."
-        },
-        {
-          title: "Teachers & school staff",
-          body: "Conferences, field trips, and PD—daily M&IE plus lodging from your district policy."
-        }
-      ].map((item) => (
-        <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 shadow-sm">
-          <h2 class="font-semibold text-[var(--color-ink)]">{item.title}</h2>
-          <p class="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">{item.body}</p>
+      featureProfessions.map((item) => (
+        <div class="flex gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 shadow-sm">
+          <ProfessionLogo professionId={item.id} size="lg" />
+          <div>
+            <h2 class="font-semibold text-[var(--color-ink)]">{item.title}</h2>
+            <p class="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">{item.body}</p>
+          </div>
         </div>
       ))
     }
