@@ -27,23 +27,14 @@ export function ProfessionIcon({ id, className = "h-8 w-8" }: Props) {
   }
 }
 
+/**
+ * Angled jet silhouette (Material “flight” style) — matches common crew-app marks
+ * like CrewPerDiem: solid plane, nose up-right, single path.
+ */
 function AirplaneIcon({ className }: { className: string }) {
   return (
-    <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
-      <path
-        d="M24 6 10 20h7l-1.5 10-6 5h9l2.5 12h4l2.5-12h9l-6-5L31 20h7L24 6Z"
-        fill="currentColor"
-        fillOpacity={0.22}
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M20 28h8M22 32h4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8-2.5z" />
     </svg>
   );
 }

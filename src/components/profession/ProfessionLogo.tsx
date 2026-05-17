@@ -11,6 +11,14 @@ const sizeMap: Record<Size, { box: string; icon: string }> = {
   xl: { box: "h-16 w-16 rounded-2xl", icon: "h-11 w-11" }
 };
 
+/** CrewPerDiem-style circular app badge for airline crew. */
+const aviationSizeMap: Record<Size, { box: string; icon: string }> = {
+  sm: { box: "h-10 w-10 rounded-full", icon: "h-[1.125rem] w-[1.125rem]" },
+  md: { box: "h-12 w-12 rounded-full", icon: "h-7 w-7" },
+  lg: { box: "h-14 w-14 rounded-full", icon: "h-8 w-8" },
+  xl: { box: "h-16 w-16 rounded-full", icon: "h-10 w-10" }
+};
+
 const toneByProfession: Record<
   string,
   { bg: string; fg: string; ring?: string }
@@ -21,9 +29,9 @@ const toneByProfession: Record<
     ring: "ring-[var(--color-primary)]/25"
   },
   "aviation-crew": {
-    bg: "bg-gradient-to-br from-sky-500/25 to-blue-600/20",
-    fg: "text-sky-300",
-    ring: "ring-sky-400/30"
+    bg: "bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg shadow-blue-900/35",
+    fg: "text-white",
+    ring: "ring-blue-400/50"
   },
   "education-teacher": {
     bg: "bg-gradient-to-br from-amber-500/25 to-orange-500/20",
@@ -65,7 +73,8 @@ export function ProfessionLogo({
   framed = true,
   available = true
 }: Props) {
-  const dims = sizeMap[size];
+  const isAviation = professionId === "aviation-crew";
+  const dims = isAviation && available ? aviationSizeMap[size] : sizeMap[size];
   const tone = toneByProfession[professionId] ?? defaultTone;
   const muted = !available;
 
@@ -74,6 +83,7 @@ export function ProfessionLogo({
       className={[
         "inline-flex shrink-0 items-center justify-center",
         dims.box,
+        isAviation && available ? "shadow-md" : "",
         muted ? "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)]" : tone.bg,
         muted ? "" : tone.fg,
         framed && !muted ? `ring-2 ring-inset ${tone.ring ?? "ring-white/10"}` : "",
