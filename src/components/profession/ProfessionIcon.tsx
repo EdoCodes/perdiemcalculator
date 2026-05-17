@@ -27,41 +27,52 @@ export function ProfessionIcon({ id, className = "h-8 w-8" }: Props) {
   }
 }
 
-/**
- * Angled jet silhouette (Material “flight” style) — matches common crew-app marks
- * like CrewPerDiem: solid plane, nose up-right, single path.
- */
+/** Angled jet with soft wing highlight (crew-app style). */
 function AirplaneIcon({ className }: { className: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8-2.5z" />
+    <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
+      <g transform="translate(24 24) rotate(-12) translate(-12 -12)">
+        <path
+          fill="currentColor"
+          fillOpacity={0.28}
+          d="M22.2 16.4v-1.9l-7.6-4.7c-.7-.4-1.6.1-1.6.9v4.3l-7.6 4.7v1.9l7.6-2.4v4.7l-1.9 1.4v1.9l3.3-1 3.3 1v-1.6l-1.9-1.4v-4.3l7.6 2.4z"
+        />
+        <path
+          fill="currentColor"
+          d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8-2.5z"
+        />
+        <path fill="currentColor" fillOpacity={0.5} d="M14.5 11.2 19.8 9.6 21.5 11.8 18.8 13z" />
+      </g>
     </svg>
   );
 }
 
+/** Schoolhouse with roof, bell tower, door, and windows. */
 function SchoolBuildingIcon({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
+      <path d="M24 4v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       <path
-        d="M24 6 6 16v22h36V16L24 6Z"
         fill="currentColor"
-        fillOpacity={0.15}
+        d="M22 7h4a1 1 0 0 1 1 1v3.2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"
+      />
+      <path fill="currentColor" fillOpacity={0.35} d="M24 7.8 9 17.5V39h30V17.5L24 7.8Z" />
+      <path fill="currentColor" d="M24 9 10 17.8V38h28V17.8L24 9Z" />
+      <path fill="currentColor" fillOpacity={0.4} d="M24 9 10 17.8 24 24.2 38 17.8 24 9Z" />
+      <path
+        fill="currentColor"
+        fillOpacity={0.55}
+        d="M20 28h8a1.2 1.2 0 0 1 1.2 1.2V38H18.8V29.2A1.2 1.2 0 0 1 20 28Z"
+      />
+      <rect x="13" y="22" width="5.5" height="5.5" rx="1" fill="currentColor" fillOpacity={0.35} />
+      <rect x="29.5" y="22" width="5.5" height="5.5" rx="1" fill="currentColor" fillOpacity={0.35} />
+      <path
+        d="M8 39h32"
         stroke="currentColor"
         strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path d="M24 6v32M6 16l18 10 18-10" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-      <rect x="20" y="28" width="8" height="10" rx="1" fill="currentColor" fillOpacity={0.35} />
-      <rect x="11" y="22" width="6" height="6" rx="0.5" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="31" y="22" width="6" height="6" rx="0.5" stroke="currentColor" strokeWidth="1.5" />
-      <path
-        d="M24 2v4M24 2l3 2M24 2l-3 2"
-        stroke="currentColor"
-        strokeWidth="1.75"
         strokeLinecap="round"
-        strokeLinejoin="round"
+        strokeOpacity={0.35}
       />
-      <circle cx="24" cy="12" r="2.5" fill="currentColor" />
     </svg>
   );
 }

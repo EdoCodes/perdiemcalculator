@@ -1,3 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-  <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8-2.5z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+  <g transform="translate(24 24) rotate(-12) translate(-12 -12)">
+    <path fill="currentColor" fill-opacity="0.28" d="M22.2 16.4v-1.9l-7.6-4.7c-.7-.4-1.6.1-1.6.9v4.3l-7.6 4.7v1.9l7.6-2.4v4.7l-1.9 1.4v1.9l3.3-1 3.3 1v-1.6l-1.9-1.4v-4.3l7.6 2.4z"/>
+    <path fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8-2.5z"/>
+    <path fill="currentColor" fill-opacity="0.5" d="M14.5 11.2 19.8 9.6 21.5 11.8 18.8 13z"/>
+  </g>
 </svg>
