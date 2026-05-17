@@ -1,38 +1,37 @@
 import { useCallback, useEffect, useState } from "react";
-import { useCrewTripLog } from "../../hooks/useCrewTripLog";
 import type { CrewImportPrefill } from "./CrewScheduleImport";
 import { CrewScheduleImport } from "./CrewScheduleImport";
-import { CrewTripLogPanel } from "./CrewTripLogPanel";
 import { CrewCalendar } from "./CrewCalendar";
-import { CrewCalculatorPanel } from "./CrewCalculatorPanel";
-import { CrewOverview } from "./CrewOverview";
-import { CrewYearStats } from "./CrewYearStats";
-import type { CrewSavedTrip } from "../../lib/crew/types";
+import { CrewHome } from "./CrewHome";
 
-type HubTab = "overview" | "calculator" | "log" | "calendar" | "import";
+type HubTab = "home" | "calendar" | "import";
 
 const TABS: { id: HubTab; label: string; short: string }[] = [
-  { id: "overview", label: "Overview", short: "Home" },
-  { id: "calculator", label: "Calculator", short: "Calc" },
-  { id: "log", label: "Trip log", short: "Log" },
+  { id: "home", label: "Trips", short: "Trips" },
   { id: "calendar", label: "Calendar", short: "Cal" },
   { id: "import", label: "Import", short: "Import" }
 ];
 
 function tabFromHash(): HubTab {
-  if (typeof window === "undefined") return "overview";
+  if (typeof window === "undefined") return "home";
   const h = window.location.hash.replace("#", "");
-  if (h === "calculator" || h === "log" || h === "calendar" || h === "import") return h;
-  if (h === "overview" || h === "") return "overview";
-  return "overview";
+  if (h === "calendar" || h === "import") return h;
+  if (
+    h === "home" ||
+    h === "overview" ||
+    h === "calculator" ||
+    h === "log" ||
+    h === ""
+  ) {
+    return "home";
+  }
+  return "home";
 }
 
 export function CrewHub() {
-  const { trips } = useCrewTripLog();
-  const [tab, setTab] = useState<HubTab>("overview");
+  const [tab, setTab] = useState<HubTab>("home");
   const [year, setYear] = useState(() => new Date().getFullYear());
   const [prefill, setPrefill] = useState<CrewImportPrefill | null>(null);
-  const [editTrip, setEditTrip] = useState<CrewSavedTrip | null>(null);
 
   useEffect(() => {
     setTab(tabFromHash());
@@ -43,14 +42,12 @@ export function CrewHub() {
 
   const goTab = useCallback((next: HubTab) => {
     setTab(next);
-    window.location.hash = next === "overview" ? "" : next;
+    window.location.hash = next === "home" ? "" : next;
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (
     <div className="crew-hub mx-auto max-w-5xl space-y-6">
-      <CrewYearStats trips={trips} year={year} onYearChange={setYear} />
-
       <nav
         className="crew-nav flex gap-1 overflow-x-auto rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-muted)]/50 p-1.5"
         aria-label="Crew tools"
@@ -73,42 +70,21 @@ export function CrewHub() {
       </nav>
 
       <div key={tab} className="crew-panel min-h-[20rem]">
-        {tab === "overview" && (
-          <CrewOverview
-            trips={trips}
+        {tab === "home" && (
+          <CrewHome
             year={year}
-            onNewTrip={() => goTab("calculator")}
-            onImport={() => goTab("import")}
-            onViewLog={() => goTab("log")}
-            onEdit={(trip) => {
-              setEditTrip(trip);
-              goTab("calculator");
-            }}
-          />
-        )}
-        {tab === "calculator" && (
-          <CrewCalculatorPanel
+            onYearChange={setYear}
             prefill={prefill}
             onPrefillConsumed={() => setPrefill(null)}
-            editTrip={editTrip}
-            onEditConsumed={() => setEditTrip(null)}
-          />
-        )}
-        {tab === "log" && (
-          <CrewTripLogPanel
-            year={year}
-            onEdit={(trip) => {
-              setEditTrip(trip);
-              goTab("calculator");
-            }}
           />
         )}
         {tab === "calendar" && <CrewCalendar year={year} />}
         {tab === "import" && (
           <CrewScheduleImport
+            submitLabel="Fill trip form"
             onImport={(data) => {
               setPrefill(data);
-              goTab("calculator");
+              goTab("home");
             }}
           />
         )}

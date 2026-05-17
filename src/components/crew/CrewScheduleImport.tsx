@@ -21,13 +21,14 @@ export type CrewImportPrefill = {
 
 type Props = {
   onImport: (prefill: CrewImportPrefill) => void;
+  submitLabel?: string;
 };
 
 const CSV_TEMPLATE = `airport,arrival,departure
 DFW,2026-05-17,2026-05-19
 LAX,2026-05-19,2026-05-21`;
 
-export function CrewScheduleImport({ onImport }: Props) {
+export function CrewScheduleImport({ onImport, submitLabel = "Send to calculator" }: Props) {
   const [tab, setTab] = useState<"csv" | "text" | "ai">("csv");
   const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -258,7 +259,7 @@ export function CrewScheduleImport({ onImport }: Props) {
               ))}
             </ul>
             <Button type="button" className="mt-4" onClick={applyImport}>
-              Send to calculator
+              {submitLabel}
             </Button>
           </div>
         )}
