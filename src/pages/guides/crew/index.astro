@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import {
+  CREW_CALCULATOR_HREF,
+  CREW_GUIDES,
+  crewGuideHref
+} from "../../../data/crewGuides";
+import { CREW_HUB_AIRPORTS } from "../../../data/crewHubAirports";
+
+const title = "Airline crew per diem guides (pilots & flight attendants)";
+const description =
+  "Guides for airline crew per diem: GSA M&IE tax basics, 75% first and last day, multi-city layovers, contract vs GSA, and links to the free trip log calculator.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">Crew guides</span>
+    </nav>
+
+    <h1 class="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+      Airline crew per diem guides
+    </h1>
+    <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      Plain-language explainers for pilots, flight attendants, and other airline crew who track
+      layover per diem alongside
+      <a class="font-medium text-[var(--color-primary)] hover:underline" href={CREW_CALCULATOR_HREF}
+        >our free trip log calculator</a
+      >. Not tax or legal advice—confirm rules with your preparer and employer.
+    </p>
+
+    <ul class="mt-10 space-y-4">
+      {
+        CREW_GUIDES.map((g) => (
+          <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-5">
+            <a class="text-lg font-semibold text-[var(--color-ink)] hover:text-[var(--color-primary)]" href={crewGuideHref(g.slug)}>
+              {g.shortLabel}
+            </a>
+            <p class="mt-2 text-sm text-[var(--color-ink-muted)]">{g.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <section class="mt-14">
+      <h2 class="text-xl font-semibold text-[var(--color-ink)]">Layover hub pages</h2>
+      <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+        GSA M&amp;IE context for busy U.S. layover airports (fiscal year rates when synced at build).
+      </p>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {
+          CREW_HUB_AIRPORTS.slice(0, 12).map((a) => (
+            <li>
+              <a
+                class="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-muted)]/50 px-3 py-1.5 text-sm font-mono font-medium text-[var(--color-primary)] hover:bg-[var(--color-surface-muted)]"
+                href={`/crew/layover/${a.code.toLowerCase()}/`}
+              >
+                {a.code}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="px-3 py-1.5 text-sm font-medium text-[var(--color-primary)] hover:underline" href="/crew/layover/">
+            All hubs →
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <div class="mt-10">
+      <a
+        href={CREW_CALCULATOR_HREF}
+        class="inline-flex rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[var(--color-primary-hover)]"
+      >
+        Open crew calculator
+      </a>
+    </div>
+  </article>
+</BaseLayout>

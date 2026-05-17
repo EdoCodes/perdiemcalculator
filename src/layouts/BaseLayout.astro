@@ -24,6 +24,8 @@ const onCalculator =
   path.startsWith("/calculator") || path === "/";
 const onStates = path.startsWith("/states");
 const onMethodology = path.startsWith("/methodology");
+const onCrewGuides =
+  path.startsWith("/guides/crew") || path.startsWith("/crew/");
 ---
 
 <!doctype html>
@@ -84,6 +86,7 @@ const onMethodology = path.startsWith("/methodology");
         </a>
         <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
           <a href="/calculator/" class={onCalculator ? navActive : navLink}>Calculators</a>
+          <a href="/guides/crew/" class={onCrewGuides ? navActive : navLink}>Crew guides</a>
           <a href="/states/" class={onStates ? navActive : navLink}>States</a>
           <a href="/methodology/" class={onMethodology ? navActive : navLink}>Methodology</a>
           <ThemeToggle client:load />
@@ -101,11 +104,18 @@ const onMethodology = path.startsWith("/methodology");
           <p class="text-sm text-[var(--color-ink-muted)]">
             Planning aid only · Not payroll or tax advice · Verify with your employer or agency
           </p>
-          <a
-            href="/calculator/"
-            class="text-sm font-semibold text-[var(--color-primary)] hover:underline"
-            >Choose your profession →</a
-          >
+          <div class="flex flex-wrap gap-4">
+            <a
+              href="/calculator/"
+              class="text-sm font-semibold text-[var(--color-primary)] hover:underline"
+              >Calculators</a
+            >
+            <a
+              href="/guides/crew/"
+              class="text-sm font-semibold text-[var(--color-primary)] hover:underline"
+              >Crew guides</a
+            >
+          </div>
         </div>
     </footer>
   </body>

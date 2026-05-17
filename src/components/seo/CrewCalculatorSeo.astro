@@ -1,0 +1,109 @@
+---
+import { CREW_GUIDES_INDEX, CREW_GUIDES, crewGuideHref } from "../../data/crewGuides";
+
+const faqs = [
+  {
+    q: "Is this a free per diem calculator for pilots and flight attendants?",
+    a: "Yes. The airline crew calculator is free: add trips to a browser-based log, compare contract per diem to GSA M&IE, upload schedules, and export CSV or print/PDF reports with no paywall."
+  },
+  {
+    q: "What is the difference between contract per diem and GSA M&IE?",
+    a: "Contract per diem is what your airline pays under your collective bargaining agreement or employer policy. GSA M&IE is the federal meals and incidental expenses rate many crew use on tax worksheets—it is not your paycheck."
+  },
+  {
+    q: "Does the calculator use the 75% rule for the first and last day?",
+    a: "For multi-day trips, GSA-style calculations often apply 75% of the daily M&IE on the first and last calendar day away from base. Our crew tool follows that convention for qualifying itineraries; confirm with your tax preparer."
+  },
+  {
+    q: "Can I track multi-city layovers?",
+    a: "Yes. Enable multiple layover cities in advanced options or import a schedule. Each calendar day is assigned to the city you were in, including departure days at the layover you left."
+  },
+  {
+    q: "How many airports are supported?",
+    a: "Over 8,800 airports from OurAirports are searchable by code or city name, with GSA locality matching for U.S. layovers when rates are synced to our database."
+  },
+  {
+    q: "Is my trip data stored in the cloud?",
+    a: "Trips are saved in your browser local storage unless you clear site data. No account is required. This is a guest-mode trip log, not an employer payroll system."
+  }
+];
+
+---
+
+<section
+  class="crew-seo mt-16 border-t border-[var(--color-border)] pt-12"
+  aria-labelledby="crew-seo-heading"
+>
+  <article class="mx-auto max-w-3xl">
+    <h2 id="crew-seo-heading" class="text-2xl font-bold tracking-tight text-[var(--color-ink)]">
+      Per diem calculator for pilots &amp; flight attendants
+    </h2>
+
+    <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      <p>
+        <strong class="text-[var(--color-ink)]">Airline crew per diem</strong> usually means two
+        different things: what your company pays under your <strong>contract</strong>, and what you
+        may reference from <strong>GSA meals &amp; incidental expenses (M&amp;IE)</strong> rates for
+        layover cities when building a tax-year worksheet. PerDiemCalculator lets you log trips,
+        run both numbers side by side, and keep a free <strong>trip history</strong> with calendar
+        view and exports—built for regional and mainline pilots, cabin crew, and other airline
+        employees who travel away from base.
+      </p>
+      <p>
+        Add a trip with your away-from-base dates and layover airport (search 8,800+ codes). Tap
+        <strong class="text-[var(--color-ink)]">Add trip to log</strong> once to calculate GSA
+        M&amp;IE (when rates are synced), optional contract totals, and save to your browser log.
+        Upload a roster CSV, paste schedule lines, or use AI import on Netlify when configured.
+      </p>
+      <p>
+        Read our crew guides for the <a href={crewGuideHref("75-percent-first-last-day")}>75% first
+        and last day rule</a>, <a href={crewGuideHref("multi-city-layovers")}>multi-city layover
+        assignment</a>, and <a href={crewGuideHref("contract-vs-gsa")}>contract vs GSA</a>. Browse
+        <a href="/crew/layover/dfw/">layover hub pages</a> for sample GSA M&amp;IE by airport.
+      </p>
+    </div>
+
+    <h3 class="mt-10 text-lg font-semibold text-[var(--color-ink)]">Crew guides</h3>
+    <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+      {
+        CREW_GUIDES.map((g) => (
+          <li>
+            <a
+              class="text-sm font-medium text-[var(--color-primary)] hover:underline"
+              href={crewGuideHref(g.slug)}
+            >
+              {g.shortLabel}
+            </a>
+          </li>
+        ))
+      }
+      <li class="sm:col-span-2">
+        <a class="text-sm font-medium text-[var(--color-primary)] hover:underline" href={CREW_GUIDES_INDEX}>
+          View all crew guides →
+        </a>
+      </li>
+    </ul>
+
+    <h3 class="mt-10 text-lg font-semibold text-[var(--color-ink)]" id="crew-faq-heading">
+      Frequently asked questions
+    </h3>
+    <div class="mt-4 space-y-3">
+      {
+        faqs.map((f) => (
+          <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4">
+            <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">{f.q}</summary>
+            <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+
+    <p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+      Also see <a class="text-[var(--color-primary)] hover:underline" href="/crew/pilots/">pilots</a
+      >, <a class="text-[var(--color-primary)] hover:underline" href="/crew/flight-attendants/"
+        >flight attendants</a
+      >, and <a class="text-[var(--color-primary)] hover:underline" href="/methodology/">GSA methodology</a
+      >. Not affiliated with any airline or the U.S. government.
+    </p>
+  </article>
+</section>

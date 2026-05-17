@@ -1,0 +1,141 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  CREW_CALCULATOR_HREF,
+  CREW_GUIDES_INDEX,
+  CREW_GUIDES,
+  crewGuideHref,
+  type CrewGuideMeta
+} from "../../data/crewGuides";
+
+type Props = {
+  guide: CrewGuideMeta;
+  jsonLd?: Record<string, unknown>[];
+};
+
+const { guide, jsonLd = [] } = Astro.props;
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL(crewGuideHref(guide.slug), siteUrl).href;
+
+const webPageLd = {
+  "@type": "WebPage",
+  name: guide.title,
+  description: guide.description,
+  url: pageUrl
+};
+
+const breadcrumbLd = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Crew guides",
+      item: new URL(CREW_GUIDES_INDEX, siteUrl).href
+    },
+    { "@type": "ListItem", position: 3, name: guide.shortLabel, item: pageUrl }
+  ]
+};
+
+const related = CREW_GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 3);
+---
+
+<BaseLayout
+  title={`${guide.title} | Per Diem Calculator`}
+  description={guide.description}
+  jsonLd={[webPageLd, breadcrumbLd, ...jsonLd]}
+>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-primary)]" href={CREW_GUIDES_INDEX}>Crew guides</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">{guide.shortLabel}</span>
+    </nav>
+
+    <h1 class="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+      {guide.title}
+    </h1>
+    <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      {guide.description}
+    </p>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a
+        href={CREW_CALCULATOR_HREF}
+        class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[var(--color-primary-hover)]"
+      >
+        Open airline crew calculator
+      </a>
+      <a
+        href="/crew/layover/dfw/"
+        class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
+      >
+        Layover hub pages
+      </a>
+    </div>
+
+    <div class="prose-crew mt-10 space-y-6 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      <slot />
+    </div>
+
+    <section class="mt-12 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6">
+      <h2 class="text-lg font-semibold text-[var(--color-ink)]">More for airline crew</h2>
+      <ul class="mt-4 space-y-2 text-sm">
+        {
+          related.map((g) => (
+            <li>
+              <a class="font-medium text-[var(--color-primary)] hover:underline" href={crewGuideHref(g.slug)}>
+                {g.shortLabel}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="font-medium text-[var(--color-primary)] hover:underline" href={CREW_GUIDES_INDEX}>
+            All crew guides
+          </a>
+        </li>
+        <li>
+          <a class="font-medium text-[var(--color-primary)] hover:underline" href={CREW_CALCULATOR_HREF}>
+            Free trip log &amp; exports
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+      Planning aid only · Not tax, payroll, or legal advice ·
+      <a class="text-[var(--color-primary)] hover:underline" href="/methodology/">GSA methodology</a>
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-crew :global(h2) {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .prose-crew :global(strong) {
+    color: var(--color-ink);
+  }
+  .prose-crew :global(ul) {
+    margin-top: 0.75rem;
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-crew :global(li) {
+    margin-top: 0.35rem;
+  }
+  .prose-crew :global(a) {
+    font-weight: 500;
+    color: var(--color-primary);
+  }
+  .prose-crew :global(a:hover) {
+    text-decoration: underline;
+  }
+</style>

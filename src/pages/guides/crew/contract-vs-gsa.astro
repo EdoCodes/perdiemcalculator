@@ -1,0 +1,40 @@
+---
+import CrewGuideShell from "../../../components/seo/CrewGuideShell.astro";
+import { CREW_GUIDES, crewGuideHref } from "../../../data/crewGuides";
+
+const guide = CREW_GUIDES.find((g) => g.slug === "contract-vs-gsa")!;
+---
+
+<CrewGuideShell guide={guide}>
+  <h2>Contract per diem (airline pay)</h2>
+  <p>
+    <strong>Contract per diem</strong> is what your employer pays while you are away from base—often
+    per hour or per calendar day under your CBA. Rates differ by airline, seat (pilot vs cabin),
+    domestic vs international, and sometimes by equipment or seniority band.
+  </p>
+  <p>
+    Our calculator lets you enter domestic and international rates and optional per-hour mode in
+    <strong>Advanced options</strong>. Defaults are placeholders only; use your union booklet or
+    payroll documentation.
+  </p>
+
+  <h2>GSA M&amp;IE (worksheet benchmark)</h2>
+  <p>
+    <strong>GSA M&amp;IE</strong> is the federal meals and incidental cap for a locality. Crew often
+    use it to organize layover-by-layover amounts on tax worksheets. It does not change what appears
+    on your W-2 from the airline.
+  </p>
+
+  <h2>Compare both in one trip</h2>
+  <p>
+    Choose <strong>Compare both</strong> on the
+    <a href="/calculator/crew/">crew calculator</a> to see contract totals next to GSA M&amp;IE for
+    the same dates and cities. Your log stores both numbers for exports.
+  </p>
+
+  <h2>Related guides</h2>
+  <ul>
+    <li><a href={crewGuideHref("per-diem-tax-basics")}>Crew per diem tax basics</a></li>
+    <li><a href={crewGuideHref("75-percent-first-last-day")}>75% first and last day</a></li>
+  </ul>
+</CrewGuideShell>

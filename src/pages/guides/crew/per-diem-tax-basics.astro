@@ -1,0 +1,49 @@
+---
+import CrewGuideShell from "../../../components/seo/CrewGuideShell.astro";
+import { CREW_GUIDES, crewGuideHref } from "../../../data/crewGuides";
+
+const guide = CREW_GUIDES.find((g) => g.slug === "per-diem-tax-basics")!;
+---
+
+<CrewGuideShell guide={guide}>
+  <h2>Two different “per diem” numbers</h2>
+  <p>
+    Most airline employees hear <strong>per diem</strong> in two contexts. Your airline pays
+    <strong>contract per diem</strong> (or a similar away-from-base allowance) under your CBA or
+    company policy. Separately, many crew reference <strong>GSA meals and incidental expenses
+    (M&amp;IE)</strong> rates for each layover city when organizing records for tax time.
+  </p>
+  <p>
+    Those amounts are <strong>not the same</strong>. Contract pay is income; GSA M&amp;IE on a
+    worksheet is a federal benchmark for meals and incidentals on official-style travel—not a
+    paycheck line item.
+  </p>
+
+  <h2>What GSA M&amp;IE is</h2>
+  <p>
+    The General Services Administration publishes daily M&amp;IE caps for CONUS cities and a
+    standard rate for other areas. Airline layovers in the U.S. usually map to a
+    <strong>GSA locality</strong> (for example Dallas, Chicago, or Los Angeles) or the state
+    standard rate.
+  </p>
+  <ul>
+    <li>M&amp;IE covers meals and incidental expenses—not lodging for most crew worksheets.</li>
+    <li>Rates change by <strong>federal fiscal year</strong> (October–September).</li>
+    <li>International layovers are outside CONUS; you may enter a reasonable daily M&amp;IE in our tool.</li>
+  </ul>
+
+  <h2>Why crew keep a trip log</h2>
+  <p>
+    A simple <strong>trip log</strong>—dates away from base, airport or city, and calculated
+    totals—beats rebuilding spreadsheets every spring. Our
+    <a href="/calculator/crew/">crew calculator</a> stores trips in your browser, shows a running
+    year total, and exports CSV or print/PDF reports for free.
+  </p>
+
+  <h2>Related topics</h2>
+  <ul>
+    <li><a href={crewGuideHref("75-percent-first-last-day")}>75% on first and last travel days</a></li>
+    <li><a href={crewGuideHref("contract-vs-gsa")}>Contract per diem vs GSA M&amp;IE</a></li>
+    <li><a href={crewGuideHref("multi-city-layovers")}>Multi-city layover assignment</a></li>
+  </ul>
+</CrewGuideShell>

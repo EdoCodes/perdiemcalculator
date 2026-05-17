@@ -2,28 +2,105 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
 import { CrewHub } from "../../components/crew/CrewHub";
+import CrewCalculatorSeo from "../../components/seo/CrewCalculatorSeo.astro";
+import { CREW_CALCULATOR_HREF } from "../../data/crewGuides";
 
-const title = "Airline crew per diem calculator | Per Diem Calculator";
+const title = "Airline crew per diem calculator (pilots & flight attendants)";
 const description =
-  "Airline crew per diem: add trips in one step, year totals, trip history, GSA vs contract, schedule import, and calendar.";
+  "Free per diem calculator and trip log for airline pilots and cabin crew: GSA M&IE by layover, contract compare, schedule import, year totals, CSV/PDF export.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL(CREW_CALCULATOR_HREF, siteUrl).href;
+
+const faqJsonLd = {
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Is this a free per diem calculator for pilots and flight attendants?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Add trips to a browser log, compare contract per diem to GSA M&IE, import schedules, and export CSV or PDF with no paywall."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "What is the difference between contract per diem and GSA M&IE?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Contract per diem is airline pay under your CBA. GSA M&IE is the federal meals and incidental rate many crew reference on tax worksheets—it is not your paycheck."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "Does the calculator use the 75% rule for the first and last day?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "For qualifying multi-day trips, GSA-style calculations often apply 75% of daily M&IE on the first and last calendar day away from base."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "Can I track multi-city layovers?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Use multiple layover cities or schedule import; each calendar day is assigned to the city you were in."
+      }
+    }
+  ]
+};
+
+const appJsonLd = {
+  "@type": "WebApplication",
+  name: "Airline crew per diem calculator",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  url: pageUrl,
+  description
+};
+
+const breadcrumbLd = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Calculators",
+      item: new URL("/calculator/", siteUrl).href
+    },
+    { "@type": "ListItem", position: 3, name: "Airline crew", item: pageUrl }
+  ]
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} jsonLd={[breadcrumbLd, appJsonLd, faqJsonLd]}>
   <section
     class="calculator-theme -mx-4 rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-8 shadow-xl shadow-black/40 sm:mx-0 sm:px-8 sm:py-10"
   >
     <CalculatorProfessionBar client:load professionId="aviation-crew" />
 
     <div class="mb-8 max-w-2xl">
-      <h1 class="text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
-        Airline crew per diem
+      <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+        <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
+        <span class="mx-2">/</span>
+        <a class="hover:text-[var(--color-primary)]" href="/calculator/">Calculators</a>
+        <span class="mx-2">/</span>
+        <span class="text-[var(--color-ink)]">Airline crew</span>
+      </nav>
+
+      <h1 class="mt-4 text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+        Airline crew per diem calculator
       </h1>
       <p class="mt-3 text-[var(--color-ink-muted)]">
-        Add trips like a trip log app: dates, layover city, one tap to save. Running GSA totals, history,
-        schedule upload, contract compare, and free exports. Not payroll or tax advice.
+        For pilots and flight attendants: add trips in one step, running GSA totals, trip history,
+        contract compare, schedule upload, and free exports. Not payroll or tax advice.
       </p>
     </div>
 
     <CrewHub client:load />
   </section>
+
+  <CrewCalculatorSeo />
 </BaseLayout>

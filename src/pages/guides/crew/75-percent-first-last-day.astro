@@ -1,0 +1,38 @@
+---
+import CrewGuideShell from "../../../components/seo/CrewGuideShell.astro";
+import { CREW_GUIDES, crewGuideHref } from "../../../data/crewGuides";
+
+const guide = CREW_GUIDES.find((g) => g.slug === "75-percent-first-last-day")!;
+---
+
+<CrewGuideShell guide={guide}>
+  <h2>What the 75% rule means</h2>
+  <p>
+    On many federal-style itineraries, the <strong>first and last calendar day</strong> of travel
+    away from base use <strong>75% of the full daily M&amp;IE</strong> rate when the trip is at
+    least two days. Middle days typically use 100% of the locality rate. Airline crew often apply
+    this same convention when building GSA-based trip totals for tax worksheets.
+  </p>
+
+  <h2>Example</h2>
+  <p>
+    Suppose a three-day trip away from base with a $68 M&amp;IE locality rate. Day 1 (first day)
+    might count $51 (75% of $68), day 2 at $68, and day 3 (last day) at $51 again—subject to how
+    your preparer treats partial days and union contract language.
+  </p>
+
+  <h2>When it applies in our calculator</h2>
+  <p>
+    The <a href="/calculator/crew/">airline crew calculator</a> applies this GSA-style convention
+    on qualifying multi-day GSA calculations. Single-day trips and contract-only mode follow
+    different rules. Always confirm with a qualified tax professional.
+  </p>
+
+  <h2>Not the same as partial contract days</h2>
+  <p>
+    Your airline may pay <strong>partial contract per diem</strong> on the first and last day of a
+    pairing using completely different fractions. Compare both in the tool with
+    <strong>Compare both</strong> mode—see
+    <a href={crewGuideHref("contract-vs-gsa")}>contract vs GSA</a>.
+  </p>
+</CrewGuideShell>

@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CREW_CALCULATOR_HREF, CREW_GUIDES_INDEX, crewGuideHref } from "../../data/crewGuides";
+
+const title = "Pilot per diem calculator (GSA M&IE & contract)";
+const description =
+  "Free per diem calculator for airline pilots: log trips by layover airport, GSA M&IE, contract compare, schedule import, year totals, and CSV export.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <h1 class="text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+      Pilot per diem calculator
+    </h1>
+    <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      Regional and mainline <strong class="text-[var(--color-ink)]">airline pilots</strong> use
+      PerDiemCalculator to track away-from-base trips: search 8,800+ airports, apply GSA M&amp;IE by
+      layover city, compare to contract per diem pay, and keep a free browser trip log with
+      calendar and exports.
+    </p>
+    <ul class="mt-6 list-disc space-y-2 pl-5 text-[var(--color-ink-muted)]">
+      <li>One-tap <strong class="text-[var(--color-ink)]">Add trip to log</strong> with running year totals</li>
+      <li>Multi-city layovers and schedule CSV / AI import</li>
+      <li>
+        <a class="text-[var(--color-primary)] hover:underline" href={crewGuideHref("75-percent-first-last-day")}
+          >75% first and last day</a
+        > on qualifying GSA trips
+      </li>
+    </ul>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href={CREW_CALCULATOR_HREF}
+        class="inline-flex rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[var(--color-primary-hover)]"
+      >
+        Open pilot / crew calculator
+      </a>
+      <a
+        href={CREW_GUIDES_INDEX}
+        class="inline-flex rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold hover:bg-[var(--color-surface-muted)]"
+      >
+        Crew guides
+      </a>
+    </div>
+    <p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+      Also for <a class="text-[var(--color-primary)] hover:underline" href="/crew/flight-attendants/"
+        >flight attendants</a
+      > · Not tax or payroll advice
+    </p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import CrewGuideShell from "../../../components/seo/CrewGuideShell.astro";
+import { CREW_GUIDES, crewGuideHref } from "../../../data/crewGuides";
+
+const guide = CREW_GUIDES.find((g) => g.slug === "multi-city-layovers")!;
+---
+
+<CrewGuideShell guide={guide}>
+  <h2>Why multi-city trips matter</h2>
+  <p>
+    A single rotation might overnight in <strong>DFW</strong>, then <strong>PHX</strong>, then
+    <strong>SEA</strong>. Each calendar day should use the <strong>M&amp;IE rate for the city you
+    were in</strong> that day—not one rate for the whole trip. Getting that wrong skews your annual
+    GSA total.
+  </p>
+
+  <h2>How days are assigned</h2>
+  <p>
+    A common crew convention (mirrored in our tool):
+  </p>
+  <ul>
+    <li>Each layover leg has arrival and departure dates.</li>
+    <li>A calendar day counts toward the leg you are on, including the <strong>departure day</strong> from that city.</li>
+    <li>The first and last day of the overall trip may still use the <strong>75% rule</strong> on GSA totals when applicable.</li>
+  </ul>
+
+  <h2>Using the calculator</h2>
+  <p>
+    On <a href="/calculator/crew/">/calculator/crew/</a>, open <strong>Advanced options</strong> and
+    enable <strong>Multiple layover cities</strong>, or
+    <strong>upload a schedule</strong> (CSV, paste, or AI) to pre-fill legs. Review the preview before
+    adding to your log.
+  </p>
+
+  <h2>Layover hub reference</h2>
+  <p>
+    See published M&amp;IE for busy hubs on pages like
+    <a href="/crew/layover/dfw/">DFW layover per diem</a> and
+    <a href="/crew/layover/lax/">LAX layover per diem</a>, then log the full trip in the calculator.
+  </p>
+
+  <p>
+    More background: <a href={crewGuideHref("per-diem-tax-basics")}>crew per diem tax basics</a>.
+  </p>
+</CrewGuideShell>

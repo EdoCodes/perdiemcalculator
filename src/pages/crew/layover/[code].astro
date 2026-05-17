@@ -1,0 +1,151 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { CREW_HUB_AIRPORTS, type CrewHubAirport } from "../../../data/crewHubAirports";
+import { CREW_CALCULATOR_HREF, CREW_GUIDES_INDEX } from "../../../data/crewGuides";
+import { fiscalYearForDate } from "../../../lib/perdiem/fiscalYear";
+import { fetchLocalitiesByStateForBuild } from "../../../lib/rates/buildTimeStateData";
+import { pickLocalityForHub } from "../../../lib/crew/pickLocalityAtBuild";
+import type { StateLocalitySummary } from "../../../lib/rates/buildTimeStateData";
+
+export async function getStaticPaths() {
+  const fiscalYear = fiscalYearForDate(new Date());
+  const byState = await fetchLocalitiesByStateForBuild(fiscalYear);
+
+  return CREW_HUB_AIRPORTS.map((airport) => {
+    const localities = byState.get(airport.state) ?? [];
+    const locality = pickLocalityForHub(localities, airport.city);
+    return {
+      params: { code: airport.code.toLowerCase() },
+      props: { airport, fiscalYear, locality }
+    };
+  });
+}
+
+interface Props {
+  airport: CrewHubAirport;
+  fiscalYear: number;
+  locality: StateLocalitySummary | null;
+}
+
+const { airport, fiscalYear, locality } = Astro.props;
+const code = airport.code.toUpperCase();
+const title = `${code} layover per diem (GSA M&IE FY ${fiscalYear}) | Airline crew`;
+const description = `GSA meals & incidental (M&IE) context for ${code} (${airport.city}) layovers—airline crew per diem planning for FY ${fiscalYear}. Free trip log calculator.`;
+const calcHref = CREW_CALCULATOR_HREF;
+const stateHref = `/states/${airport.state.toLowerCase()}/`;
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = Astro.url.href;
+
+const mieDisplay =
+  locality && !locality.isStandard
+    ? `$${locality.mieTotal.toFixed(0)} / day M&IE (${locality.city})`
+    : locality
+      ? `$${locality.mieTotal.toFixed(0)} / day M&IE (standard CONUS proxy for ${airport.state})`
+      : null;
+
+const jsonLd = {
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: pageUrl,
+  about: { "@type": "Airport", name: `${code} — ${airport.city}` }
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-primary)]" href="/crew/layover/">Layover hubs</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">{code}</span>
+    </nav>
+
+    <h1 class="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+      {code} layover per diem ({airport.city})
+    </h1>
+    <p class="mt-2 text-sm font-medium text-[var(--color-primary)]">
+      Airline crew · GSA M&amp;IE · FY {fiscalYear}
+    </p>
+
+    <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      <p>{airport.intro}</p>
+      {
+        mieDisplay ? (
+          <p>
+            <strong class="text-[var(--color-ink)]">Published GSA M&amp;IE (FY {fiscalYear}):</strong>{" "}
+            {mieDisplay}. Multi-day trips may use 75% on the first and last calendar day—see our{" "}
+            <a class="text-[var(--color-primary)] hover:underline" href="/guides/crew/75-percent-first-last-day/">
+              75% rule guide
+            </a>
+            .
+          </p>
+        ) : (
+          <p>
+            Connect Supabase GSA data at build time for live M&amp;IE on this page, or use the{" "}
+            <a class="text-[var(--color-primary)] hover:underline" href={calcHref}>crew calculator</a>{" "}
+            with {code} selected.
+          </p>
+        )
+      }
+      <p>
+        Log full pairings with multiple cities in our free{" "}
+        <a class="font-medium text-[var(--color-primary)] hover:underline" href={calcHref}>
+          airline crew per diem calculator
+        </a>—trip history, contract vs GSA compare, and CSV export.
+      </p>
+    </div>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href={calcHref}
+        class="inline-flex rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[var(--color-primary-hover)]"
+      >
+        Calculate {code} trip
+      </a>
+      <a
+        href={stateHref}
+        class="inline-flex rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
+      >
+        {airport.state} GSA rates
+      </a>
+      <a
+        href={CREW_GUIDES_INDEX}
+        class="inline-flex rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
+      >
+        Crew guides
+      </a>
+    </div>
+
+    <section class="mt-12">
+      <h2 class="text-lg font-semibold text-[var(--color-ink)]">Other layover hubs</h2>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {
+          CREW_HUB_AIRPORTS.filter((a) => a.code !== airport.code)
+            .slice(0, 10)
+            .map((a) => (
+              <li>
+                <a
+                  class="rounded-lg border border-[var(--color-border)] px-3 py-1.5 font-mono text-sm text-[var(--color-primary)] hover:bg-[var(--color-surface-muted)]"
+                  href={`/crew/layover/${a.code.toLowerCase()}/`}
+                >
+                  {a.code}
+                </a>
+              </li>
+            ))
+        }
+        <li>
+          <a class="px-3 py-1.5 text-sm text-[var(--color-primary)] hover:underline" href="/crew/layover/">
+            All hubs
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+      Planning aid only · Rates from GSA when synced · Not tax advice ·
+      <a class="text-[var(--color-primary)] hover:underline" href="/methodology/">Methodology</a>
+    </p>
+  </article>
+</BaseLayout>
