@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# NCES LEA sync temp files
+scripts/.tmp/

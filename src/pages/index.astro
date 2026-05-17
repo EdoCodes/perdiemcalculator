@@ -1,10 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { ProfessionPicker } from "../components/profession/ProfessionPicker";
 import { US_STATES } from "../data/usStates";
 
-const title = "Federal GSA per diem calculator (CONUS)";
+const title = "Per diem calculator for every profession";
 const description =
-  "Estimate CONUS per diem with official GSA lodging and M&IE rates, travel-day adjustments, and day-by-day breakdowns.";
+  "Estimate per diem for federal government travel (GSA CONUS), airline pilots and cabin crew, and more—pick your profession and calculate.";
 
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
 
@@ -21,30 +22,30 @@ const jsonLd = [
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd} hero>
   <section class="relative overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-6 py-14 shadow-xl shadow-black/5 sm:px-12 sm:py-16">
-    <div class="relative z-10 max-w-2xl">
+    <div class="relative z-10 max-w-3xl">
       <p
         class="inline-flex items-center rounded-full bg-[var(--color-primary-muted)] px-3 py-1 text-xs font-semibold text-[var(--color-primary)]"
       >
-        Official GSA CONUS data
+        perdiemcalculator.com
       </p>
       <h1 class="mt-4 text-4xl font-bold tracking-tight text-[var(--color-ink)] sm:text-5xl">
-        Per diem, calculated with precision
+        Per diem, for your profession
       </h1>
       <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
-        Seasonal lodging, M&IE tiers, travel-day rules, and meal deductions — in one modern
-        calculator built for federal travelers and contractors.
+        One site, many pay systems—GSA for federal travelers, contract rates for airline crew, school
+        policy for teachers, and more on the way.
       </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a
-          href="/calculator/gsa/"
-          class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[var(--color-primary)]/30 transition hover:bg-[var(--color-primary-hover)]"
-          >Start calculating</a
-        >
-        <a
-          href="/methodology/"
-          class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-6 py-3 text-sm font-semibold text-[var(--color-ink)] transition hover:bg-[var(--color-surface-elevated)]"
-          >How it works</a
-        >
+    </div>
+  </section>
+
+  <section class="mt-14">
+    <div class="mx-auto max-w-4xl">
+      <h2 class="text-2xl font-bold text-[var(--color-ink)]">Choose your profession</h2>
+      <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+        Step 1: select how you earn per diem. Step 2: run a calculator built for those rules.
+      </p>
+      <div class="mt-8">
+        <ProfessionPicker client:load />
       </div>
     </div>
   </section>
@@ -53,16 +54,16 @@ const jsonLd = [
     {
       [
         {
-          title: "Real GSA rates",
+          title: "Federal GSA rates",
           body: "Localities, monthly lodging caps, and M&IE synced from the federal Per Diem API."
         },
         {
-          title: "FTR-aware options",
-          body: "75% travel days, meal deductions, optional 150% lodging display."
+          title: "Airline crew",
+          body: "Per day or per hour away from base—domestic and international, with your contract rates."
         },
         {
-          title: "Day-by-day clarity",
-          body: "Transparent breakdown for audits, vouchers, and trip planning."
+          title: "Teachers & school staff",
+          body: "Conferences, field trips, and PD—daily M&IE plus lodging from your district policy."
         }
       ].map((item) => (
         <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 shadow-sm">
@@ -76,9 +77,9 @@ const jsonLd = [
   <section class="mt-16">
     <div class="flex items-end justify-between gap-4">
       <div>
-        <h2 class="text-2xl font-bold text-[var(--color-ink)]">Browse by state</h2>
+        <h2 class="text-2xl font-bold text-[var(--color-ink)]">Federal travelers: browse by state</h2>
         <p class="mt-1 text-sm text-[var(--color-ink-muted)]">
-          Open a state hub or jump straight into the calculator.
+          GSA CONUS rate hubs for government employees and contractors.
         </p>
       </div>
       <a href="/states/" class="hidden text-sm font-semibold text-[var(--color-primary)] sm:inline hover:underline"

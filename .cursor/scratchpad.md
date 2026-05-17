@@ -1,8 +1,9 @@
 # Project Status Board
 
-- [done] Scaffold Astro + React + Netlify + Supabase placeholders + CI — evidence: `npm run build` OK (55 pages), sitemap emitted when `PUBLIC_SITE_URL` is set.
-- [done] Design pass B (tokens, dark mode, calculator UX, homepage hero) — pushed to main
-- [done] Wire calculator island to rate data — **Implementation:** SQL migration, `scripts/sync-gsa-rates.mjs`, GitHub `sync-gsa.yml`, UI queries + calculator; **Remaining (you):** run migration, set Netlify + GitHub secrets, run sync once or schedule workflow.
+- [done] Scaffold Astro + React + Netlify + Supabase placeholders + CI
+- [done] Design pass B (tokens, dark mode, calculator UX, homepage hero)
+- [done] Wire calculator + GSA sync (conus/lodging + deduped ZIPs); verify:db OK (790 loc, 40k zips ×2 FY)
+- [done] Go-live pass: `PUBLIC_SITE_URL` in netlify.toml, sitemap, OG meta, README checklist, security headers
 - [done] Per-day GSA logic connected to calculator UI
 
 # Executor's Feedback or Assistance Requests

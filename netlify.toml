@@ -5,7 +5,7 @@
 [build.environment]
   NODE_VERSION = "22.12.0"
   # Canonical URLs + sitemap (override in Netlify UI if you use a custom domain).
-  PUBLIC_SITE_URL = "https://perdiemproject.netlify.app"
+  PUBLIC_SITE_URL = "https://www.perdiemcalculator.com"
   # Also set in Netlify UI (required for the calculator):
   # PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY
 

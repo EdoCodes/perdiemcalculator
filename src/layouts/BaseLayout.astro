@@ -19,6 +19,11 @@ const navLink =
   "text-sm font-medium text-[var(--color-ink-muted)] transition hover:text-[var(--color-ink)]";
 const navActive = "text-sm font-semibold text-[var(--color-primary)]";
 const path = Astro.url.pathname;
+
+const onCalculator =
+  path.startsWith("/calculator") || path === "/";
+const onStates = path.startsWith("/states");
+const onMethodology = path.startsWith("/methodology");
 ---
 
 <!doctype html>
@@ -78,14 +83,9 @@ const path = Astro.url.pathname;
           >
         </a>
         <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
-          <a
-            href="/calculator/gsa/"
-            class={path.startsWith("/calculator") ? navActive : navLink}>Calculator</a
-          >
-          <a href="/states/" class={path.startsWith("/states") ? navActive : navLink}>States</a>
-          <a href="/methodology/" class={path.startsWith("/methodology") ? navActive : navLink}
-            >Methodology</a
-          >
+          <a href="/calculator/" class={onCalculator ? navActive : navLink}>Calculators</a>
+          <a href="/states/" class={onStates ? navActive : navLink}>States</a>
+          <a href="/methodology/" class={onMethodology ? navActive : navLink}>Methodology</a>
           <ThemeToggle client:load />
         </nav>
       </div>
@@ -99,24 +99,14 @@ const path = Astro.url.pathname;
       <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p class="text-sm text-[var(--color-ink-muted)]">
-            Planning aid only · Rates from
-            <a
-              class="font-medium text-[var(--color-primary)] hover:underline"
-              href="https://www.gsa.gov/travel/plan-book/per-diem-rates">GSA</a
-            >
-            · Rules per
-            <a
-              class="font-medium text-[var(--color-primary)] hover:underline"
-              href="https://www.ecfr.gov/current/title-41/subtitle-F">FTR</a
-            >
+            Planning aid only · Not payroll or tax advice · Verify with your employer or agency
           </p>
           <a
-            href="/calculator/gsa/"
+            href="/calculator/"
             class="text-sm font-semibold text-[var(--color-primary)] hover:underline"
-            >Open calculator →</a
+            >Choose your profession →</a
           >
         </div>
-      </div>
     </footer>
   </body>
 </html>
