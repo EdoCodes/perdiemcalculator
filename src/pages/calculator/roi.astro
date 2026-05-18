@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { TravelRoiCalculator } from "../../components/calculator/TravelRoiCalculator";
+
+const title = "Corporate travel & per diem ROI calculator | Per Diem Calculator";
+const description =
+  "Estimate annual per diem exposure, monthly savings, ROI, and payback for your business travel program—modeled like enterprise T&E ROI tools, tuned for per diem accuracy.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL("/calculator/roi/", siteUrl).href;
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Corporate travel & per diem ROI calculator",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  url: pageUrl,
+  description
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={appJsonLd}>
+  <section
+    class="calculator-theme calc-panel -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
+  >
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-accent)]" href="/calculator/">Calculators</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">Travel ROI</span>
+    </nav>
+
+    <header class="mt-6 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+        Corporate travel
+      </p>
+      <h1 class="font-display mt-3 text-3xl sm:text-4xl lg:text-[2.75rem]">
+        Travel &amp; per diem savings calculator
+      </h1>
+      <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
+        Estimate how much your organization could save on travel spend, expense leakage, and per
+        diem accuracy—using the same inputs finance teams use in enterprise ROI tools, with
+        transparent assumptions you can audit.
+      </p>
+    </header>
+
+    <div class="mt-10">
+      <TravelRoiCalculator client:load />
+    </div>
+  </section>
+</BaseLayout>
