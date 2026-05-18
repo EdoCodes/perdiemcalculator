@@ -9,14 +9,18 @@ import {
 import { Badge } from "../ui/Badge";
 import { ProfessionLogo } from "./ProfessionLogo";
 
+const QUICK_LINKS: { id: Profession["id"]; label: string }[] = [
+  { id: "government-federal", label: "Federal GSA" },
+  { id: "aviation-crew", label: "Airline crew" },
+  { id: "education-teacher", label: "Teachers" }
+];
+
 function ProfessionCardTitle({ profession }: { profession: Profession }) {
   return (
     <div className="flex items-start gap-3">
       <ProfessionLogo professionId={profession.id} size="md" available={profession.available} />
       <div>
-        <h3 className="font-semibold text-[var(--color-ink)] group-hover:text-[var(--color-primary)]">
-          {profession.name}
-        </h3>
+        <h3 className="font-semibold text-[var(--color-ink)]">{profession.name}</h3>
         <div className="mt-2 flex flex-wrap gap-1.5">
           {profession.badges.map((b) => (
             <Badge key={b} variant={profession.available ? "primary" : "muted"}>
@@ -31,22 +35,17 @@ function ProfessionCardTitle({ profession }: { profession: Profession }) {
 
 function ProfessionCard({
   profession,
-  selected,
   onSelect
 }: {
   profession: Profession;
-  selected: boolean;
   onSelect: (p: Profession) => void;
 }) {
   const disabled = !profession.available;
   const cardClass = [
-    "group relative flex h-full flex-col rounded-2xl border p-6 text-left transition",
+    "group relative flex h-full flex-col rounded-xl border p-5 text-left transition",
     disabled
-      ? "cursor-not-allowed border-[var(--color-border)] bg-[var(--color-surface-muted)]/50 opacity-70"
-      : "cursor-pointer border-[var(--color-border)] bg-[var(--color-surface-elevated)] hover:border-[var(--color-primary)]/50 hover:shadow-lg hover:shadow-[var(--color-primary)]/10",
-    selected && !disabled
-      ? "ring-2 ring-[var(--color-primary)] ring-offset-2 ring-offset-[var(--color-surface)]"
-      : ""
+      ? "cursor-not-allowed border-[var(--color-border)] bg-[var(--color-surface-muted)]/60 opacity-65"
+      : "cursor-pointer border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] hover:border-[var(--color-accent)]"
   ].join(" ");
 
   const body = (
@@ -60,7 +59,7 @@ function ProfessionCard({
           {profession.highlights.map((h) => (
             <li
               key={h}
-              className="rounded-lg bg-[var(--color-surface-muted)] px-2 py-1 text-xs text-[var(--color-ink-muted)]"
+              className="rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-0.5 text-xs text-[var(--color-ink-muted)]"
             >
               {h}
             </li>
@@ -68,7 +67,7 @@ function ProfessionCard({
         </ul>
       )}
       {profession.available && (
-        <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-primary)]">
+        <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-accent)]">
           Open calculator
           <span aria-hidden>→</span>
         </span>
@@ -78,7 +77,7 @@ function ProfessionCard({
 
   if (disabled) {
     return (
-      <div className={cardClass} aria-disabled>
+      <div aria-disabled className={cardClass}>
         {body}
       </div>
     );
@@ -99,23 +98,55 @@ function LastProfessionBanner({
   remember: (p: Profession) => void;
 }) {
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-[var(--color-primary)]/30 bg-[var(--color-primary-muted)]/40 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-3 rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
         <ProfessionLogo professionId={profession.id} size="sm" />
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-accent)]">
             Continue where you left off
           </p>
           <p className="mt-1 text-sm font-medium text-[var(--color-ink)]">{profession.shortName}</p>
         </div>
-        </div>
+      </div>
       <a
         href={profession.href}
         onClick={() => remember(profession)}
-        className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-[var(--color-primary-hover)]"
+        className="inline-flex shrink-0 items-center justify-center rounded-lg bg-[var(--color-accent)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--color-accent-hover)]"
       >
         Continue
       </a>
+    </div>
+  );
+}
+
+function ProfessionQuickNav({
+  activeId,
+  onPick
+}: {
+  activeId: string | null;
+  onPick: (p: Profession) => void;
+}) {
+  return (
+    <div
+      className="flex flex-wrap items-center justify-center gap-2 sm:gap-3"
+      role="navigation"
+      aria-label="Popular professions"
+    >
+      {QUICK_LINKS.map(({ id, label }) => {
+        const profession = PROFESSIONS.find((p) => p.id === id);
+        if (!profession?.available) return null;
+        const active = activeId === id;
+        return (
+          <a
+            key={id}
+            href={profession.href}
+            onClick={() => onPick(profession)}
+            className={`profession-chip ${active ? "profession-chip--active" : ""}`}
+          >
+            {label}
+          </a>
+        );
+      })}
     </div>
   );
 }
@@ -128,7 +159,7 @@ function CategoryTabs({
   setCategory: (c: ProfessionCategory | "all") => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter by category">
+    <div className="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Filter by category">
       {PROFESSION_CATEGORIES.map((cat) => {
         const active = category === cat.id;
         return (
@@ -138,11 +169,7 @@ function CategoryTabs({
             role="tab"
             aria-selected={active}
             onClick={() => setCategory(cat.id)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-              active
-                ? "bg-[var(--color-primary)] text-white shadow-md shadow-[var(--color-primary)]/25"
-                : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
-            }`}
+            className={`profession-chip text-sm ${active ? "profession-chip--active" : ""}`}
           >
             {cat.label}
           </button>
@@ -192,16 +219,19 @@ export function ProfessionPicker({ compact = false }: { compact?: boolean }) {
     <div className={compact ? "space-y-5" : "space-y-8"}>
       {lastProfession && <LastProfessionBanner profession={lastProfession} remember={remember} />}
 
-      <div className={compact ? "space-y-3" : "space-y-4"}>
-        <label className="block">
+      <div className={compact ? "space-y-4" : "space-y-6"}>
+        <ProfessionQuickNav activeId={lastId} onPick={remember} />
+
+        <label className="mx-auto block max-w-xl">
           <span className="sr-only">Search professions</span>
           <SearchInput query={query} setQuery={setQuery} />
         </label>
+
         <CategoryTabs category={category} setCategory={setCategory} />
       </div>
 
       {filtered.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-[var(--color-border)] px-6 py-10 text-center text-sm text-[var(--color-ink-muted)]">
+        <p className="rounded-xl border border-dashed border-[var(--color-border-strong)] px-6 py-10 text-center text-sm text-[var(--color-ink-muted)]">
           No professions match your search. Try &ldquo;teacher&rdquo;, &ldquo;government&rdquo;, or
           &ldquo;airline&rdquo;.
         </p>
@@ -210,14 +240,14 @@ export function ProfessionPicker({ compact = false }: { compact?: boolean }) {
           {available.length > 0 && (
             <section>
               {!compact && (
-                <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+                <h2 className="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-[var(--color-ink-muted)]">
                   Available now
                 </h2>
               )}
               <ul className="grid gap-4 sm:grid-cols-2">
                 {available.map((p) => (
                   <li key={p.id}>
-                    <ProfessionCard profession={p} selected={lastId === p.id} onSelect={remember} />
+                    <ProfessionCard profession={p} onSelect={remember} />
                   </li>
                 ))}
               </ul>
@@ -225,13 +255,13 @@ export function ProfessionPicker({ compact = false }: { compact?: boolean }) {
           )}
           {upcoming.length > 0 && (
             <section>
-              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+              <h2 className="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-[var(--color-ink-muted)]">
                 Coming soon
               </h2>
               <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {upcoming.map((p) => (
                   <li key={p.id}>
-                    <ProfessionCard profession={p} selected={false} onSelect={remember} />
+                    <ProfessionCard profession={p} onSelect={remember} />
                   </li>
                 ))}
               </ul>
@@ -266,8 +296,9 @@ function SearchInput({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search by role, industry, or keyword…"
-        className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] py-3.5 pl-11 pr-4 text-sm text-[var(--color-ink)] shadow-sm transition focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20"
+        className="w-full rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] py-3 pl-11 pr-4 text-sm text-[var(--color-ink)] transition placeholder:text-[var(--color-ink-muted)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20"
       />
     </div>
   );
 }
+

@@ -40,77 +40,97 @@ const jsonLd = [
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd} hero>
-  <section class="relative overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-6 py-14 shadow-xl shadow-black/5 sm:px-12 sm:py-16">
-    <div class="relative z-10 max-w-3xl">
-      <p
-        class="inline-flex items-center rounded-full bg-[var(--color-primary-muted)] px-3 py-1 text-xs font-semibold text-[var(--color-primary)]"
-      >
-        perdiemcalculator.com
-      </p>
-      <h1 class="mt-4 text-4xl font-bold tracking-tight text-[var(--color-ink)] sm:text-5xl">
-        Per diem, for your profession
-      </h1>
-      <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
-        One site, many pay systems—GSA for federal travelers, contract rates for airline crew, school
-        policy for teachers, and more on the way.
-      </p>
+  <section class="px-2 pb-4 pt-6 text-center sm:pt-10">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+      perdiemcalculator.com
+    </p>
+    <h1 class="font-display mx-auto mt-5 max-w-3xl text-4xl leading-tight sm:text-5xl lg:text-[3.25rem]">
+      Per diem, for your profession
+    </h1>
+    <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-ink-muted)]">
+      One site, many pay systems—GSA for federal travelers, contract rates for airline crew, school
+      policy for teachers, and more on the way.
+    </p>
+  </section>
+
+  <div class="site-trust-band -mx-4 my-10 px-6 py-4 text-center sm:-mx-6 sm:px-8">
+    <p class="text-sm font-medium tracking-wide text-white/95 sm:text-base">
+      Built for travelers who need accurate estimates—not generic spreadsheets
+    </p>
+  </div>
+
+  <section class="mx-auto max-w-4xl">
+    <h2 class="font-display text-center text-3xl sm:text-4xl">Choose your profession</h2>
+    <p class="mx-auto mt-4 max-w-xl text-center text-sm leading-relaxed text-[var(--color-ink-muted)]">
+      Pick how you earn per diem, then open a calculator tuned to those rules.
+    </p>
+    <div class="mt-10">
+      <ProfessionPicker client:load />
     </div>
   </section>
 
-  <section class="mt-14">
-    <div class="mx-auto max-w-4xl">
-      <h2 class="text-2xl font-bold text-[var(--color-ink)]">Choose your profession</h2>
-      <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
-        Step 1: select how you earn per diem. Step 2: run a calculator built for those rules.
-      </p>
-      <div class="mt-8">
-        <ProfessionPicker client:load />
-      </div>
-    </div>
-  </section>
-
-  <section class="mt-16 grid gap-6 sm:grid-cols-3">
+  <section class="mt-20 space-y-14">
     {
-      featureProfessions.map((item) => (
-        <div class="flex gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6 shadow-sm">
-          <ProfessionLogo professionId={item.id} size="lg" />
-          <div>
-            <h2 class="font-semibold text-[var(--color-ink)]">{item.title}</h2>
-            <p class="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">{item.body}</p>
+      featureProfessions.map((item, i) => (
+        <article
+          class:list={[
+            "flex flex-col items-center gap-8 sm:gap-10",
+            i % 2 === 1 ? "sm:flex-row-reverse" : "sm:flex-row"
+          ]}
+        >
+          <div class="site-feature-icon shrink-0">
+            <ProfessionLogo professionId={item.id} size="lg" />
           </div>
-        </div>
+          <div class="max-w-lg text-center sm:text-left">
+            <h2 class="font-display text-2xl sm:text-3xl">{item.title}</h2>
+            <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">{item.body}</p>
+            <a
+              href={
+                item.id === "government-federal"
+                  ? "/calculator/gsa/"
+                  : item.id === "aviation-crew"
+                    ? "/calculator/crew/"
+                    : "/calculator/teacher/"
+              }
+              class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-accent)] hover:underline"
+            >
+              Open calculator <span aria-hidden>→</span>
+            </a>
+          </div>
+        </article>
       ))
     }
   </section>
 
-  <section class="mt-16">
-    <div class="flex items-end justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-bold text-[var(--color-ink)]">Federal travelers: browse by state</h2>
-        <p class="mt-1 text-sm text-[var(--color-ink-muted)]">
-          GSA CONUS rate hubs for government employees and contractors.
-        </p>
-      </div>
-      <a href="/states/" class="hidden text-sm font-semibold text-[var(--color-primary)] sm:inline hover:underline"
-        >View all</a
-      >
+  <section class="mt-24">
+    <h2 class="font-display text-2xl sm:text-3xl">Federal travelers: browse by state</h2>
+    <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+      GSA CONUS rate hubs for government employees and contractors.
+    </p>
+    <div class="mt-6 flex justify-end sm:hidden">
+      <a href="/states/" class="text-sm font-semibold text-[var(--color-accent)] hover:underline">
+        View all
+      </a>
     </div>
-    <ul class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <ul class="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
       {
         US_STATES.map((s) => (
           <li>
             <a
               href={`/states/${s.abbr.toLowerCase()}/`}
-              class="group flex items-center justify-between rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-4 py-3.5 transition hover:border-[var(--color-primary)]/40 hover:shadow-md"
+              class="group flex items-center justify-between rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] px-4 py-3 transition hover:border-[var(--color-accent)]"
             >
-              <span class="font-medium text-[var(--color-ink)] group-hover:text-[var(--color-primary)]">
-                {s.name}
-              </span>
+              <span class="font-medium text-[var(--color-ink)]">{s.name}</span>
               <span class="text-xs font-bold text-[var(--color-ink-muted)]">{s.abbr}</span>
             </a>
           </li>
         ))
       }
     </ul>
+    <p class="mt-6 hidden text-right sm:block">
+      <a href="/states/" class="text-sm font-semibold text-[var(--color-accent)] hover:underline">
+        View all states →
+      </a>
+    </p>
   </section>
 </BaseLayout>

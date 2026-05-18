@@ -5,23 +5,27 @@
 @import "@fontsource/plus-jakarta-sans/500.css";
 @import "@fontsource/plus-jakarta-sans/600.css";
 @import "@fontsource/plus-jakarta-sans/700.css";
+@import "@fontsource/playfair-display/600.css";
+@import "@fontsource/playfair-display/700.css";
 
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
 
-  --color-surface: #f8fafc;
+  /* Editorial cream + navy + orange (marketing / picker) */
+  --color-surface: #fef6ef;
   --color-surface-elevated: #ffffff;
-  --color-surface-muted: #f1f5f9;
-  --color-border: #e2e8f0;
-  --color-border-strong: #cbd5e1;
-  --color-ink: #0f172a;
-  --color-ink-muted: #64748b;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-muted: #dbeafe;
-  --color-accent: #f97316;
-  --color-accent-hover: #ea580c;
-  --color-accent-muted: #ffedd5;
+  --color-surface-muted: #f5ebe0;
+  --color-border: #e8dcc8;
+  --color-border-strong: #d4b896;
+  --color-ink: #002147;
+  --color-ink-muted: #3d4f63;
+  --color-primary: #002147;
+  --color-primary-hover: #001530;
+  --color-primary-muted: #e8eef5;
+  --color-accent: #f26522;
+  --color-accent-hover: #e05a1a;
+  --color-accent-muted: #fff0e8;
   --color-action: #f97316;
   --color-action-hover: #fb923c;
   --color-action-fg: #ffffff;
@@ -38,11 +42,11 @@
   --color-border-strong: #475569;
   --color-ink: #f8fafc;
   --color-ink-muted: #94a3b8;
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
+  --color-primary: #7eb8ff;
+  --color-primary-hover: #a8d0ff;
   --color-primary-muted: #1e3a5f;
-  --color-accent: #fb923c;
-  --color-accent-hover: #fdba74;
+  --color-accent: #f26522;
+  --color-accent-hover: #ff8a4c;
   --color-accent-muted: #431407;
   --color-action: #f97316;
   --color-action-hover: #fb923c;
@@ -62,16 +66,69 @@
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
   .bg-mesh {
     background-color: var(--color-surface);
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 0%, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent);
   }
 
   .glass {
-    background: color-mix(in srgb, var(--color-surface-elevated) 88%, transparent);
-    backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Outlined profession / filter chips (reference UI) */
+  .profession-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface-elevated);
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--color-ink) 4%, transparent);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .profession-chip:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+
+  .profession-chip--active {
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 35%, transparent);
+  }
+
+  .site-trust-band {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  .site-feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 9999px;
+    background: var(--color-surface-elevated);
+    border: 2px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+    box-shadow:
+      0 0 0 6px color-mix(in srgb, var(--color-accent) 8%, transparent),
+      0 0 0 14px color-mix(in srgb, var(--color-accent) 4%, transparent);
   }
 
   /*
