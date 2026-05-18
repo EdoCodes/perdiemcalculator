@@ -82,7 +82,7 @@ export function CrewOverview({ trips, year, onNewTrip, onImport, onViewLog, onEd
           {trips.length > 0 && (
             <button
               type="button"
-              className="text-sm font-medium text-[var(--color-primary)] hover:underline"
+              className="text-sm font-medium text-[var(--color-accent)] hover:underline"
               onClick={onViewLog}
             >
               View all
@@ -106,7 +106,7 @@ export function CrewOverview({ trips, year, onNewTrip, onImport, onViewLog, onEd
                 <div className="flex items-center gap-4">
                   <span className="text-sm tabular-nums text-[var(--color-ink-muted)]">
                     {t.gsaTotal > 0 && (
-                      <span className="text-[var(--color-primary)]">{formatUsd(t.gsaTotal)} GSA</span>
+                      <span className="text-[var(--color-accent)]">{formatUsd(t.gsaTotal)} GSA</span>
                     )}
                     {t.contractTotal > 0 && t.gsaTotal > 0 && " · "}
                     {t.contractTotal > 0 && formatUsd(t.contractTotal)}
@@ -121,7 +121,7 @@ export function CrewOverview({ trips, year, onNewTrip, onImport, onViewLog, onEd
         )}
       </Card>
 
-      <Card padding="lg" className="border-dashed border-[var(--color-primary)]/40 bg-[var(--color-primary)]/5">
+      <Card padding="lg" className="border-dashed border-[var(--color-border-strong)] bg-[var(--color-surface-muted)]">
         <h3 className="font-semibold text-[var(--color-ink)]">Why crews use this over basic calculators</h3>
         <ul className="mt-3 grid gap-2 text-sm text-[var(--color-ink-muted)] sm:grid-cols-2">
           <li>✓ Live GSA rates (not a stale 2025 table in JavaScript)</li>
@@ -153,15 +153,15 @@ function QuickAction({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-2xl border p-5 text-left transition hover:scale-[1.01] ${
+      className={`rounded-lg border p-5 text-left transition ${
         highlight
-          ? "border-[var(--color-primary)]/50 bg-[var(--color-primary)]/10 shadow-md shadow-[var(--color-primary)]/10"
-          : "border-[var(--color-border)] bg-[var(--color-surface-elevated)] hover:border-[var(--color-ink-muted)]"
+          ? "border-[var(--color-accent)] bg-[var(--color-accent-muted)] shadow-sm"
+          : "border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] hover:border-[var(--color-accent)]"
       }`}
     >
       <p className="font-semibold text-[var(--color-ink)]">{title}</p>
       <p className="mt-2 text-sm text-[var(--color-ink-muted)]">{description}</p>
-      <span className="mt-4 inline-block text-sm font-semibold text-[var(--color-primary)]">
+      <span className="mt-4 inline-block text-sm font-semibold text-[var(--color-accent)]">
         {cta} →
       </span>
     </button>

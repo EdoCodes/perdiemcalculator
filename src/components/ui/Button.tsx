@@ -1,30 +1,39 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type Variant = "primary" | "action" | "secondary" | "ghost";
+type Size = "sm" | "md";
 
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-[var(--color-primary)] text-white shadow-md shadow-[var(--color-primary)]/25 hover:bg-[var(--color-primary-hover)]",
-  action:
-    "bg-[var(--color-action)] text-[var(--color-action-fg)] shadow-md shadow-[var(--color-action)]/30 hover:bg-[var(--color-action-hover)] focus-visible:outline-[var(--color-action)]",
   secondary:
-    "bg-[var(--color-surface-elevated)] text-[var(--color-ink)] ring-1 ring-[var(--color-border)] hover:bg-[var(--color-surface-muted)]",
-  ghost: "text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-ink)]"
+    "border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] text-[var(--color-ink)] shadow-sm hover:border-[var(--color-accent)]",
+  primary:
+    "border border-[var(--color-accent)] bg-[var(--color-surface-elevated)] font-semibold text-[var(--color-ink)] shadow-sm hover:bg-[var(--color-accent-muted)]",
+  action:
+    "border border-[var(--color-accent)] bg-[var(--color-surface-elevated)] font-semibold text-[var(--color-ink)] shadow-sm hover:bg-[var(--color-accent-muted)]",
+  ghost:
+    "border border-transparent bg-transparent text-[var(--color-ink-muted)] hover:border-[var(--color-border)] hover:bg-[var(--color-surface-elevated)] hover:text-[var(--color-ink)]"
+};
+
+const sizes: Record<Size, string> = {
+  sm: "rounded-lg px-3 py-1.5 text-xs",
+  md: "rounded-lg px-4 py-2.5 text-sm"
 };
 
 export function Button({
   children,
   variant = "primary",
+  size = "md",
   className = "",
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
   variant?: Variant;
+  size?: Size;
 }) {
   return (
     <button
       type="button"
-      className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] disabled:pointer-events-none disabled:opacity-50 ${variants[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)] disabled:pointer-events-none disabled:opacity-50 ${sizes[size]} ${variants[variant]} ${className}`}
       {...props}
     >
       {children}

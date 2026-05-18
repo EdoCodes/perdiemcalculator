@@ -33,7 +33,7 @@ export function TripSummary({
           title={`Lodging ${lodgingPct.toFixed(0)}% · M&IE ${miePct.toFixed(0)}%`}
         >
           <div
-            className="bg-[var(--color-primary)] transition-all duration-500"
+            className="bg-[var(--color-ink)] transition-all duration-500"
             style={{ width: `${lodgingPct}%` }}
           />
           <div

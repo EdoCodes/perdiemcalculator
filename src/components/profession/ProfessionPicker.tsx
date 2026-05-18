@@ -111,7 +111,7 @@ function LastProfessionBanner({
       <a
         href={profession.href}
         onClick={() => remember(profession)}
-        className="inline-flex shrink-0 items-center justify-center rounded-lg bg-[var(--color-accent)] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--color-accent-hover)]"
+        className="profession-chip shrink-0 font-semibold"
       >
         Continue
       </a>

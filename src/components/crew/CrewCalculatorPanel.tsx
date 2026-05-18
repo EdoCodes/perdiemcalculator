@@ -32,7 +32,7 @@ import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 import { US_STATES } from "../../data/usStates";
 
-import { calcInput } from "../../lib/calcUi";
+import { calcInput, calcPill } from "../../lib/calcUi";
 
 type CalcMode = CrewCalcMode;
 
@@ -437,10 +437,10 @@ export function CrewCalculatorPanel({
                 key={tab.id}
                 type="button"
                 onClick={() => setCalcMode(tab.id)}
-                className={`rounded-xl border px-4 py-3 text-left transition ${
+                className={`rounded-lg border px-4 py-3 text-left transition ${
                   calcMode === tab.id
-                    ? "border-[var(--color-primary)] bg-[var(--color-primary)]/10"
-                    : "border-[var(--color-border)] bg-[var(--color-surface-muted)]/40 hover:border-[var(--color-ink-muted)]"
+                    ? "border-[var(--color-accent)] bg-[var(--color-accent-muted)] shadow-sm"
+                    : "border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] hover:border-[var(--color-accent)]"
                 }`}
               >
                 <span className="block text-sm font-semibold text-[var(--color-ink)]">
@@ -599,11 +599,7 @@ function RoleButtons({
           key={id}
           type="button"
           onClick={() => setRole(id)}
-          className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
-            role === id
-              ? "bg-[var(--color-primary)] text-white"
-              : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
-          }`}
+          className={role === id ? `${calcPill} calc-pill--active` : calcPill}
         >
           {label}
         </button>

@@ -44,10 +44,7 @@ export function CalculatorProfessionBar({ professionId }: Props) {
         <span className="text-sm text-[var(--color-ink-muted)]">
           Calculating for <strong className="text-[var(--color-ink)]">{profession.shortName}</strong>
         </span>
-        <a
-          href="/calculator/"
-          className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--color-ink)] transition hover:border-[var(--color-primary)]/40"
-        >
+        <a href="/calculator/" className="profession-chip text-xs">
           Change profession
         </a>
       </div>

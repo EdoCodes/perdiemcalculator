@@ -268,16 +268,14 @@ export function PerDiemCalculator() {
 
         <Card>
           <StepHeader n={2} title="Destination" />
-          <div className="mt-4 flex gap-2 rounded-xl bg-[var(--color-surface-muted)] p-1">
+          <div className="mt-4 flex flex-wrap gap-2">
             {(["picker", "zip"] as const).map((tab) => (
               <button
                 key={tab}
                 type="button"
                 onClick={() => setLocationTab(tab)}
-                className={`flex-1 rounded-lg py-2 text-sm font-semibold transition ${
-                  locationTab === tab
-                    ? "bg-[var(--color-surface-elevated)] text-[var(--color-primary)] shadow-sm ring-1 ring-[var(--color-border-strong)]"
-                    : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
+                className={`profession-chip flex-1 sm:flex-none ${
+                  locationTab === tab ? "profession-chip--active" : ""
                 }`}
               >
                 {tab === "picker" ? "Locality" : "ZIP code"}

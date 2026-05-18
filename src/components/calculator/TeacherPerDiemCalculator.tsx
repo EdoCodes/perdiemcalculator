@@ -25,7 +25,7 @@ import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 
-import { calcInput } from "../../lib/calcUi";
+import { calcInput, calcPill, calcPillActive } from "../../lib/calcUi";
 
 type RateMode = "gsa" | "custom";
 type AnyResult = TeacherGsaTripResult | TeacherCustomTripResult;
@@ -365,11 +365,7 @@ function ModeButton({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
-        active
-          ? "bg-[var(--color-primary)] text-white shadow-md"
-          : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
-      }`}
+      className={active ? `${calcPill} calc-pill--active` : calcPill}
     >
       {children}
     </button>
@@ -414,11 +410,7 @@ function RoleButtons({
           key={id}
           type="button"
           onClick={() => setRole(id)}
-          className={`rounded-xl px-4 py-2 text-sm font-medium transition ${
-            role === id
-              ? "bg-[var(--color-primary)] text-white"
-              : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)]"
-          }`}
+          className={role === id ? calcPillActive : calcPill}
         >
           {label}
         </button>

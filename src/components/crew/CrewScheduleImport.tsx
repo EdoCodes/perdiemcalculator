@@ -148,11 +148,7 @@ export function CrewScheduleImport({ onImport, submitLabel = "Send to calculator
               key={id}
               type="button"
               onClick={() => setTab(id)}
-              className={`rounded-xl px-4 py-2 text-sm font-medium ${
-                tab === id
-                  ? "bg-[var(--color-primary)] text-white"
-                  : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)]"
-              }`}
+              className={`profession-chip ${tab === id ? "profession-chip--active" : ""}`}
             >
               {label}
             </button>
