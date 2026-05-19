@@ -1,0 +1,46 @@
+---
+import type { BlogFaq } from "../../data/blogTypes";
+
+interface Props {
+  items: BlogFaq[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <aside
+      class:list={[
+        "blog-rubric rounded-xl border border-[var(--color-accent)]/40 bg-[var(--color-accent-muted)] px-5 py-4",
+        className
+      ]}
+      aria-labelledby="people-also-ask-heading"
+    >
+      <p
+        id="people-also-ask-heading"
+        class="blog-rubric-label text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]"
+      >
+        People also ask
+      </p>
+      <div class="mt-4 space-y-2">
+        {items.map((item) => (
+          <details class="group rounded-lg border border-[var(--color-accent)]/25 bg-[var(--color-surface-elevated)]">
+            <summary class="blog-heading cursor-pointer px-4 py-3 text-sm font-semibold text-[var(--color-ink)] marker:content-none">
+              <span class="flex items-center justify-between gap-3">
+                {item.question}
+                <span class="shrink-0 text-[var(--color-accent)] transition group-open:rotate-45" aria-hidden>
+                  +
+                </span>
+              </span>
+            </summary>
+            <p class="border-t border-[var(--color-border)] px-4 py-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+              {item.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </aside>
+  )
+}

@@ -2,6 +2,7 @@ import type { BlogFaq } from "./blogTypes";
 
 export type { BlogFaq };
 import { PER_DIEM_VS_RECEIPTS_FAQS } from "./blog/per-diem-vs-itemized-receipts";
+import { BLOG_PEOPLE_ALSO_ASK } from "./blog/peopleAlsoAsk";
 
 export type BlogCategory = "general" | "federal" | "crew" | "education" | "trucking";
 
@@ -16,6 +17,8 @@ export type BlogPost = {
   kind: "article" | "guide";
   href?: string;
   faqs?: BlogFaq[];
+  /** “People also ask” accordion rubric (SEO / reader quick answers). */
+  peopleAlsoAsk?: BlogFaq[];
 };
 
 export const BLOG_INDEX = "/blog/";
@@ -30,7 +33,8 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-05-19",
     category: "general",
     kind: "article",
-    faqs: PER_DIEM_VS_RECEIPTS_FAQS
+    faqs: PER_DIEM_VS_RECEIPTS_FAQS,
+    peopleAlsoAsk: BLOG_PEOPLE_ALSO_ASK["per-diem-vs-itemized-receipts"]
   },
   {
     slug: "what-is-per-diem",
@@ -39,7 +43,8 @@ export const BLOG_POSTS: BlogPost[] = [
       "Per diem pays for meals and incidentals when you travel for work. Learn how federal GSA rates, IRS transportation rates, and employer policies differ.",
     publishedAt: "2026-05-18",
     category: "general",
-    kind: "article"
+    kind: "article",
+    peopleAlsoAsk: BLOG_PEOPLE_ALSO_ASK["what-is-per-diem"]
   },
   {
     slug: "choose-the-right-calculator",
@@ -48,7 +53,8 @@ export const BLOG_POSTS: BlogPost[] = [
       "Federal employees, airline crew, teachers, and truck drivers follow different rate systems. Match your profession to the right free tool on this site.",
     publishedAt: "2026-05-18",
     category: "general",
-    kind: "article"
+    kind: "article",
+    peopleAlsoAsk: BLOG_PEOPLE_ALSO_ASK["choose-the-right-calculator"]
   },
   {
     slug: "crew-per-diem-tax-basics",

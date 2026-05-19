@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogPeopleAlsoAsk from "./BlogPeopleAlsoAsk.astro";
 import BlogRunNumbersCta from "./BlogRunNumbersCta.astro";
 import {
   BLOG_INDEX,
@@ -17,6 +18,19 @@ type Props = {
 
 const { post, blocks } = Astro.props;
 const faqs = post.faqs ?? [];
+const peopleAlsoAsk = post.peopleAlsoAsk ?? [];
+
+function uniqueFaqs(items: BlogFaq[]): BlogFaq[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = item.question.trim().toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+const schemaFaqs = uniqueFaqs([...peopleAlsoAsk, ...faqs]);
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
 const pageUrl = new URL(`/blog/${post.slug}/`, siteUrl).href;
 const pageTitle = post.metaTitle ?? post.title;
@@ -51,10 +65,10 @@ const articleLd = {
 };
 
 const faqLd =
-  faqs.length > 0
+  schemaFaqs.length > 0
     ? {
         "@type": "FAQPage",
-        mainEntity: faqs.map((f) => ({
+        mainEntity: schemaFaqs.map((f) => ({
           "@type": "Question",
           name: f.question,
           acceptedAnswer: { "@type": "Answer", text: f.answer }
@@ -193,6 +207,8 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
         })
       }
     </div>
+
+    <BlogPeopleAlsoAsk items={peopleAlsoAsk} class="mt-14" />
 
     <BlogRunNumbersCta class="mt-14" />
 
