@@ -27,23 +27,15 @@ export function ProfessionIcon({ id, className = "h-8 w-8" }: Props) {
   }
 }
 
-/** Top-down commercial jet (plan view, nose toward top-right). */
+/** Side-view jet silhouette (nose toward top-right), solid fill. */
 function AirplaneIcon({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
-      <g transform="rotate(45 24 24)">
+      <g transform="translate(24 24) rotate(45) scale(1.6) translate(-12 -12)">
         <path
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.25"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M24 7.5c1.1 0 2 .9 2 2v7.35M24 16.85H7.75M24 16.85h16.5M7.75 19.75v4.5M40.25 19.75v4.5M24 24.25V33.75M19.25 33.75h9.5M24 33.75v6"
+          fill="currentColor"
+          d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8-2.5z"
         />
-        <circle cx="11.25" cy="21.25" r="1.9" fill="currentColor" stroke="none" />
-        <circle cx="11.25" cy="25.75" r="1.9" fill="currentColor" stroke="none" />
-        <circle cx="36.75" cy="21.25" r="1.9" fill="currentColor" stroke="none" />
-        <circle cx="36.75" cy="25.75" r="1.9" fill="currentColor" stroke="none" />
       </g>
     </svg>
   );
