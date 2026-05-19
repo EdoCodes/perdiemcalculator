@@ -6,28 +6,36 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
     type: "callout",
     title: "Key takeaways",
     items: [
-      "Per diem is a fixed daily allowance; itemized reimbursement pays back actual approved costs from receipts.",
-      "Per diem reduces paperwork and speeds reimbursement—ideal for frequent travelers and sales reps.",
-      "Itemized receipts give finance teams line-by-line control and stronger audit trails.",
-      "Federal GSA per diem and IRS per diem rules are separate from employer reimbursement policy—know which applies to you."
+      "Per diem is a flat daily allowance; itemized reimbursement pays back actual approved expenses from receipts.",
+      "Per diem is usually faster and easier; itemized receipts are more precise and audit-friendly.",
+      "Choose per diem for frequent travel and predictable budgets; choose receipts when costs vary or policy requires detail.",
+      "Travel dates and business purpose may still need documentation even when meal receipts are not required."
     ]
   },
   {
-    type: "html",
-    html: `When consultants and sales reps travel for work, companies usually reimburse expenses in one of two ways: <strong>per diem</strong> or <strong>itemized receipts</strong>. Per diem pays a flat daily allowance; itemized reimbursement pays back actual approved expenses supported by receipts. This guide explains the difference, when each method works best, and what travelers should document—whether you use a <a href="/calculator/roi/">corporate travel program</a> or file expenses as an individual.`
+    type: "p",
+    text: "When consultants and sales reps travel for work, companies usually reimburse expenses in one of two ways: per diem or itemized receipts. Per diem gives a flat daily allowance, while itemized reimbursement pays back actual approved expenses based on receipts."
+  },
+  {
+    type: "p",
+    text: "This guide explains the difference, when each method works best, and what travelers should know about reimbursement policy and documentation."
   },
   {
     type: "h2",
-    id: "what-is-per-diem",
+    id: "what-per-diem-means",
     text: "What per diem means"
   },
   {
-    type: "html",
-    html: `Per diem means “per day.” In business travel, it usually refers to a fixed daily allowance for meals, lodging, and incidental expenses while you are away from home on business. Instead of collecting receipts for every coffee or meal, the traveler receives a set amount for each eligible travel day—making <strong>per diem travel reimbursement</strong> faster for employees and AP teams alike.`
+    type: "p",
+    text: "Per diem means “per day.” In business travel, it usually refers to a fixed daily allowance used to cover meals, lodging, and incidental expenses."
+  },
+  {
+    type: "p",
+    text: "Instead of collecting receipts for every small cost, the traveler receives a set amount for each eligible travel day. This makes reimbursement simpler and faster for frequent travelers."
   },
   {
     type: "html",
-    html: `Government travelers often follow <a href="https://www.gsa.gov/travel/plan-book/per-diem-rates" target="_blank" rel="noopener noreferrer">GSA per diem rates</a> by city. Private employers may set their own caps or mirror federal tables. Our <a href="/calculator/gsa/">federal GSA calculator</a> and <a href="/states/">state rate hubs</a> help estimate official CONUS lodging and M&amp;IE; your company policy may still differ.`
+    html: `Federal employees often follow <a href="https://www.gsa.gov/travel/plan-book/per-diem-rates" target="_blank" rel="noopener noreferrer">GSA per diem rates</a> by city. You can estimate CONUS lodging and M&amp;IE with our <a href="/calculator/gsa/">federal GSA calculator</a> or <a href="/states/">state rate hubs</a>—employer policies may differ.`
   },
   {
     type: "h2",
@@ -35,27 +43,21 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
     text: "What itemized receipts mean"
   },
   {
-    type: "html",
-    html: `Itemized reimbursement works the opposite way. The traveler pays during the trip, keeps receipts, and submits them for approval. The employer reimburses only allowed categories—often meals, lodging, mileage, and transport—up to policy limits. This is sometimes called <strong>per diem vs actual expenses</strong>: actual-expense (receipt-based) reimbursement tracks what was really spent.`
+    type: "p",
+    text: "Itemized receipts work the opposite way. The traveler pays for expenses during the trip, keeps the receipts, and submits them for reimbursement."
   },
   {
-    type: "html",
-    html: `Under an <a href="https://www.irs.gov/taxtopics/tc514" target="_blank" rel="noopener noreferrer">IRS accountable plan</a>, reimbursements can be tax-free to the employee when expenses are business-related and properly substantiated. Receipt-based plans substantiate <em>amount</em>; per diem plans substantiate <em>rate × days</em> when rules are met. See <a href="https://www.irs.gov/publications/p463" target="_blank" rel="noopener noreferrer">IRS Publication 463 (Travel, Gift, and Car Expenses)</a> for tax concepts—not employer policy.`
+    type: "p",
+    text: "The employer then reimburses approved costs based on what was actually spent. This method gives the company more detailed control over travel spending."
   },
   {
     type: "h2",
     id: "main-difference",
-    text: "The main difference: per diem vs itemized receipts"
+    text: "The main difference"
   },
   {
-    type: "table",
-    headers: ["", "Per diem", "Itemized receipts"],
-    rows: [
-      ["How you get paid", "Fixed amount per eligible day", "Sum of approved actual costs"],
-      ["Receipts for meals", "Usually not required for covered items", "Typically required"],
-      ["Best for", "Frequent travel, predictable budgets", "Variable costs, strict audit needs"],
-      ["Speed", "Faster for traveler and AP", "Slower; more review"]
-    ]
+    type: "p",
+    text: "Per diem is a flat daily payment. Itemized reimbursement is based on actual expenses."
   },
   {
     type: "p",
@@ -73,15 +75,11 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
   {
     type: "ul",
     items: [
-      "Travel happens frequently (consultants, <strong>sales rep travel expenses</strong>, regional managers).",
-      "The company wants less paperwork and faster close each month.",
-      "The traveler needs flexibility in how they spend the daily amount.",
-      "Finance wants predictable budgeting by headcount and trip days."
+      "Travel happens frequently.",
+      "The company wants less paperwork.",
+      "The traveler needs flexibility.",
+      "The employer wants predictable budgeting."
     ]
-  },
-  {
-    type: "html",
-    html: `Field teams comparing policy options can model volume with our <a href="/calculator/roi/">travel ROI calculator</a>. Pilots and cabin crew often track federal M&amp;IE separately from contract pay—see our <a href="/guides/crew/per-diem-tax-basics/">crew per diem tax basics guide</a>.`
   },
   {
     type: "h2",
@@ -95,10 +93,10 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
   {
     type: "ul",
     items: [
-      "Trip costs vary widely (luxury client dinners, last-minute lodging).",
-      "The company wants exact expense tracking by category.",
-      "Policy requires detailed records for compliance or grants.",
-      "The destination is high-cost and a flat rate would be unfair."
+      "Travel costs vary a lot.",
+      "The company wants exact expense tracking.",
+      "The policy requires detailed records.",
+      "The trip involves higher-cost destinations."
     ]
   },
   {
@@ -113,10 +111,10 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
   {
     type: "ul",
     items: [
-      "Less paperwork for travelers.",
-      "Faster reimbursement cycles.",
-      "Predictable budgeting for finance.",
-      "Easier for frequent travelers and mobile sales forces."
+      "Less paperwork.",
+      "Faster reimbursement.",
+      "Predictable budgeting.",
+      "Easier for frequent travelers."
     ]
   },
   {
@@ -126,9 +124,9 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
   {
     type: "ul",
     items: [
-      "May not match actual costs in expensive cities.",
-      "Traveler may spend less than the allowance (policy-dependent).",
-      "Less line-item detail for accounting without extra reporting."
+      "May not match actual costs.",
+      "Can be too low in expensive cities.",
+      "May be less precise for accounting."
     ]
   },
   {
@@ -138,10 +136,10 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
   {
     type: "ul",
     items: [
-      "Reimburses actual spending—fair for unusual trips.",
-      "Stronger documentation for audits.",
-      "Clear category breakdown (meals vs lodging vs transport).",
-      "Works well for <strong>consultant travel reimbursement</strong> on client-billable projects."
+      "Reimburses actual spending.",
+      "Stronger documentation.",
+      "Better for audits.",
+      "Fair for unusual travel costs."
     ]
   },
   {
@@ -151,31 +149,31 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
   {
     type: "ul",
     items: [
-      "More paperwork and receipt chasing.",
-      "Slower approval and reimbursement.",
-      "Higher administrative load on AP and managers.",
-      "Lost receipts can mean lost reimbursement."
+      "More paperwork.",
+      "Slower reimbursement.",
+      "Requires receipt tracking.",
+      "More administrative work."
     ]
   },
   {
     type: "h2",
     id: "example",
-    text: "Example: three-day sales trip"
+    text: "Example"
   },
   {
-    type: "html",
-    html: `A sales rep travels Tuesday–Thursday for client meetings. The company policy allows either method.`
+    type: "p",
+    text: "A sales rep travels for three days."
   },
   {
     type: "h3",
     text: "With per diem"
   },
   {
-    type: "ol",
+    type: "ul",
     items: [
-      "Finance pays a fixed daily amount (e.g., based on GSA M&amp;IE or an internal table) × 3 days.",
-      "The rep does not submit meal receipts for covered expenses.",
-      "Reimbursement is simple; the rep still documents dates and business purpose."
+      "The company pays a fixed daily amount.",
+      "The rep does not submit meal receipts.",
+      "Reimbursement is simple and predictable."
     ]
   },
   {
@@ -183,34 +181,25 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
     text: "With itemized receipts"
   },
   {
-    type: "ol",
+    type: "ul",
     items: [
-      "The rep submits receipts for meals, hotel, rideshare, and parking.",
-      "Finance reimburses approved actual costs, possibly capped per category.",
-      "Total reimbursement equals approved spend—not a preset daily rate."
-    ]
-  },
-  {
-    type: "callout",
-    title: "Planning tip",
-    items: [
-      "Estimate federal per diem for a destination with our /calculator/gsa/ before negotiating client budgets.",
-      "Read /methodology/ for how we source GSA data on this site."
+      "The rep submits receipts for meals, lodging, and transport.",
+      "The company reimburses approved actual costs.",
+      "Reimbursement depends on what was spent."
     ]
   },
   {
     type: "h2",
-    id: "related-tools",
-    text: "Related calculators and guides"
+    id: "related",
+    text: "Related on PerDiemCalculator"
   },
   {
     type: "ul",
     items: [
-      "<a href=\"/blog/what-is-per-diem/\">What is per diem?</a> — plain-language overview",
+      "<a href=\"/blog/what-is-per-diem/\">What is per diem?</a>",
       "<a href=\"/calculator/gsa/\">Federal GSA per diem calculator</a>",
-      "<a href=\"/calculator/crew/\">Airline crew calculator</a> (contract vs GSA M&amp;IE)",
-      "<a href=\"/calculator/trucking/\">Truck driver IRS transportation rates</a>",
-      "<a href=\"/methodology/\">Rate methodology</a>"
+      "<a href=\"/calculator/roi/\">Travel program ROI calculator</a>",
+      "<a href=\"/methodology/\">How we source rate data</a>"
     ]
   }
 ];
@@ -219,36 +208,24 @@ export const PER_DIEM_VS_RECEIPTS_FAQS = [
   {
     question: "What is the difference between per diem and itemized receipts?",
     answer:
-      "Per diem is a fixed daily allowance for eligible travel days. Itemized reimbursement pays back actual approved expenses supported by receipts. Per diem favors speed; itemized favors precision and audit detail."
+      "Per diem is a fixed daily allowance, while itemized receipts reimburse actual approved expenses."
   },
   {
     question: "Do consultants get per diem?",
-    answer:
-      "Many consulting firms pay per diem or a fixed daily rate for client-site travel, especially when consultants are on the road every week. Others require itemized expenses for client billing—check your engagement letter and expense policy."
+    answer: "Yes, many consultants get per diem when they travel for client work."
   },
   {
     question: "Do sales reps get per diem?",
-    answer:
-      "Yes. Sales organizations with frequent overnight travel often use per diem or a company per-day rate to reduce receipt volume. Some teams use itemized reimbursement for strategic accounts or executive travel."
+    answer: "Yes, sales reps who travel frequently often receive per diem reimbursement."
   },
   {
     question: "Do you need receipts for per diem?",
     answer:
-      "Usually not for expenses covered by the per diem amount itself, but employers and the IRS still expect documentation of travel dates, places, and business purpose. Keep a calendar or trip log even without meal receipts."
+      "Usually not for the covered expenses, but travel dates and business purpose may still need documentation."
   },
   {
     question: "Is per diem better than receipts?",
     answer:
-      "Neither is universally better. Per diem is better for simplicity and speed. Itemized receipts are better for exact expense tracking and audits. Policy and trip type should drive the choice."
-  },
-  {
-    question: "Is per diem the same as GSA per diem?",
-    answer:
-      "Not always. GSA publishes federal CONUS per diem rates for government travel. Private employers may use GSA as a benchmark, set their own rates, or use itemized reimbursement instead."
-  },
-  {
-    question: "Can you use per diem and actual expenses on the same trip?",
-    answer:
-      "Employer policy usually picks one method per trip or category. Tax rules also restrict mixing methods for the same expense type in many cases—ask your preparer if you are deducting travel on your own return."
+      "Per diem is better for simplicity. Receipts are better for exact expense tracking."
   }
 ];

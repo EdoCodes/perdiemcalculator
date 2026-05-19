@@ -70,7 +70,7 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
       <span class="mx-2">/</span>
       <a class="hover:text-[var(--color-accent)]" href={BLOG_INDEX}>Blog</a>
       <span class="mx-2">/</span>
-      <span class="text-[var(--color-ink)]">Per diem vs receipts</span>
+      <span class="text-[var(--color-ink)]">{post.title}</span>
     </nav>
 
     <p class="mt-6 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
