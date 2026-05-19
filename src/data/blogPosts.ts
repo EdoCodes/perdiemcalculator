@@ -1,19 +1,37 @@
+import type { BlogFaq } from "./blogTypes";
+
+export type { BlogFaq };
+import { PER_DIEM_VS_RECEIPTS_FAQS } from "./blog/per-diem-vs-itemized-receipts";
+
 export type BlogCategory = "general" | "federal" | "crew" | "education" | "trucking";
 
 export type BlogPost = {
   slug: string;
   title: string;
+  /** SEO &lt;title&gt;; defaults to title */
+  metaTitle?: string;
   description: string;
   publishedAt: string;
   category: BlogCategory;
-  /** Full article at /blog/{slug}/; omit when href is set. */
   kind: "article" | "guide";
   href?: string;
+  faqs?: BlogFaq[];
 };
 
 export const BLOG_INDEX = "/blog/";
 
 export const BLOG_POSTS: BlogPost[] = [
+  {
+    slug: "per-diem-vs-itemized-receipts",
+    metaTitle: "Per Diem vs Itemized Receipts: Difference, Pros, and Best Use Cases",
+    title: "Per Diem vs Itemized Receipts: What’s the Difference?",
+    description:
+      "Learn the difference between per diem and itemized receipts, how each travel reimbursement method works, and which is better for consultants and sales reps.",
+    publishedAt: "2026-05-19",
+    category: "general",
+    kind: "article",
+    faqs: PER_DIEM_VS_RECEIPTS_FAQS
+  },
   {
     slug: "what-is-per-diem",
     title: "What is per diem? A plain-language guide for business travelers",

@@ -6,7 +6,8 @@ import {
   blogCategoryLabel,
   formatBlogDate
 } from "../../data/blogPosts";
-import type { BlogBlock } from "../../data/blogContent";
+import type { BlogBlock } from "../../data/blogTypes";
+import type { BlogFaq } from "../../data/blogTypes";
 
 type Props = {
   post: BlogPost;
@@ -14,8 +15,10 @@ type Props = {
 };
 
 const { post, blocks } = Astro.props;
+const faqs = post.faqs ?? [];
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
 const pageUrl = new URL(`/blog/${post.slug}/`, siteUrl).href;
+const pageTitle = post.metaTitle ?? post.title;
 
 function linkifyPaths(html: string): string {
   return html.replace(
@@ -24,51 +27,194 @@ function linkifyPaths(html: string): string {
   );
 }
 
+function renderHtml(html: string): string {
+  return linkifyPaths(html);
+}
+
 const articleLd = {
   "@type": "BlogPosting",
   headline: post.title,
   description: post.description,
   datePublished: post.publishedAt,
+  dateModified: post.publishedAt,
   url: pageUrl,
-  author: { "@type": "Organization", name: "PerDiemCalculator" }
+  mainEntityOfPage: pageUrl,
+  author: { "@type": "Organization", name: "PerDiemCalculator" },
+  publisher: { "@type": "Organization", name: "PerDiemCalculator" }
 };
+
+const faqLd =
+  faqs.length > 0
+    ? {
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.question,
+          acceptedAnswer: { "@type": "Answer", text: f.answer }
+        }))
+      }
+    : null;
+
+const jsonLd = faqLd ? [articleLd, faqLd] : articleLd;
+
+const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
 ---
 
-<BaseLayout title={`${post.title} | Blog`} description={post.description} jsonLd={articleLd}>
-  <article class="mx-auto max-w-3xl">
+<BaseLayout title={`${pageTitle} | Blog`} description={post.description} jsonLd={jsonLd}>
+  <article class="mx-auto max-w-3xl" itemscope itemtype="https://schema.org/BlogPosting">
+    <meta itemprop="headline" content={post.title} />
+    <meta itemprop="datePublished" content={post.publishedAt} />
+
     <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
       <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
       <span class="mx-2">/</span>
       <a class="hover:text-[var(--color-accent)]" href={BLOG_INDEX}>Blog</a>
       <span class="mx-2">/</span>
-      <span class="text-[var(--color-ink)]">{post.title}</span>
+      <span class="text-[var(--color-ink)]">Per diem vs receipts</span>
     </nav>
 
     <p class="mt-6 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
       {blogCategoryLabel(post.category)} · {formatBlogDate(post.publishedAt)}
     </p>
-    <h1 class="font-display mt-3 text-3xl sm:text-4xl">{post.title}</h1>
-    <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">{post.description}</p>
+    <h1 class="font-display mt-3 text-3xl sm:text-4xl" itemprop="name">{post.title}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]" itemprop="description">
+      {post.description}
+    </p>
+
+    {
+      toc.length > 0 && (
+        <nav
+          class="mt-8 rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] p-5"
+          aria-label="On this page"
+        >
+          <p class="text-xs font-semibold uppercase tracking-widest text-[var(--color-ink-muted)]">
+            On this page
+          </p>
+          <ol class="mt-3 list-decimal space-y-1.5 pl-5 text-sm">
+            {toc.map((h) => h.type === "h2" && h.id && (
+              <li>
+                <a class="text-[var(--color-ink)] hover:text-[var(--color-accent)]" href={`#${h.id}`}>
+                  {h.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
 
     <div class="prose-blog mt-10 space-y-6 text-base leading-relaxed text-[var(--color-ink-muted)]">
       {
         blocks.map((block) => {
+          if (block.type === "callout") {
+            return (
+              <aside
+                class="blog-rubric rounded-xl border border-[var(--color-accent)]/40 bg-[var(--color-accent-muted)] px-5 py-4"
+                role="note"
+              >
+                <p class="blog-rubric-label text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                  {block.title}
+                </p>
+                <ul class="mt-3 space-y-2 text-sm text-[var(--color-ink)]">
+                  {block.items.map((item) => (
+                    <li set:html={renderHtml(item)} />
+                  ))}
+                </ul>
+              </aside>
+            );
+          }
           if (block.type === "h2") {
-            return <h2>{block.text}</h2>;
+            return (
+              <h2 id={block.id} class={block.id ? "scroll-mt-24" : ""}>
+                {block.text}
+              </h2>
+            );
+          }
+          if (block.type === "h3") {
+            return <h3>{block.text}</h3>;
           }
           if (block.type === "ul") {
             return (
               <ul>
                 {block.items.map((item) => (
-                  <li set:html={linkifyPaths(item)} />
+                  <li set:html={renderHtml(item)} />
                 ))}
               </ul>
             );
           }
-          return <p set:html={linkifyPaths(block.text)} />;
+          if (block.type === "ol") {
+            return (
+              <ol>
+                {block.items.map((item) => (
+                  <li set:html={renderHtml(item)} />
+                ))}
+              </ol>
+            );
+          }
+          if (block.type === "table") {
+            return (
+              <div class="overflow-x-auto">
+                <table class="w-full min-w-[20rem] border-collapse text-sm">
+                  <thead>
+                    <tr>
+                      {block.headers.map((h) => (
+                        <th class="border border-[var(--color-border-strong)] bg-[var(--color-surface-muted)] px-3 py-2 text-left font-semibold text-[var(--color-ink)]">
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {block.rows.map((row) => (
+                      <tr>
+                        {row.map((cell) => (
+                          <td class="border border-[var(--color-border)] px-3 py-2 text-[var(--color-ink-muted)]">
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          }
+          if (block.type === "html") {
+            return <p set:html={renderHtml(block.html)} />;
+          }
+          return <p set:html={renderHtml(block.text)} />;
         })
       }
     </div>
+
+    {
+      faqs.length > 0 && (
+        <section class="mt-14" aria-labelledby="faq-heading">
+          <h2 id="faq-heading" class="font-display text-2xl text-[var(--color-ink)]">
+            Frequently asked questions
+          </h2>
+          <div class="mt-6 space-y-3">
+            {
+              faqs.map((f) => (
+                <details class="group rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)]">
+                  <summary class="cursor-pointer px-5 py-4 text-sm font-semibold text-[var(--color-ink)] marker:content-none">
+                    <span class="flex items-center justify-between gap-3">
+                      {f.question}
+                      <span class="text-[var(--color-accent)] transition group-open:rotate-45" aria-hidden>
+                        +
+                      </span>
+                    </span>
+                  </summary>
+                  <p class="border-t border-[var(--color-border)] px-5 py-4 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+                    {f.answer}
+                  </p>
+                </details>
+              ))
+            }
+          </div>
+        </section>
+      )
+    }
 
     <p class="mt-12 text-sm text-[var(--color-ink-muted)]">
       <a href={BLOG_INDEX} class="font-semibold text-[var(--color-accent)] hover:underline">
@@ -80,14 +226,27 @@ const articleLd = {
 
 <style>
   .prose-blog :global(h2) {
-    margin-top: 2rem;
-    font-size: 1.25rem;
+    margin-top: 2.5rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
     font-weight: 600;
     color: var(--color-ink);
   }
+  .prose-blog :global(h3) {
+    margin-top: 1.5rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .prose-blog :global(ul),
+  .prose-blog :global(ol) {
+    padding-left: 1.25rem;
+  }
   .prose-blog :global(ul) {
     list-style: disc;
-    padding-left: 1.25rem;
+  }
+  .prose-blog :global(ol) {
+    list-style: decimal;
   }
   .prose-blog :global(li) {
     margin-top: 0.35rem;
@@ -95,5 +254,11 @@ const articleLd = {
   .prose-blog :global(a) {
     font-weight: 500;
     color: var(--color-accent);
+  }
+  .prose-blog :global(strong) {
+    color: var(--color-ink);
+  }
+  .blog-rubric-label {
+    letter-spacing: 0.08em;
   }
 </style>

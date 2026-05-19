@@ -1,9 +1,10 @@
-export type BlogBlock =
-  | { type: "p"; text: string }
-  | { type: "h2"; text: string }
-  | { type: "ul"; items: string[] };
+import type { BlogBlock } from "./blogTypes";
+import { PER_DIEM_VS_RECEIPTS_BLOCKS } from "./blog/per-diem-vs-itemized-receipts";
+
+export type { BlogBlock } from "./blogTypes";
 
 export const BLOG_CONTENT: Record<string, BlogBlock[]> = {
+  "per-diem-vs-itemized-receipts": PER_DIEM_VS_RECEIPTS_BLOCKS,
   "what-is-per-diem": [
     {
       type: "p",
