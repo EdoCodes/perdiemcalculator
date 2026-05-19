@@ -27,18 +27,15 @@ export function ProfessionIcon({ id, className = "h-8 w-8" }: Props) {
   }
 }
 
-/** Symmetric jet — mirrored wings and tail, nose toward top-right. */
+/** Side-view jet silhouette (nose toward top-right), solid fill. */
 function AirplaneIcon({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
-      <g transform="rotate(45 24 24)" fill="currentColor">
-        <path d="M6.75 20.5h34.5a1.85 1.85 0 0 1 1.85 1.85v4.25a1.85 1.85 0 0 1-1.85 1.85H6.75a1.85 1.85 0 0 1-1.85-1.85v-4.25a1.85 1.85 0 0 1 1.85-1.85Z" />
-        <path d="M20.75 7.25h6.5a2.35 2.35 0 0 1 2.35 2.35v21.15a2.35 2.35 0 0 1-2.35 2.35h-6.5a2.35 2.35 0 0 1-2.35-2.35V9.6a2.35 2.35 0 0 1 2.35-2.35Z" />
-        <path d="M17 34.75h14a1.65 1.65 0 0 1 1.65 1.65v3.35A1.65 1.65 0 0 1 31 41.4H17a1.65 1.65 0 0 1-1.65-1.65v-3.35a1.65 1.65 0 0 1 1.65-1.65Z" />
-        <circle cx="10.75" cy="22.15" r="2.15" />
-        <circle cx="10.75" cy="25.85" r="2.15" />
-        <circle cx="37.25" cy="22.15" r="2.15" />
-        <circle cx="37.25" cy="25.85" r="2.15" />
+      <g transform="translate(24 24) rotate(45) scale(1.6) translate(-12 -12)">
+        <path
+          fill="currentColor"
+          d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8-2.5z"
+        />
       </g>
     </svg>
   );
