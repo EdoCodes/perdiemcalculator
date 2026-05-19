@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  BLOG_INDEX,
+  type BlogPost,
+  blogCategoryLabel,
+  formatBlogDate
+} from "../../data/blogPosts";
+import type { BlogBlock } from "../../data/blogContent";
+
+type Props = {
+  post: BlogPost;
+  blocks: BlogBlock[];
+};
+
+const { post, blocks } = Astro.props;
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL(`/blog/${post.slug}/`, siteUrl).href;
+
+function linkifyPaths(html: string): string {
+  return html.replace(
+    /(\/[a-z0-9\-/]+)/gi,
+    '<a href="$1" class="font-medium text-[var(--color-accent)] hover:underline">$1</a>'
+  );
+}
+
+const articleLd = {
+  "@type": "BlogPosting",
+  headline: post.title,
+  description: post.description,
+  datePublished: post.publishedAt,
+  url: pageUrl,
+  author: { "@type": "Organization", name: "PerDiemCalculator" }
+};
+---
+
+<BaseLayout title={`${post.title} | Blog`} description={post.description} jsonLd={articleLd}>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-accent)]" href={BLOG_INDEX}>Blog</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">{post.title}</span>
+    </nav>
+
+    <p class="mt-6 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+      {blogCategoryLabel(post.category)} · {formatBlogDate(post.publishedAt)}
+    </p>
+    <h1 class="font-display mt-3 text-3xl sm:text-4xl">{post.title}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">{post.description}</p>
+
+    <div class="prose-blog mt-10 space-y-6 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      {
+        blocks.map((block) => {
+          if (block.type === "h2") {
+            return <h2>{block.text}</h2>;
+          }
+          if (block.type === "ul") {
+            return (
+              <ul>
+                {block.items.map((item) => (
+                  <li set:html={linkifyPaths(item)} />
+                ))}
+              </ul>
+            );
+          }
+          return <p set:html={linkifyPaths(block.text)} />;
+        })
+      }
+    </div>
+
+    <p class="mt-12 text-sm text-[var(--color-ink-muted)]">
+      <a href={BLOG_INDEX} class="font-semibold text-[var(--color-accent)] hover:underline">
+        ← Back to blog
+      </a>
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-blog :global(h2) {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .prose-blog :global(ul) {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-blog :global(li) {
+    margin-top: 0.35rem;
+  }
+  .prose-blog :global(a) {
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+</style>

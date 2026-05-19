@@ -1,0 +1,25 @@
+---
+import BlogArticleLayout from "../../components/blog/BlogArticleLayout.astro";
+import { BLOG_ARTICLES } from "../../data/blogPosts";
+import { BLOG_CONTENT } from "../../data/blogContent";
+
+export function getStaticPaths() {
+  return BLOG_ARTICLES.map((post) => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+interface Props {
+  post: (typeof BLOG_ARTICLES)[number];
+}
+
+const { post } = Astro.props;
+const blocks = BLOG_CONTENT[post.slug];
+
+if (!blocks) {
+  throw new Error(`Missing blog content for slug: ${post.slug}`);
+}
+---
+
+<BlogArticleLayout post={post} blocks={blocks} />
