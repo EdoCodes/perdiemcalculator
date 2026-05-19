@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { ProfessionPicker } from "../components/profession/ProfessionPicker";
+import { HomeCalculatorHub } from "../components/home/HomeCalculatorHub";
 import { ProfessionLogo } from "../components/profession/ProfessionLogo";
 import { US_STATES } from "../data/usStates";
 
@@ -22,9 +22,11 @@ const featureProfessions = [
   }
 ];
 
+const siteTagline =
+  "Built for travelers who need accurate estimates—not generic spreadsheets.";
+
 const title = "Per diem calculator for every profession";
-const description =
-  "Estimate per diem for federal government travel (GSA CONUS), airline pilots and cabin crew, and more—pick your profession and calculate.";
+const description = `${siteTagline} Estimate federal GSA CONUS, airline crew, teacher, truck driver, and corporate travel ROI per diem.`;
 
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
 
@@ -34,49 +36,14 @@ const jsonLd = [
     "@type": "WebSite",
     name: "PerDiemCalculator",
     url: siteUrl,
-    description
+    description,
+    alternateName: siteTagline
   }
 ];
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd} hero>
-  <section class="px-2 pb-4 pt-6 text-center sm:pt-10">
-    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-      perdiemcalculator.com
-    </p>
-    <h1 class="font-display mx-auto mt-5 max-w-3xl text-4xl leading-tight sm:text-5xl lg:text-[3.25rem]">
-      Per diem, for your profession
-    </h1>
-    <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-ink-muted)]">
-      One site, many pay systems—GSA for federal travelers, contract rates for airline crew, school
-      policy for teachers, and more on the way.
-    </p>
-  </section>
-
-  <div class="site-trust-band -mx-4 my-10 px-6 py-4 text-center sm:-mx-6 sm:px-8">
-    <p class="text-sm font-medium tracking-wide text-white/95 sm:text-base">
-      Built for travelers who need accurate estimates—not generic spreadsheets
-    </p>
-  </div>
-
-  <section class="mx-auto max-w-2xl text-center">
-    <a href="/calculator/roi/" class="profession-chip inline-flex">
-      Corporate travel ROI calculator
-    </a>
-    <p class="mt-3 text-sm text-[var(--color-ink-muted)]">
-      Annual spend, travellers, domestic vs international — estimate savings and per diem exposure.
-    </p>
-  </section>
-
-  <section class="mx-auto mt-14 max-w-4xl">
-    <h2 class="font-display text-center text-3xl sm:text-4xl">Choose your profession</h2>
-    <p class="mx-auto mt-4 max-w-xl text-center text-sm leading-relaxed text-[var(--color-ink-muted)]">
-      Pick how you earn per diem, then open a calculator tuned to those rules.
-    </p>
-    <div class="mt-10">
-      <ProfessionPicker client:load />
-    </div>
-  </section>
+  <HomeCalculatorHub client:load />
 
   <section class="mt-20 space-y-14">
     {
