@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogRunNumbersCta from "../../components/blog/BlogRunNumbersCta.astro";
 import {
   BLOG_POSTS,
   blogCategoryLabel,
@@ -21,7 +22,7 @@ const guides = sorted.filter((p) => p.kind === "guide");
 <BaseLayout title={title} description={description} hero>
   <article class="mx-auto max-w-3xl">
     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">Blog</p>
-    <h1 class="font-display mt-4 text-3xl sm:text-4xl lg:text-[2.75rem]">
+    <h1 class="blog-heading font-display mt-4 text-3xl sm:text-4xl lg:text-[2.75rem]">
       Per diem insights for every traveler
     </h1>
     <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
@@ -30,7 +31,7 @@ const guides = sorted.filter((p) => p.kind === "guide");
     </p>
 
     <section class="mt-12">
-      <h2 class="text-sm font-semibold uppercase tracking-widest text-[var(--color-ink-muted)]">
+      <h2 class="blog-heading text-sm font-semibold uppercase tracking-widest text-[var(--color-ink-muted)]">
         Latest articles
       </h2>
       <ul class="mt-6 space-y-4">
@@ -41,7 +42,9 @@ const guides = sorted.filter((p) => p.kind === "guide");
                 <p class="text-xs font-semibold uppercase tracking-wide text-[var(--color-accent)]">
                   {blogCategoryLabel(post.category)} · {formatBlogDate(post.publishedAt)}
                 </p>
-                <h3 class="mt-2 font-semibold text-[var(--color-ink)]">{post.title}</h3>
+                <h3 class="blog-heading mt-2 font-semibold text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
+                  {post.title}
+                </h3>
                 <p class="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
                   {post.description}
                 </p>
@@ -56,7 +59,7 @@ const guides = sorted.filter((p) => p.kind === "guide");
     </section>
 
     <section class="mt-14">
-      <h2 class="text-sm font-semibold uppercase tracking-widest text-[var(--color-ink-muted)]">
+      <h2 class="blog-heading text-sm font-semibold uppercase tracking-widest text-[var(--color-ink-muted)]">
         Guides &amp; resources
       </h2>
       <ul class="mt-6 space-y-3">
@@ -67,7 +70,7 @@ const guides = sorted.filter((p) => p.kind === "guide");
                 href={blogPostHref(post)}
                 class="group flex flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-4 py-3 transition hover:border-[var(--color-border-strong)] sm:flex-row sm:items-center sm:justify-between"
               >
-                <span class="font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
+                <span class="blog-heading font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
                   {post.title}
                 </span>
                 <span class="mt-1 text-xs text-[var(--color-ink-muted)] sm:mt-0">
@@ -80,11 +83,6 @@ const guides = sorted.filter((p) => p.kind === "guide");
       </ul>
     </section>
 
-    <div class="mt-14 rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-muted)] px-5 py-6 text-center">
-      <p class="text-sm font-semibold text-[var(--color-ink)]">Ready to run numbers?</p>
-      <a href="/calculator/" class="profession-chip mt-4 inline-flex font-semibold">
-        Open calculators
-      </a>
-    </div>
+    <BlogRunNumbersCta class="mt-14" />
   </article>
 </BaseLayout>

@@ -442,3 +442,21 @@
     }
   }
 }
+
+.blog-heading {
+  color: var(--color-ink);
+  transition: color 0.15s ease;
+}
+
+.blog-heading:hover {
+  color: var(--color-accent);
+}
+
+.blog-heading-link {
+  color: var(--color-ink);
+  transition: color 0.15s ease;
+}
+
+.blog-heading-link:hover {
+  color: var(--color-accent);
+}

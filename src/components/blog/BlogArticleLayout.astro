@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogRunNumbersCta from "./BlogRunNumbersCta.astro";
 import {
   BLOG_INDEX,
   type BlogPost,
@@ -28,7 +29,13 @@ function linkifyPaths(html: string): string {
 }
 
 function renderHtml(html: string): string {
+  if (/<a\s/i.test(html)) return html;
   return linkifyPaths(html);
+}
+
+function renderListItem(item: string): string {
+  if (/<a\s/i.test(item)) return item;
+  return linkifyPaths(item);
 }
 
 const articleLd = {
@@ -76,7 +83,7 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
     <p class="mt-6 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
       {blogCategoryLabel(post.category)} · {formatBlogDate(post.publishedAt)}
     </p>
-    <h1 class="font-display mt-3 text-3xl sm:text-4xl" itemprop="name">{post.title}</h1>
+    <h1 class="blog-heading font-display mt-3 text-3xl sm:text-4xl" itemprop="name">{post.title}</h1>
     <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]" itemprop="description">
       {post.description}
     </p>
@@ -93,7 +100,7 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
           <ol class="mt-3 list-decimal space-y-1.5 pl-5 text-sm">
             {toc.map((h) => h.type === "h2" && h.id && (
               <li>
-                <a class="text-[var(--color-ink)] hover:text-[var(--color-accent)]" href={`#${h.id}`}>
+                <a class="blog-heading-link text-[var(--color-ink)]" href={`#${h.id}`}>
                   {h.text}
                 </a>
               </li>
@@ -125,19 +132,19 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
           }
           if (block.type === "h2") {
             return (
-              <h2 id={block.id} class={block.id ? "scroll-mt-24" : ""}>
+              <h2 id={block.id} class:list={["blog-heading", block.id ? "scroll-mt-24" : ""]}>
                 {block.text}
               </h2>
             );
           }
           if (block.type === "h3") {
-            return <h3>{block.text}</h3>;
+            return <h3 class="blog-heading">{block.text}</h3>;
           }
           if (block.type === "ul") {
             return (
               <ul>
                 {block.items.map((item) => (
-                  <li set:html={renderHtml(item)} />
+                  <li set:html={renderListItem(item)} />
                 ))}
               </ul>
             );
@@ -146,7 +153,7 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
             return (
               <ol>
                 {block.items.map((item) => (
-                  <li set:html={renderHtml(item)} />
+                  <li set:html={renderListItem(item)} />
                 ))}
               </ol>
             );
@@ -187,17 +194,19 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
       }
     </div>
 
+    <BlogRunNumbersCta class="mt-14" />
+
     {
       faqs.length > 0 && (
         <section class="mt-14" aria-labelledby="faq-heading">
-          <h2 id="faq-heading" class="font-display text-2xl text-[var(--color-ink)]">
+          <h2 id="faq-heading" class="blog-heading font-display text-2xl text-[var(--color-ink)]">
             Frequently asked questions
           </h2>
           <div class="mt-6 space-y-3">
             {
               faqs.map((f) => (
                 <details class="group rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)]">
-                  <summary class="cursor-pointer px-5 py-4 text-sm font-semibold text-[var(--color-ink)] marker:content-none">
+                  <summary class="blog-heading cursor-pointer px-5 py-4 text-sm font-semibold text-[var(--color-ink)] marker:content-none">
                     <span class="flex items-center justify-between gap-3">
                       {f.question}
                       <span class="text-[var(--color-accent)] transition group-open:rotate-45" aria-hidden>
@@ -230,13 +239,11 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
     font-family: var(--font-display);
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--color-ink);
   }
   .prose-blog :global(h3) {
     margin-top: 1.5rem;
     font-size: 1.0625rem;
     font-weight: 600;
-    color: var(--color-ink);
   }
   .prose-blog :global(ul),
   .prose-blog :global(ol) {

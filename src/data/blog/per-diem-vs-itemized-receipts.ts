@@ -187,20 +187,6 @@ export const PER_DIEM_VS_RECEIPTS_BLOCKS: BlogBlock[] = [
       "The company reimburses approved actual costs.",
       "Reimbursement depends on what was spent."
     ]
-  },
-  {
-    type: "h2",
-    id: "related",
-    text: "Related on PerDiemCalculator"
-  },
-  {
-    type: "ul",
-    items: [
-      "<a href=\"/blog/what-is-per-diem/\">What is per diem?</a>",
-      "<a href=\"/calculator/gsa/\">Federal GSA per diem calculator</a>",
-      "<a href=\"/calculator/roi/\">Travel program ROI calculator</a>",
-      "<a href=\"/methodology/\">How we source rate data</a>"
-    ]
   }
 ];
 

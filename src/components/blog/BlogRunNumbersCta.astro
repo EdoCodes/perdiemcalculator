@@ -1,0 +1,20 @@
+---
+/** Shared end-of-article CTA — also used on the blog index. */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<aside
+  class:list={[
+    "blog-run-cta rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-muted)] px-5 py-6 text-center",
+    className
+  ]}
+  aria-label="Run per diem numbers"
+>
+  <p class="blog-heading text-sm font-semibold text-[var(--color-ink)]">Ready to run numbers?</p>
+  <a href="/calculator/" class="profession-chip mt-4 inline-flex font-semibold">
+    Open calculators
+  </a>
+</aside>
