@@ -43,7 +43,7 @@ function CalculatorTile({
       : "Finance teams";
 
   const className = [
-    "home-calc-card group flex flex-col items-center rounded-xl border px-3 py-5 text-center transition",
+    "home-calc-card group flex flex-col items-center rounded-xl border px-4 py-6 text-center transition",
     disabled
       ? "cursor-not-allowed border-[var(--color-border)] bg-[var(--color-surface-muted)]/50 opacity-60"
       : "border-[var(--color-border)] bg-[var(--color-surface-elevated)] hover:border-[var(--color-accent)] hover:shadow-md"
@@ -52,13 +52,13 @@ function CalculatorTile({
   const inner = (
     <>
       {item.kind === "profession" ? (
-        <ProfessionLogo professionId={item.id} size="md" available={item.available} />
+        <ProfessionLogo professionId={item.id} size="lg" available={item.available} />
       ) : (
         <span
-          className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-primary-muted)] text-[var(--color-primary)] ring-1 ring-[var(--color-primary)]/20"
+          className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-primary-muted)] text-[var(--color-primary)] ring-1 ring-[var(--color-primary)]/20"
           aria-hidden
         >
-          <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none">
+          <svg className="h-8 w-8" viewBox="0 0 24 24" fill="none">
             <path
               d="M4 19V5M4 19h16M8 15l3-4 3 3 4-6"
               stroke="currentColor"
@@ -69,10 +69,10 @@ function CalculatorTile({
           </svg>
         </span>
       )}
-      <p className="mt-3 text-sm font-semibold leading-snug text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
+      <p className="mt-3.5 text-base font-semibold leading-snug text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
         {label}
       </p>
-      <p className="mt-1 text-xs text-[var(--color-ink-muted)]">{sub}</p>
+      <p className="mt-1.5 text-sm text-[var(--color-ink-muted)]">{sub}</p>
     </>
   );
 
@@ -199,7 +199,7 @@ export function HomeCalculatorHub() {
             &ldquo;teacher&rdquo;.
           </p>
         ) : (
-          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {filtered.map((item) => (
               <li key={item.id}>
                 <CalculatorTile

@@ -15,7 +15,7 @@ const sizeMap: Record<Size, { box: string; icon: string }> = {
 const circularSizeMap: Record<Size, { box: string; icon: string }> = {
   sm: { box: "h-10 w-10 rounded-full", icon: "h-[1.125rem] w-[1.125rem]" },
   md: { box: "h-12 w-12 rounded-full", icon: "h-7 w-7" },
-  lg: { box: "h-14 w-14 rounded-full", icon: "h-8 w-8" },
+  lg: { box: "h-14 w-14 rounded-full", icon: "h-9 w-9" },
   xl: { box: "h-16 w-16 rounded-full", icon: "h-10 w-10" }
 };
 

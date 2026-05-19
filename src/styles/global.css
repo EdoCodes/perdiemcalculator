@@ -161,8 +161,18 @@
     border-radius: 1rem;
     border: 1px solid var(--color-border-strong);
     background: var(--color-surface-elevated);
-    padding: 1.25rem;
+    padding: 1.5rem 1.375rem;
     box-shadow: 0 12px 40px -16px color-mix(in srgb, var(--color-ink) 12%, transparent);
+  }
+
+  .home-calc-card {
+    min-height: 9.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .home-calc-card {
+      min-height: 10.25rem;
+    }
   }
 
   .home-calc-panel::before {

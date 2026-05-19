@@ -27,21 +27,30 @@ export function ProfessionIcon({ id, className = "h-8 w-8" }: Props) {
   }
 }
 
-/** Angled jet with soft wing highlight (crew-app style). */
+/** Commercial jet silhouette (nose up-right). */
 function AirplaneIcon({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
-      <g transform="translate(24 24) rotate(-12) translate(-12 -12)">
+      <g transform="translate(24 25) rotate(-32) translate(-24 -25)">
         <path
           fill="currentColor"
-          fillOpacity={0.28}
-          d="M22.2 16.4v-1.9l-7.6-4.7c-.7-.4-1.6.1-1.6.9v4.3l-7.6 4.7v1.9l7.6-2.4v4.7l-1.9 1.4v1.9l3.3-1 3.3 1v-1.6l-1.9-1.4v-4.3l7.6 2.4z"
+          fillOpacity={0.22}
+          d="M30.5 27.2 38 24.8l1.2 2.4-7.2 3.2-1.5-3.2Z"
         />
         <path
           fill="currentColor"
-          d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8-2.5z"
+          d="M10.5 24.8a2 2 0 0 1 2-2h3.4l9.8-6.4a2.4 2.4 0 0 1 2.6.35l9.2 6.6h7.6a2.8 2.8 0 0 1 0 5.6h-7.4l-9 6.5a2.4 2.4 0 0 1-2.6.3l-9.6-6.2H12.5a2 2 0 0 1-2-2Z"
         />
-        <path fill="currentColor" fillOpacity={0.5} d="M14.5 11.2 19.8 9.6 21.5 11.8 18.8 13z" />
+        <path
+          fill="currentColor"
+          fillOpacity={0.55}
+          d="M17.2 20.4 22.8 17.6l4.8 3.4-3.1 1.8-7.3-2.4Z"
+        />
+        <path
+          fill="currentColor"
+          d="M34.8 22.4h3.6l1.8 2.6-1.8 2.6h-3.6l-1.2-2.6 1.2-2.6Z"
+        />
+        <circle cx="21.2" cy="19.6" r="1.1" fill="currentColor" fillOpacity={0.65} />
       </g>
     </svg>
   );
@@ -81,60 +90,46 @@ function GovernmentCapitolIcon({ className }: { className: string }) {
   return (
     <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
       <path
-        d="M8 38h32M10 38V22l14-10 14 10v16"
+        d="M6 39h36"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="2.25"
         strokeLinecap="round"
-        strokeLinejoin="round"
+        strokeOpacity={0.35}
       />
       <path
-        d="M24 12v8M18 20h12"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
+        fill="currentColor"
+        fillOpacity={0.12}
+        d="M9 39V24.5l15-11L39 24.5V39H9Z"
       />
       <path
-        d="M6 38h36"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-      <rect
-        x="14"
-        y="26"
-        width="5"
-        height="12"
         fill="currentColor"
-        fillOpacity={0.2}
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <rect
-        x="21.5"
-        y="22"
-        width="5"
-        height="16"
-        fill="currentColor"
-        fillOpacity={0.3}
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <rect
-        x="29"
-        y="26"
-        width="5"
-        height="12"
-        fill="currentColor"
-        fillOpacity={0.2}
-        stroke="currentColor"
-        strokeWidth="1.5"
+        d="M11 39V25.2L24 15.5 37 25.2V39H11Z"
       />
       <path
-        d="M24 4a4 4 0 0 1 0 8 4 4 0 0 1 0-8Z"
         fill="currentColor"
-        fillOpacity={0.25}
+        fillOpacity={0.35}
+        d="M24 15.5 11 25.2 24 31.8 37 25.2 24 15.5Z"
+      />
+      <path
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        d="M24 8.5V14M21 11h6"
+      />
+      <ellipse cx="24" cy="8" rx="4.5" ry="3.2" fill="currentColor" fillOpacity={0.28} />
+      <path
+        fill="currentColor"
+        d="M24 5.2a2.8 2.8 0 0 1 2.8 2.8v.2H21.2v-.2A2.8 2.8 0 0 1 24 5.2Z"
+      />
+      <rect x="14.5" y="28" width="4.5" height="11" rx="0.6" fill="currentColor" fillOpacity={0.45} />
+      <rect x="21.75" y="24.5" width="4.5" height="14.5" rx="0.6" fill="currentColor" fillOpacity={0.65} />
+      <rect x="29" y="28" width="4.5" height="11" rx="0.6" fill="currentColor" fillOpacity={0.45} />
+      <path
+        d="M17.5 28h13"
         stroke="currentColor"
         strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeOpacity={0.4}
       />
     </svg>
   );
