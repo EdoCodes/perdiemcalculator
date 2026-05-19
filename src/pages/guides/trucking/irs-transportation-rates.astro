@@ -1,0 +1,43 @@
+---
+import TruckingGuideShell from "../../../components/seo/TruckingGuideShell.astro";
+import { TRUCKING_GUIDES, truckingGuideHref } from "../../../data/truckingGuides";
+import { TRUCKER_RATE_PERIODS } from "../../../data/truckerPerDiemRates";
+
+const guide = TRUCKING_GUIDES.find((g) => g.slug === "irs-transportation-rates")!;
+const current = TRUCKER_RATE_PERIODS[0];
+---
+
+<TruckingGuideShell guide={guide}>
+  <h2>IRS transportation industry M&amp;IE (not GSA)</h2>
+  <p>
+    Qualified workers in the <strong>transportation industry</strong> can use special per diem amounts to
+    substantiate meals and incidental expenses under Rev. Proc. 2019-48. The IRS publishes updated
+    dollar amounts each year—often in an October notice for the period starting October 1.
+  </p>
+  <p>
+    For the current period ({current.label}), the CONUS rate is{" "}
+    <strong>${current.conusMie} per day</strong> and the outside CONUS rate is{" "}
+    <strong>${current.oconusMie} per day</strong> (see{" "}
+    <a href={current.sourceUrl} target="_blank" rel="noopener noreferrer">{current.sourceLabel}</a>).
+  </p>
+
+  <h2>Who this usually includes</h2>
+  <ul>
+    <li>Over-the-road (OTR) truck drivers away from their tax home</li>
+    <li>Many regional and long-haul operators subject to DOT hours-of-service rules</li>
+    <li>Other transportation workers covered by the same notice (air, rail, etc.—rules vary)</li>
+  </ul>
+
+  <h2>What you still must document</h2>
+  <p>
+    Per diem does not remove the need to establish that you were traveling away from home for business. Keep
+    records showing <strong>time, place, and business purpose</strong> of travel, plus the days you were on the
+    road.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={truckingGuideHref("dot-80-percent-meals")}>DOT 80% meal deduction</a></li>
+    <li><a href={truckingGuideHref("per-diem-vs-gsa")}>Trucker per diem vs GSA rates</a></li>
+  </ul>
+</TruckingGuideShell>

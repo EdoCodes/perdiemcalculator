@@ -1,0 +1,38 @@
+---
+import TruckingGuideShell from "../../../components/seo/TruckingGuideShell.astro";
+import { TRUCKING_GUIDES, truckingGuideHref, TRUCKING_CALCULATOR_HREF } from "../../../data/truckingGuides";
+import { DOT_MEAL_DEDUCTIBLE_FRACTION } from "../../../data/truckerPerDiemRates";
+
+const guide = TRUCKING_GUIDES.find((g) => g.slug === "dot-80-percent-meals")!;
+const pct = Math.round(DOT_MEAL_DEDUCTIBLE_FRACTION * 100);
+---
+
+<TruckingGuideShell guide={guide}>
+  <h2>80% vs 50% meal deduction</h2>
+  <p>
+    Most taxpayers can deduct only <strong>50%</strong> of business meal expenses. Workers subject to the
+    Department of Transportation <strong>hours-of-service limits</strong>—including many truck drivers—may deduct{" "}
+    <strong>{pct}%</strong> instead when meals qualify.
+  </p>
+  <p>
+    Our <a href={TRUCKING_CALCULATOR_HREF}>trucker calculator</a> applies {pct}% to the gross IRS transportation
+    M&amp;IE total as a simplified planning estimate when you select &ldquo;DOT hours-of-service.&rdquo;
+  </p>
+
+  <h2>Per diem method vs actual receipts</h2>
+  <p>
+    Using the federal per diem method lets you substantiate the <em>amount</em> of M&amp;IE without listing every
+    meal receipt, but you must still use the per diem rules correctly and only for eligible travel days.
+  </p>
+
+  <h2>Owner-operators</h2>
+  <p>
+    Schedule C filers often pair per diem with other deductions (fuel, depreciation, etc.). A preparer can help
+    decide between per diem and actual expenses for meals.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={truckingGuideHref("irs-transportation-rates")}>IRS transportation rates</a></li>
+  </ul>
+</TruckingGuideShell>

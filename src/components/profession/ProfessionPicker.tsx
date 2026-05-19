@@ -12,7 +12,8 @@ import { ProfessionLogo } from "./ProfessionLogo";
 const QUICK_LINKS: { id: Profession["id"]; label: string }[] = [
   { id: "government-federal", label: "Federal GSA" },
   { id: "aviation-crew", label: "Airline crew" },
-  { id: "education-teacher", label: "Teachers" }
+  { id: "education-teacher", label: "Teachers" },
+  { id: "trucking", label: "Truck drivers" }
 ];
 
 function ProfessionCardTitle({ profession }: { profession: Profession }) {

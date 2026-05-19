@@ -1,0 +1,36 @@
+---
+import TruckingGuideShell from "../../../components/seo/TruckingGuideShell.astro";
+import { TRUCKING_GUIDES, truckingGuideHref } from "../../../data/truckingGuides";
+
+const guide = TRUCKING_GUIDES.find((g) => g.slug === "per-diem-vs-gsa")!;
+---
+
+<TruckingGuideShell guide={guide}>
+  <h2>Two different federal rate systems</h2>
+  <p>
+    <strong>GSA per diem</strong> (General Services Administration) sets lodging and M&amp;IE caps for{" "}
+    <strong>federal employees</strong> on official travel. Rates vary by city and fiscal year.
+  </p>
+  <p>
+    <strong>IRS transportation industry rates</strong> are fixed CONUS/OCONUS M&amp;IE amounts for{" "}
+    <strong>transportation workers</strong> using the per diem substantiation method—not locality-by-locality tables.
+  </p>
+
+  <h2>Which should truckers use?</h2>
+  <p>
+    Most OTR drivers planning taxes use the <strong>IRS transportation rates</strong> when they qualify. GSA tables
+    are still useful to <strong>compare</strong> a city (our calculator includes an optional GSA ZIP lookup) or when
+    an employer policy references federal CONUS caps.
+  </p>
+
+  <h2>Federal employee calculator on this site</h2>
+  <p>
+    If you are a civilian government traveler—not a truck driver—use the{" "}
+    <a href="/calculator/gsa/">federal GSA calculator</a> and <a href="/states/">state rate hubs</a> instead.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={truckingGuideHref("irs-transportation-rates")}>IRS transportation rates</a></li>
+  </ul>
+</TruckingGuideShell>

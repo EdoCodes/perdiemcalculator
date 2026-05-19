@@ -26,6 +26,7 @@ const onStates = path.startsWith("/states");
 const onMethodology = path.startsWith("/methodology");
 const onCrewGuides =
   path.startsWith("/guides/crew") || path.startsWith("/crew/");
+const onTruckingGuides = path.startsWith("/guides/trucking");
 ---
 
 <!doctype html>
@@ -87,6 +88,7 @@ const onCrewGuides =
         <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
           <a href="/calculator/" class={onCalculator ? navActive : navLink}>Calculators</a>
           <a href="/guides/crew/" class={onCrewGuides ? navActive : navLink}>Crew guides</a>
+          <a href="/guides/trucking/" class={onTruckingGuides ? navActive : navLink}>Trucker guides</a>
           <a href="/states/" class={onStates ? navActive : navLink}>States</a>
           <a href="/methodology/" class={onMethodology ? navActive : navLink}>Methodology</a>
           <ThemeToggle client:load />

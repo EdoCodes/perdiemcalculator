@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import {
+  TRUCKING_CALCULATOR_HREF,
+  TRUCKING_GUIDES,
+  truckingGuideHref
+} from "../../../data/truckingGuides";
+
+const title = "Truck driver per diem guides | Per Diem Calculator";
+const description =
+  "Guides on IRS transportation industry per diem rates, DOT 80% meal deductions, and how trucker per diem differs from GSA federal rates.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">Trucker guides</span>
+    </nav>
+
+    <h1 class="font-display mt-6 text-3xl sm:text-4xl">Truck driver per diem guides</h1>
+    <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
+      Over-the-road and regional drivers use <strong class="text-[var(--color-ink)]">IRS special transportation
+      rates</strong>—not the same tables as federal employees. Start with the calculator, then read the guides
+      below.
+    </p>
+
+    <a href={TRUCKING_CALCULATOR_HREF} class="profession-chip mt-6 inline-flex font-semibold">
+      Truck driver per diem calculator
+    </a>
+
+    <ul class="mt-10 space-y-4">
+      {
+        TRUCKING_GUIDES.map((g) => (
+          <li class="rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] p-5">
+            <a href={truckingGuideHref(g.slug)} class="font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)]">
+              {g.title}
+            </a>
+            <p class="mt-2 text-sm text-[var(--color-ink-muted)]">{g.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</BaseLayout>

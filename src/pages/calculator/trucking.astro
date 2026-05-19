@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
+import { TruckingPerDiemCalculator } from "../../components/calculator/TruckingPerDiemCalculator";
+import { ProfessionPageBrand } from "../../components/profession/ProfessionLogo";
+import { TRUCKING_CALCULATOR_HREF } from "../../data/truckingGuides";
+
+const title = "Truck driver per diem calculator (IRS transportation rates)";
+const description =
+  "Free OTR per diem calculator using IRS special transportation industry M&IE rates ($80 CONUS / $86 OCONUS), DOT 80% meal deduction, and optional GSA rate compare.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL(TRUCKING_CALCULATOR_HREF, siteUrl).href;
+
+const faqJsonLd = {
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is the truck driver per diem rate for 2025–2026?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "For transportation industry workers, IRS Notice 2025-54 sets the CONUS meals and incidental expenses rate at $80 per day and the OCONUS rate at $86 per day, effective October 1, 2025."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "Can truck drivers use GSA per diem rates?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Over-the-road drivers who qualify typically use IRS special transportation industry M&IE rates, not GSA federal employee locality tables. GSA rates can still be used for comparison or employer policies."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "What is the 80% meal deduction for DOT drivers?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Drivers subject to Department of Transportation hours-of-service limits may deduct 80% of business meal expenses instead of the usual 50%, when using the per diem substantiation method under Rev. Proc. 2019-48."
+      }
+    }
+  ]
+};
+
+const appJsonLd = {
+  "@type": "WebApplication",
+  name: "Truck driver per diem calculator",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  url: pageUrl,
+  description
+};
+
+const breadcrumbLd = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Calculators",
+      item: new URL("/calculator/", siteUrl).href
+    },
+    { "@type": "ListItem", position: 3, name: "Truck drivers", item: pageUrl }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={[breadcrumbLd, appJsonLd, faqJsonLd]}>
+  <section
+    class="calculator-theme calc-panel -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
+  >
+    <CalculatorProfessionBar client:load professionId="trucking" />
+
+    <div class="mb-8 max-w-2xl">
+      <div class="mt-4">
+        <ProfessionPageBrand
+          professionId="trucking"
+          title="Truck driver per diem calculator"
+          subtitle="Over-the-road and regional drivers: IRS transportation industry M&IE rates, CONUS vs OCONUS days, DOT 80% meal deduction estimate, and optional GSA federal rate compare."
+        />
+      </div>
+    </div>
+
+    <TruckingPerDiemCalculator client:load />
+  </section>
+</BaseLayout>

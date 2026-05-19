@@ -69,11 +69,12 @@ export const PROFESSIONS: Profession[] = [
     name: "Over-the-road truck driver",
     shortName: "Truck driver",
     category: "field",
-    description: "DOT and employer per diem for long-haul trips.",
-    href: "#",
-    available: false,
-    badges: ["Coming soon"],
-    highlights: []
+    description:
+      "IRS special transportation M&IE ($80 CONUS / $86 OCONUS), DOT 80% meal deduction estimate, and optional GSA compare.",
+    href: "/calculator/trucking/",
+    available: true,
+    badges: ["IRS transport rates", "DOT 80%"],
+    highlights: ["CONUS / OCONUS split", "Oct 1 rate updates", "GSA compare"]
   },
   {
     id: "travel-nurse",
@@ -109,5 +110,6 @@ export function getProfessionForPath(pathname: string): Profession | undefined {
   if (pathname.startsWith("/calculator/gsa")) return getProfessionById("government-federal");
   if (pathname.startsWith("/calculator/crew")) return getProfessionById("aviation-crew");
   if (pathname.startsWith("/calculator/teacher")) return getProfessionById("education-teacher");
+  if (pathname.startsWith("/calculator/trucking")) return getProfessionById("trucking");
   return undefined;
 }

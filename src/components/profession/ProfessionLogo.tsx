@@ -39,8 +39,9 @@ const toneByProfession: Record<
     ring: "ring-amber-400/45"
   },
   trucking: {
-    bg: "bg-[var(--color-surface-muted)]",
-    fg: "text-[var(--color-ink-muted)]"
+    bg: "bg-gradient-to-br from-emerald-600 to-slate-700 shadow-lg shadow-slate-900/30",
+    fg: "text-white",
+    ring: "ring-emerald-400/45"
   },
   "travel-nurse": {
     bg: "bg-gradient-to-br from-rose-500/20 to-pink-500/15",
@@ -74,7 +75,10 @@ export function ProfessionLogo({
   available = true
 }: Props) {
   const isCircularBadge =
-    available && (professionId === "aviation-crew" || professionId === "education-teacher");
+    available &&
+    (professionId === "aviation-crew" ||
+      professionId === "education-teacher" ||
+      professionId === "trucking");
   const dims = isCircularBadge ? circularSizeMap[size] : sizeMap[size];
   const tone = toneByProfession[professionId] ?? defaultTone;
   const muted = !available;
