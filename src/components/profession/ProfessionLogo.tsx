@@ -1,5 +1,6 @@
 import type { Profession } from "../../data/professions";
 import { getProfessionById } from "../../data/professions";
+import { PROFESSION_ASSETS } from "../../data/professionAssets";
 import { ProfessionIcon, type ProfessionIconId } from "./ProfessionIcon";
 
 type Size = "sm" | "md" | "lg" | "xl";
@@ -74,14 +75,34 @@ export function ProfessionLogo({
   framed = true,
   available = true
 }: Props) {
+  const asset = available ? PROFESSION_ASSETS[professionId] : undefined;
+  const muted = !available;
+
+  if (asset?.fullTile) {
+    const tileBox = sizeMap[size].box;
+    return (
+      <img
+        src={asset.src}
+        alt=""
+        width={64}
+        height={64}
+        className={[
+          "inline-block shrink-0 object-cover",
+          tileBox,
+          muted ? "opacity-50 grayscale" : "shadow-md",
+          framed && !muted ? "ring-2 ring-inset ring-black/8" : "",
+          className
+        ].join(" ")}
+        aria-hidden
+      />
+    );
+  }
+
   const isCircularBadge =
     available &&
-    (professionId === "aviation-crew" ||
-      professionId === "education-teacher" ||
-      professionId === "trucking");
+    (professionId === "education-teacher" || professionId === "trucking");
   const dims = isCircularBadge ? circularSizeMap[size] : sizeMap[size];
   const tone = toneByProfession[professionId] ?? defaultTone;
-  const muted = !available;
 
   return (
     <span
