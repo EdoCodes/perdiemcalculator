@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogFaqAccordion from "./BlogFaqAccordion.astro";
 import BlogPeopleAlsoAsk from "./BlogPeopleAlsoAsk.astro";
 import BlogRunNumbersCta from "./BlogRunNumbersCta.astro";
 import {
@@ -217,34 +218,12 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
 
     <BlogRunNumbersCta class="mt-14" />
 
-    {
-      faqs.length > 0 && (
-        <section class="mt-14" aria-labelledby="faq-heading">
-          <h2 id="faq-heading" class="blog-heading font-display text-2xl text-[var(--color-ink)]">
-            Frequently asked questions
-          </h2>
-          <div class="mt-6 space-y-3">
-            {
-              faqs.map((f) => (
-                <details class="group rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)]">
-                  <summary class="cursor-pointer px-5 py-4 text-sm font-semibold text-[var(--color-ink-muted)] marker:content-none hover:text-[var(--color-accent)]">
-                    <span class="flex items-center justify-between gap-3">
-                      {f.question}
-                      <span class="text-[var(--color-accent)] transition group-open:rotate-45" aria-hidden>
-                        +
-                      </span>
-                    </span>
-                  </summary>
-                  <p class="border-t border-[var(--color-border)] px-5 py-4 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                    {f.answer}
-                  </p>
-                </details>
-              ))
-            }
-          </div>
-        </section>
-      )
-    }
+    <BlogFaqAccordion
+      items={faqs}
+      title="Frequently asked questions"
+      headingId="faq-heading"
+      class="mt-14"
+    />
 
     <p class="mt-12 text-sm text-[var(--color-ink-muted)]">
       <a href={BLOG_INDEX} class="font-semibold text-[var(--color-accent)] hover:underline">
