@@ -1,4 +1,2 @@
-/** Public contact inbox — also set Form notifications in Netlify to this address. */
-export const CONTACT_EMAIL = "perdiemcalculator@gmail.com";
-
+/** Netlify form id — route submissions to your inbox via Netlify → Forms → notifications (not shown on the site). */
 export const CONTACT_FORM_NAME = "contact";

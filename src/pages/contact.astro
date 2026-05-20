@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { CONTACT_EMAIL, CONTACT_FORM_NAME } from "../data/siteContact";
+import { CONTACT_FORM_NAME } from "../data/siteContact";
 
 const title = "Contact | PerDiemCalculator";
 const description =
@@ -103,18 +103,6 @@ const sent = Astro.url.searchParams.has("sent");
         </form>
       )
     }
-
-    <section class="mt-10 border-t border-[var(--color-border)] pt-8">
-      <h2 class="text-lg font-semibold text-[var(--color-ink)]">Email directly</h2>
-      <p class="mt-2 text-[var(--color-ink-muted)]">
-        <a
-          class="font-medium text-[var(--color-accent)] hover:underline"
-          href={`mailto:${CONTACT_EMAIL}`}
-        >
-          {CONTACT_EMAIL}
-        </a>
-      </p>
-    </section>
 
     <h2 class="mt-10 text-xl font-semibold text-[var(--color-ink)]">Before you write</h2>
     <ul class="mt-3 list-disc space-y-2 pl-5 text-[var(--color-ink-muted)]">

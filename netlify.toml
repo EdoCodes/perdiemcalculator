@@ -8,6 +8,7 @@
   PUBLIC_SITE_URL = "https://www.perdiemcalculator.com"
   # Also set in Netlify UI (required for the calculator):
   # PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY
+  # Contact form: Forms → notifications → email (inbox is not published in site HTML)
 
 [[headers]]
   for = "/*"

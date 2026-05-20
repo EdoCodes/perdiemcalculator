@@ -49,11 +49,11 @@ After any env change: **Deploys → Clear cache and deploy**.
 
 ### Contact form (Netlify)
 
-The `/contact/` page uses [Netlify Forms](https://docs.netlify.com/forms/setup/). After deploy:
+The `/contact/` page uses [Netlify Forms](https://docs.netlify.com/forms/setup/). The public site does not display your inbox—only the form. After deploy:
 
 1. **Netlify → Site configuration → Forms → Form notifications**
-2. Add **Email notification** → `perdiemcalculator@gmail.com`
-3. Submit a test message on `/contact/` and confirm it arrives
+2. Add **Email notification** and enter the Gmail inbox you want to receive messages
+3. Submit a test on `/contact/` and confirm it arrives (check spam on first send)
 
 ## Local setup
 
