@@ -87,12 +87,19 @@ const onBlog = path.startsWith("/blog");
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
         <a href="/" class="flex items-center gap-2.5">
           <span
-            class="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-ink)] text-sm font-bold text-white"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--color-ink)] text-sm font-bold text-white"
             >PD</span
           >
-          <span class="text-sm font-bold tracking-tight text-[var(--color-ink)] sm:text-base"
-            >PerDiemCalculator</span
-          >
+          <span class="flex min-w-0 flex-col leading-tight">
+            <span class="text-base font-bold tracking-tight text-[var(--color-ink)] sm:text-lg"
+              >PerDiemCalculator</span
+            >
+            <span
+              class="mt-0.5 text-[0.6875rem] font-medium tracking-wide text-[var(--color-ink-muted)] sm:text-xs"
+            >
+              Per diem calculated with precision
+            </span>
+          </span>
         </a>
         <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
           <a href="/calculator/" class={onCalculator ? navActive : navLink}>Calculators</a>
