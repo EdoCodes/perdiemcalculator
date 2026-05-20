@@ -49,6 +49,7 @@ const onBlog = path.startsWith("/blog");
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
@@ -136,6 +137,11 @@ const onBlog = path.startsWith("/blog");
               href="/guides/nursing/"
               class="text-sm font-semibold text-[var(--color-accent)] hover:underline"
               >Nurse guides</a
+            >
+            <a
+              href="/sitemap/"
+              class="text-sm font-semibold text-[var(--color-accent)] hover:underline"
+              >Sitemap</a
             >
           </div>
         </div>

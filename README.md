@@ -40,6 +40,13 @@ After any env change: **Deploys → Clear cache and deploy**.
 - Repo connected to Netlify (`main` branch).
 - Optional: enable weekly **Sync GSA rates** workflow after adding Actions secrets.
 
+### SEO / sitemap
+
+- XML: `https://www.perdiemcalculator.com/sitemap-index.xml` (split by calculators, blog, guides, states, crew).
+- HTML: `/sitemap/` for humans and internal linking.
+- `robots.txt` is generated at build from `PUBLIC_SITE_URL`.
+- After deploy, submit the sitemap index in [Google Search Console](https://search.google.com/search-console).
+
 ## Local setup
 
 Copy `.env.example` → `.env` and fill keys from Supabase + GSA.

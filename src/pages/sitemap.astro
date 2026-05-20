@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { HTML_SITEMAP_SECTIONS } from "../data/htmlSitemap";
+
+const title = "Sitemap | Per Diem Calculator";
+const description =
+  "Browse all calculators, blog articles, profession guides, state GSA rate hubs, and crew layover pages on PerDiemCalculator.com.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const xmlSitemapUrl = new URL("/sitemap-index.xml", siteUrl).href;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <h1 class="font-display text-3xl sm:text-4xl">Sitemap</h1>
+    <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      HTML overview for visitors and crawlers. Search engines should use the XML sitemap index:
+      <a class="font-medium text-[var(--color-accent)] hover:underline" href="/sitemap-index.xml">
+        sitemap-index.xml
+      </a>
+      (<span class="text-xs">{xmlSitemapUrl}</span>).
+    </p>
+
+    <div class="mt-10 space-y-10">
+      {
+        HTML_SITEMAP_SECTIONS.map((section) => (
+          <section>
+            <h2 class="text-lg font-semibold text-[var(--color-ink)]">{section.title}</h2>
+            <ul class="mt-3 columns-1 gap-x-8 sm:columns-2">
+              {section.links.map((link) => (
+                <li class="mb-2 break-inside-avoid text-sm">
+                  <a
+                    class="text-[var(--color-accent)] hover:underline"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </article>
+</BaseLayout>

@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Required for @astrojs/sitemap absolute URLs in CI. Override in Netlify with your domain.
-      PUBLIC_SITE_URL: https://example.com
+      PUBLIC_SITE_URL: https://www.perdiemcalculator.com
       # Placeholders so Astro embeds PUBLIC_* at build time (replace on Netlify with real values).
       PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
       PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
