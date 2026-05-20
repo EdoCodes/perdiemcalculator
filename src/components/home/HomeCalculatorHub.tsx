@@ -215,7 +215,7 @@ export function HomeCalculatorHub() {
 
         {PROFESSIONS.some((p) => !p.available) && !query.trim() && (
           <p className="border-t border-[var(--color-border)] px-5 py-4 text-center text-xs text-[var(--color-ink-muted)]">
-            Travel nurse and field sales calculators coming soon.
+            Field sales calculator coming soon.
           </p>
         )}
       </div>

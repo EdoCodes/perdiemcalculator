@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
+import { NursePerDiemCalculator } from "../../components/calculator/NursePerDiemCalculator";
+import { ProfessionPageBrand } from "../../components/profession/ProfessionLogo";
+
+const title = "Travel nurse per diem calculator | Per Diem Calculator";
+const description =
+  "Estimate travel nurse assignment per diem with federal GSA lodging and M&IE by hospital ZIP. Compare agency housing and meal stipends to GSA benchmarks.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL("/calculator/nurse/", siteUrl).href;
+
+const faqJsonLd = {
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Do travel nurses use GSA per diem rates?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Many agencies benchmark tax-free stipends against federal GSA per diem limits for the assignment city. GSA lodging and meals and incidental expense rates are a common reference, though your contract and tax situation control what you actually receive."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "Are travel nurse stipends tax-free?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Housing and meal stipends may be tax-free when you have a tax home, the assignment is temporary, and amounts do not exceed federal per diem limits. Amounts above GSA caps are often taxable. Consult your agency and a tax professional."
+      }
+    }
+  ]
+};
+
+const appJsonLd = {
+  "@type": "WebApplication",
+  name: "Travel nurse per diem calculator",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  url: pageUrl,
+  description
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={[appJsonLd, faqJsonLd]}>
+  <section
+    class="calculator-theme calc-panel -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
+  >
+    <CalculatorProfessionBar client:load professionId="travel-nurse" />
+
+    <div class="mb-8 max-w-2xl">
+      <div class="mt-4">
+        <ProfessionPageBrand
+          professionId="travel-nurse"
+          title="Travel nurse per diem calculator"
+          subtitle="Assignment-based estimates using GSA lodging and M&IE for your hospital city—optionally compare weekly agency housing and meal stipends to federal benchmarks."
+        />
+      </div>
+    </div>
+
+    <NursePerDiemCalculator client:load />
+  </section>
+</BaseLayout>

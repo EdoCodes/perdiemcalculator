@@ -81,11 +81,12 @@ export const PROFESSIONS: Profession[] = [
     name: "Travel nurse or healthcare traveler",
     shortName: "Travel nurse",
     category: "field",
-    description: "Agency stipends and tax-free per diem for assignment travel.",
-    href: "#",
-    available: false,
-    badges: ["Coming soon"],
-    highlights: []
+    description:
+      "13-week assignments: GSA lodging and M&IE at the hospital city, optional 75% travel days, and weekly stipend compare.",
+    href: "/calculator/nurse/",
+    available: true,
+    badges: ["GSA stipend compare", "Assignment dates"],
+    highlights: ["Hospital ZIP lookup", "Weekly stipend vs GSA", "Travel-day toggle"]
   },
   {
     id: "field-sales",
@@ -111,5 +112,6 @@ export function getProfessionForPath(pathname: string): Profession | undefined {
   if (pathname.startsWith("/calculator/crew")) return getProfessionById("aviation-crew");
   if (pathname.startsWith("/calculator/teacher")) return getProfessionById("education-teacher");
   if (pathname.startsWith("/calculator/trucking")) return getProfessionById("trucking");
+  if (pathname.startsWith("/calculator/nurse")) return getProfessionById("travel-nurse");
   return undefined;
 }
