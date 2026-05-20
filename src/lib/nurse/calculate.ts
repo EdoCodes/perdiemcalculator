@@ -12,6 +12,8 @@ export type NurseDayBreakdown = {
   dailyTotal: number;
 };
 
+export type StipendCapStatus = "under" | "within" | "over";
+
 export type NurseStipendCompare = {
   weeklyHousing: number;
   weeklyMeals: number;
@@ -19,7 +21,19 @@ export type NurseStipendCompare = {
   agencyHousingTotal: number;
   agencyMealsTotal: number;
   agencyTotal: number;
+  gsaLodgingCap: number;
+  gsaMieCap: number;
+  housingStatus: StipendCapStatus;
+  mealsStatus: StipendCapStatus;
+  housingOverAmount: number;
+  mealsOverAmount: number;
 };
+
+function stipendCapStatus(agency: number, cap: number): StipendCapStatus {
+  const delta = round2(agency - cap);
+  if (Math.abs(delta) < 0.01) return "within";
+  return delta > 0 ? "over" : "under";
+}
 
 export type NurseAssignmentResult = {
   destinationLabel: string;
@@ -113,13 +127,21 @@ export function calculateNurseAssignment(input: {
     const assignmentWeeks = Math.max(1, Math.ceil(dayCount / 7));
     const agencyHousingTotal = round2(weeklyHousing * assignmentWeeks);
     const agencyMealsTotal = round2(weeklyMeals * assignmentWeeks);
+    const gsaLodgingCap = lodgingSubtotalR;
+    const gsaMieCap = mealsSubtotalR;
     stipendCompare = {
       weeklyHousing,
       weeklyMeals,
       assignmentWeeks,
       agencyHousingTotal,
       agencyMealsTotal,
-      agencyTotal: round2(agencyHousingTotal + agencyMealsTotal)
+      agencyTotal: round2(agencyHousingTotal + agencyMealsTotal),
+      gsaLodgingCap,
+      gsaMieCap,
+      housingStatus: stipendCapStatus(agencyHousingTotal, gsaLodgingCap),
+      mealsStatus: stipendCapStatus(agencyMealsTotal, gsaMieCap),
+      housingOverAmount: Math.max(0, round2(agencyHousingTotal - gsaLodgingCap)),
+      mealsOverAmount: Math.max(0, round2(agencyMealsTotal - gsaMieCap))
     };
   }
 

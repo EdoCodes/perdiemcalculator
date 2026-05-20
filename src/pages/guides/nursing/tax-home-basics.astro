@@ -1,0 +1,44 @@
+---
+import NursingGuideShell from "../../../components/seo/NursingGuideShell.astro";
+import { NURSING_GUIDES, nursingGuideHref } from "../../../data/nursingGuides";
+
+const guide = NURSING_GUIDES.find((g) => g.slug === "tax-home-basics")!;
+---
+
+<NursingGuideShell guide={guide}>
+  <h2>What is a tax home?</h2>
+  <p>
+    For most travelers, a <strong>tax home</strong> is generally your regular place of business—the area where you earn
+    most of your income and maintain a home base. When you take a <strong>temporary</strong> assignment away from that
+    area, duplicate living costs (housing and meals at the assignment) may qualify for tax-free reimbursements or
+    stipends under IRS rules—if you meet substantiation and other requirements.
+  </p>
+
+  <h2>Why it matters for stipends</h2>
+  <p>
+    Tax-free treatment is not automatic just because you are “traveling.” Preparers typically look at whether the
+    assignment is temporary, whether you maintain a home at your tax home, and whether stipend amounts stay within
+    federal per-diem limits (often GSA-based for the hospital city). Amounts above those caps may be taxable even when
+    other tests are met.
+  </p>
+
+  <h2>Allied health travelers</h2>
+  <p>
+    RNs, LPNs, therapists, techs, and other <strong>allied health</strong> travelers on agency contracts face the same
+    framework when pay is split into housing and meal stipends. Use the{" "}
+    <a href="/calculator/nurse/">travel nurse &amp; allied health calculator</a> for GSA benchmarks; confirm tax-home
+    and assignment facts with your agency and a qualified tax professional.
+  </p>
+
+  <h2>Not the same as agency “per diem pay”</h2>
+  <p>
+    Stipends on a traveler contract are compensation structured for taxes and compliance—they are not the same tables
+    federal employees use for official travel, and they are not airline <em>contract per diem</em> pay. GSA rates here
+    are a <strong>benchmark</strong>, not a promise of what you will receive.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={nursingGuideHref("stipends-vs-gsa")}>Stipends vs GSA caps</a></li>
+  </ul>
+</NursingGuideShell>

@@ -1,0 +1,136 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  NURSING_CALCULATOR_HREF,
+  NURSING_GUIDES_INDEX,
+  NURSING_GUIDES,
+  nursingGuideHref,
+  type NursingGuideMeta
+} from "../../data/nursingGuides";
+
+type Props = {
+  guide: NursingGuideMeta;
+  jsonLd?: Record<string, unknown>[];
+};
+
+const { guide, jsonLd = [] } = Astro.props;
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL(nursingGuideHref(guide.slug), siteUrl).href;
+
+const webPageLd = {
+  "@type": "WebPage",
+  name: guide.title,
+  description: guide.description,
+  url: pageUrl
+};
+
+const breadcrumbLd = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Nurse guides",
+      item: new URL(NURSING_GUIDES_INDEX, siteUrl).href
+    },
+    { "@type": "ListItem", position: 3, name: guide.shortLabel, item: pageUrl }
+  ]
+};
+
+const related = NURSING_GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 3);
+---
+
+<BaseLayout
+  title={`${guide.title} | Per Diem Calculator`}
+  description={guide.description}
+  jsonLd={[webPageLd, breadcrumbLd, ...jsonLd]}
+>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-accent)]" href={NURSING_GUIDES_INDEX}>Nurse guides</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">{guide.shortLabel}</span>
+    </nav>
+
+    <h1 class="font-display mt-6 text-3xl sm:text-4xl">{guide.title}</h1>
+    <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      {guide.description}
+    </p>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href={NURSING_CALCULATOR_HREF} class="profession-chip font-semibold">
+        Open travel nurse calculator
+      </a>
+      <a href="/calculator/gsa/" class="profession-chip">Federal GSA calculator</a>
+    </div>
+
+    <div class="prose-nursing mt-10 space-y-6 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      <slot />
+    </div>
+
+    <section
+      class="mt-12 rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] p-6"
+    >
+      <h2 class="text-lg font-semibold text-[var(--color-ink)]">More for travel nurses</h2>
+      <ul class="mt-4 space-y-2 text-sm">
+        {
+          related.map((g) => (
+            <li>
+              <a
+                class="font-medium text-[var(--color-accent)] hover:underline"
+                href={nursingGuideHref(g.slug)}
+              >
+                {g.shortLabel}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="font-medium text-[var(--color-accent)] hover:underline" href={NURSING_GUIDES_INDEX}>
+            All nurse guides
+          </a>
+        </li>
+        <li>
+          <a class="font-medium text-[var(--color-accent)] hover:underline" href={NURSING_CALCULATOR_HREF}>
+            Travel nurse per diem tool
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+      Planning aid only · Not tax, payroll, or legal advice ·
+      <a class="text-[var(--color-accent)] hover:underline" href="/methodology/">Methodology</a>
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-nursing :global(h2) {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .prose-nursing :global(strong) {
+    color: var(--color-ink);
+  }
+  .prose-nursing :global(ul) {
+    margin-top: 0.75rem;
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-nursing :global(li) {
+    margin-top: 0.35rem;
+  }
+  .prose-nursing :global(a) {
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+  .prose-nursing :global(a:hover) {
+    text-decoration: underline;
+  }
+</style>

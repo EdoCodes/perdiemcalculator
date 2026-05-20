@@ -66,6 +66,11 @@ export const BLOG_PEOPLE_ALSO_ASK: Record<string, BlogFaq[]> = {
       question: "Is crew contract per diem the same as GSA M&IE?",
       answer:
         "No. Airline contract per diem is wages; GSA M&IE is a federal benchmark often used for expense tracking and tax planning—not a substitute for your pay scale."
+    },
+    {
+      question: "How do travel nurse stipends relate to GSA per diem?",
+      answer:
+        "Agencies often benchmark tax-free housing and meal stipends separately against GSA lodging and M&IE for the assignment city. Use the travel nurse calculator to compare each stipend to its own federal cap."
     }
   ]
 };

@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import {
+  NURSING_CALCULATOR_HREF,
+  NURSING_GUIDES,
+  nursingGuideHref
+} from "../../../data/nursingGuides";
+
+const title = "Travel nurse per diem guides | Per Diem Calculator";
+const description =
+  "Guides on GSA stipend caps, housing vs lodging benchmarks, tax home rules, and how travel nurses and allied health travelers use federal per diem.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">Nurse guides</span>
+    </nav>
+
+    <h1 class="font-display mt-6 text-3xl sm:text-4xl">Travel nurse &amp; allied health guides</h1>
+    <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
+      Agency stipends are often compared to <strong class="text-[var(--color-ink)]">federal GSA per diem</strong> for
+      the hospital city—not the same as your W-2 wages. Use the calculator, then read the guides below.
+    </p>
+
+    <a href={NURSING_CALCULATOR_HREF} class="profession-chip mt-6 inline-flex font-semibold">
+      Travel nurse per diem calculator
+    </a>
+
+    <ul class="mt-10 space-y-4">
+      {
+        NURSING_GUIDES.map((g) => (
+          <li class="rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] p-5">
+            <a href={nursingGuideHref(g.slug)} class="font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)]">
+              {g.title}
+            </a>
+            <p class="mt-2 text-sm text-[var(--color-ink-muted)]">{g.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</BaseLayout>

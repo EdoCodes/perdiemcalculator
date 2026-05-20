@@ -3,7 +3,8 @@ import { US_STATES } from "../../data/usStates";
 import {
   calculateNurseAssignment,
   defaultLodgingNights,
-  type NurseAssignmentResult
+  type NurseAssignmentResult,
+  type StipendCapStatus
 } from "../../lib/nurse/calculate";
 import { eachTripDay, fiscalYearForDate } from "../../lib/perdiem/fiscalYear";
 import {
@@ -19,6 +20,20 @@ import { calcInput, calcPill, calcPillActive } from "../../lib/calcUi";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
+
+function StipendCapLabel({ status, overAmount }: { status: StipendCapStatus; overAmount: number }) {
+  if (status === "over") {
+    return (
+      <span className="text-[var(--color-error-text)]">
+        Over GSA cap by {formatUsd(overAmount)} — may be taxable
+      </span>
+    );
+  }
+  if (status === "within") {
+    return <span className="text-[var(--color-ink)]">Within GSA cap</span>;
+  }
+  return <span className="text-[var(--color-ink-muted)]">Under GSA cap</span>;
+}
 
 function formatLocalityLabel(l: LocalityListItem): string {
   if (l.isStandard) return `${l.state} — Standard rate`;
@@ -37,7 +52,7 @@ export function NursePerDiemCalculator() {
 
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
-  const [partialTravelDays, setPartialTravelDays] = useState(true);
+  const [partialTravelDays, setPartialTravelDays] = useState(false);
   const [weeklyHousing, setWeeklyHousing] = useState("");
   const [weeklyMeals, setWeeklyMeals] = useState("");
 
@@ -178,7 +193,10 @@ export function NursePerDiemCalculator() {
           Estimate <strong className="text-[var(--color-ink)]">GSA lodging and M&amp;IE</strong> for
           your assignment city—useful when comparing agency housing and meal stipends to federal
           per-diem caps. Tax-free treatment depends on your tax home, assignment length, and
-          substantiation; verify with your agency and tax preparer.
+          substantiation; verify with your agency and tax preparer.{" "}
+          <a href="/guides/nursing/" className="font-medium text-[var(--color-accent)] hover:underline">
+            Nurse guides
+          </a>
         </p>
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -256,19 +274,24 @@ export function NursePerDiemCalculator() {
           <div className="mt-2 flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => setPartialTravelDays(true)}
-              className={partialTravelDays ? calcPillActive : calcPill}
-            >
-              75% first &amp; last day
-            </button>
-            <button
-              type="button"
               onClick={() => setPartialTravelDays(false)}
               className={!partialTravelDays ? calcPillActive : calcPill}
             >
               Full M&amp;IE every day
             </button>
+            <button
+              type="button"
+              onClick={() => setPartialTravelDays(true)}
+              className={partialTravelDays ? calcPillActive : calcPill}
+            >
+              75% first &amp; last day
+            </button>
           </div>
+          <p className="mt-3 text-xs leading-relaxed text-[var(--color-ink-muted)]">
+            Most travel-nurse stipend benchmarks use <strong className="text-[var(--color-ink)]">full daily M&amp;IE</strong>.
+            Choose 75% on first and last days only if your agency or tax preparer follows federal travel-day rules (common
+            for government-style itineraries).
+          </p>
         </fieldset>
 
         <p className="mt-6 text-sm font-semibold text-[var(--color-ink)]">
@@ -348,26 +371,82 @@ export function NursePerDiemCalculator() {
             <Card padding="lg">
               <h3 className="font-display text-lg text-[var(--color-ink)]">Agency stipend comparison</h3>
               <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
-                {result.stipendCompare.assignmentWeeks} week
-                {result.stipendCompare.assignmentWeeks === 1 ? "" : "s"} at{" "}
+                Roughly {result.stipendCompare.assignmentWeeks} week
+                {result.stipendCompare.assignmentWeeks === 1 ? "" : "s"} (
+                {result.dayCount} calendar days, rounded up from days ÷ 7—not your contract week count) at{" "}
                 {formatUsd(result.stipendCompare.weeklyHousing)}/wk housing +{" "}
-                {formatUsd(result.stipendCompare.weeklyMeals)}/wk meals
+                {formatUsd(result.stipendCompare.weeklyMeals)}/wk meals.
               </p>
-              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-                <div className="flex justify-between gap-4 border-b border-[var(--color-border)] pb-2">
+
+              <div className="mt-6 space-y-4">
+                <div className="rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-muted)] p-4">
+                  <h4 className="text-sm font-semibold text-[var(--color-ink)]">Housing stipend vs GSA lodging</h4>
+                  <dl className="mt-3 space-y-2 text-sm">
+                    <div className="flex justify-between gap-4">
+                      <dt className="text-[var(--color-ink-muted)]">Agency housing (est.)</dt>
+                      <dd className="font-semibold text-[var(--color-ink)]">
+                        {formatUsd(result.stipendCompare.agencyHousingTotal)}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <dt className="text-[var(--color-ink-muted)]">GSA lodging cap</dt>
+                      <dd className="font-semibold text-[var(--color-ink)]">
+                        {formatUsd(result.stipendCompare.gsaLodgingCap)}
+                      </dd>
+                    </div>
+                  </dl>
+                  <p className="mt-3 text-xs font-medium">
+                    <StipendCapLabel
+                      status={result.stipendCompare.housingStatus}
+                      overAmount={result.stipendCompare.housingOverAmount}
+                    />
+                  </p>
+                </div>
+
+                <div className="rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-muted)] p-4">
+                  <h4 className="text-sm font-semibold text-[var(--color-ink)]">Meals stipend vs GSA M&amp;IE</h4>
+                  <dl className="mt-3 space-y-2 text-sm">
+                    <div className="flex justify-between gap-4">
+                      <dt className="text-[var(--color-ink-muted)]">Agency meals (est.)</dt>
+                      <dd className="font-semibold text-[var(--color-ink)]">
+                        {formatUsd(result.stipendCompare.agencyMealsTotal)}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <dt className="text-[var(--color-ink-muted)]">GSA M&amp;IE cap</dt>
+                      <dd className="font-semibold text-[var(--color-ink)]">
+                        {formatUsd(result.stipendCompare.gsaMieCap)}
+                      </dd>
+                    </div>
+                  </dl>
+                  <p className="mt-3 text-xs font-medium">
+                    <StipendCapLabel
+                      status={result.stipendCompare.mealsStatus}
+                      overAmount={result.stipendCompare.mealsOverAmount}
+                    />
+                  </p>
+                </div>
+              </div>
+
+              <dl className="mt-6 grid gap-3 border-t border-[var(--color-border)] pt-4 text-sm sm:grid-cols-2">
+                <div className="flex justify-between gap-4">
                   <dt className="text-[var(--color-ink-muted)]">Agency total (est.)</dt>
                   <dd className="font-semibold text-[var(--color-ink)]">
                     {formatUsd(result.stipendCompare.agencyTotal)}
                   </dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-[var(--color-border)] pb-2">
+                <div className="flex justify-between gap-4">
                   <dt className="text-[var(--color-ink-muted)]">GSA benchmark total</dt>
                   <dd className="font-semibold text-[var(--color-ink)]">{formatUsd(result.gsaTotal)}</dd>
                 </div>
               </dl>
               <p className="mt-4 text-xs text-[var(--color-ink-muted)]">
-                Stipends above GSA caps may be taxable; amounts within federal per-diem limits are
-                often treated as tax-free when rules are met—not tax advice.
+                Compare each stipend to its own federal cap—housing to lodging, meals to M&amp;IE. Amounts over a cap
+                may be taxable when other rules are met.{" "}
+                <a href="/guides/nursing/stipends-vs-gsa/" className="font-medium text-[var(--color-accent)] hover:underline">
+                  Stipends vs GSA guide
+                </a>
+                —not tax advice.
               </p>
             </Card>
           )}

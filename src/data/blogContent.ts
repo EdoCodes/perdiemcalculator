@@ -84,6 +84,14 @@ export const BLOG_CONTENT: Record<string, BlogBlock[]> = {
     },
     {
       type: "h2",
+      text: "Travel nurses and allied health travelers"
+    },
+    {
+      type: "p",
+      text: "Use the travel nurse calculator at /calculator/nurse/ for assignment GSA lodging and M&IE by hospital ZIP, split housing vs meals stipend compare, and optional 75% travel-day M&IE. Read /guides/nursing/ for stipend caps and tax-home basics."
+    },
+    {
+      type: "h2",
       text: "Corporate travel teams"
     },
     {

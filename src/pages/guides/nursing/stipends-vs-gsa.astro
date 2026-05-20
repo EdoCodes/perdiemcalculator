@@ -1,0 +1,44 @@
+---
+import NursingGuideShell from "../../../components/seo/NursingGuideShell.astro";
+import { NURSING_GUIDES, nursingGuideHref } from "../../../data/nursingGuides";
+
+const guide = NURSING_GUIDES.find((g) => g.slug === "stipends-vs-gsa")!;
+---
+
+<NursingGuideShell guide={guide}>
+  <h2>Two stipends, two federal caps</h2>
+  <p>
+    Travel contracts usually pay a <strong>housing stipend</strong> and a separate <strong>meals / incidentals
+    stipend</strong>. For tax planning, each is often compared to a different GSA benchmark for your assignment
+    locality:
+  </p>
+  <ul>
+    <li><strong>Housing</strong> → total GSA <strong>lodging</strong> for the days you are away (monthly rates by city).</li>
+    <li><strong>Meals</strong> → total GSA <strong>M&amp;IE</strong> (meals and incidental expenses) for those same days.</li>
+  </ul>
+  <p>
+    Comparing only the <em>combined</em> stipend to the combined GSA total can hide a problem—for example, high
+    housing with low meals can still exceed the lodging cap even when the grand total looks reasonable.
+  </p>
+
+  <h2>What our calculator shows</h2>
+  <p>
+    The <a href="/calculator/nurse/">travel nurse calculator</a> totals GSA lodging and M&amp;IE for your assignment
+    dates, then—if you enter weekly stipends—estimates agency totals and labels each side as{" "}
+    <strong>under, within, or over</strong> the matching federal cap. Weekly amounts are multiplied by weeks rounded up
+    from calendar days (a rough compare, not your contract’s exact week count).
+  </p>
+
+  <h2>Full M&amp;IE vs 75% travel days</h2>
+  <p>
+    Many travelers use <strong>full daily M&amp;IE</strong> when benchmarking stipends. The optional{" "}
+    <strong>75% first and last day</strong> setting follows federal travel-day conventions used by government
+    itineraries and some crew tools—it is not the default for every agency or preparer.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={nursingGuideHref("tax-home-basics")}>Tax home basics</a></li>
+    <li><a href="/calculator/gsa/">Federal GSA calculator</a> (civilian government travel)</li>
+  </ul>
+</NursingGuideShell>
