@@ -1,0 +1,60 @@
+---
+import { SITE_FOOTER_COLUMNS } from "../data/siteFooter";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-16 border-t border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="flex flex-col gap-10 lg:flex-row lg:justify-between">
+      <div class="max-w-sm">
+        <a href="/" class="inline-flex items-center gap-2.5">
+          <span
+            class="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-ink)] text-sm font-bold text-white"
+            >PD</span
+          >
+          <span class="text-sm font-bold tracking-tight text-[var(--color-ink)] sm:text-base"
+            >PerDiemCalculator</span
+          >
+        </a>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+          Free per diem calculators and guides for federal travelers, airline crew, healthcare
+          travelers, and more—built on published GSA and IRS rate data.
+        </p>
+      </div>
+
+      <nav
+        class="grid gap-8 sm:grid-cols-3 sm:gap-10"
+        aria-label="Footer"
+      >
+        {
+          SITE_FOOTER_COLUMNS.map((column) => (
+            <div>
+              <h2 class="text-xs font-bold uppercase tracking-widest text-[var(--color-ink)]">
+                {column.title}
+              </h2>
+              <ul class="mt-3 space-y-2">
+                {column.links.map((link) => (
+                  <li>
+                    <a
+                      href={link.href}
+                      class="text-sm text-[var(--color-ink-muted)] transition hover:text-[var(--color-accent)]"
+                      {...link.external ? { rel: "noopener noreferrer" } : {}}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <p class="mt-10 border-t border-[var(--color-border)] pt-6 text-center text-xs text-[var(--color-ink-muted)] sm:text-left">
+      © {year} PerDiemCalculator · Planning aid only · Not payroll or tax advice · Verify with your
+      employer or agency
+    </p>
+  </div>
+</footer>

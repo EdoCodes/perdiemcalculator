@@ -30,6 +30,9 @@ function metaForPath(path: string): PageMeta {
   if (path === "/methodology/") {
     return { priority: 0.5, changefreq: ChangeFreqEnum.YEARLY };
   }
+  if (path === "/about/" || path === "/contact/") {
+    return { priority: 0.5, changefreq: ChangeFreqEnum.YEARLY };
+  }
   if (path === "/sitemap/") {
     return { priority: 0.4, changefreq: ChangeFreqEnum.MONTHLY };
   }

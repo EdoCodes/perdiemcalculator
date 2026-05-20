@@ -51,6 +51,8 @@ export const HTML_SITEMAP_SECTIONS: HtmlSitemapSection[] = [
     title: "Main",
     links: [
       { href: "/", label: "Home" },
+      { href: "/about/", label: "About" },
+      { href: "/contact/", label: "Contact" },
       { href: "/calculator/", label: "Choose a calculator" },
       { href: "/states/", label: "GSA rates by state" },
       { href: "/methodology/", label: "Methodology" },

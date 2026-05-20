@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "About PerDiemCalculator | Free per diem tools";
+const description =
+  "What PerDiemCalculator is, who it is for, and how our GSA-backed calculators and profession guides help travelers estimate lodging and M&IE.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <h1 class="font-display text-3xl sm:text-4xl">About PerDiemCalculator</h1>
+    <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
+      PerDiemCalculator.com provides <strong class="text-[var(--color-ink)]">free planning tools</strong>{" "}
+      for travelers who need realistic per diem estimates—not generic spreadsheets. We publish
+      profession-specific calculators, state rate hubs, and guides that explain how federal GSA
+      rates, IRS transportation rules, and employer policies differ.
+    </p>
+
+    <h2 class="mt-10 text-xl font-semibold text-[var(--color-ink)]">Who we serve</h2>
+    <ul class="mt-3 list-disc space-y-2 pl-5 text-[var(--color-ink-muted)]">
+      <li>Federal employees and contractors using GSA CONUS rates</li>
+      <li>Airline pilots and cabin crew (contract pay vs GSA M&amp;IE worksheets)</li>
+      <li>Teachers, travel nurses, locum physicians, field sales, police, and hospitality corporate staff</li>
+      <li>Over-the-road truck drivers on IRS transportation industry M&amp;IE</li>
+    </ul>
+
+    <h2 class="mt-10 text-xl font-semibold text-[var(--color-ink)]">Data &amp; disclaimer</h2>
+    <p class="mt-3 leading-relaxed text-[var(--color-ink-muted)]">
+      Rates are loaded from published federal sources (including the GSA Per Diem API where
+      applicable). Our tools are <strong class="text-[var(--color-ink)]">planning aids only</strong>—not
+      payroll, tax, or legal advice. Always verify amounts with your agency, employer, or tax
+      preparer. See <a class="font-medium text-[var(--color-accent)] hover:underline" href="/methodology/">methodology</a>{" "}
+      for details.
+    </p>
+
+    <p class="mt-8">
+      <a href="/calculator/" class="profession-chip inline-flex font-semibold">Browse calculators</a>
+    </p>
+  </article>
+</BaseLayout>
