@@ -1,8 +1,7 @@
 import type { BlogFaq } from "./blogTypes";
 
 export type { BlogFaq };
-import { LOCUM_VS_PER_DIEM_FAQS } from "./blog/locum-vs-per-diem";
-import { PER_DIEM_VS_RECEIPTS_FAQS } from "./blog/per-diem-vs-itemized-receipts";
+import { BLOG_FAQS } from "./blog/blogFaqs";
 import { BLOG_PEOPLE_ALSO_ASK } from "./blog/peopleAlsoAsk";
 
 export type BlogCategory = "general" | "federal" | "crew" | "education" | "trucking" | "healthcare";
@@ -34,7 +33,7 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-05-20",
     category: "healthcare",
     kind: "article",
-    faqs: LOCUM_VS_PER_DIEM_FAQS,
+    faqs: BLOG_FAQS["locum-vs-per-diem"],
     peopleAlsoAsk: BLOG_PEOPLE_ALSO_ASK["locum-vs-per-diem"]
   },
   {
@@ -46,7 +45,7 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-05-19",
     category: "general",
     kind: "article",
-    faqs: PER_DIEM_VS_RECEIPTS_FAQS,
+    faqs: BLOG_FAQS["per-diem-vs-itemized-receipts"],
     peopleAlsoAsk: BLOG_PEOPLE_ALSO_ASK["per-diem-vs-itemized-receipts"]
   },
   {
@@ -57,6 +56,7 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-05-18",
     category: "general",
     kind: "article",
+    faqs: BLOG_FAQS["what-is-per-diem"],
     peopleAlsoAsk: BLOG_PEOPLE_ALSO_ASK["what-is-per-diem"]
   },
   {
@@ -67,6 +67,7 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-05-18",
     category: "general",
     kind: "article",
+    faqs: BLOG_FAQS["choose-the-right-calculator"],
     peopleAlsoAsk: BLOG_PEOPLE_ALSO_ASK["choose-the-right-calculator"]
   },
   {
