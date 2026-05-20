@@ -9,5 +9,9 @@ export const PROFESSION_ASSETS: Partial<Record<string, ProfessionAsset>> = {
   "aviation-crew": {
     src: "/icons/professions/airplane.png",
     fullTile: true
+  },
+  "education-teacher": {
+    src: "/icons/professions/teacher.png",
+    fullTile: true
   }
 };
