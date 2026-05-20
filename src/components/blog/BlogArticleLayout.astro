@@ -35,20 +35,25 @@ const siteUrl = Astro.site?.href ?? Astro.url.origin;
 const pageUrl = new URL(`/blog/${post.slug}/`, siteUrl).href;
 const pageTitle = post.metaTitle ?? post.title;
 
-function linkifyPaths(html: string): string {
-  return html.replace(
+function linkifyPaths(text: string): string {
+  return text.replace(
     /(\/[a-z0-9\-/]+)/gi,
     '<a href="$1" class="font-medium text-[var(--color-accent)] hover:underline">$1</a>'
   );
 }
 
+/** Skip auto-linkify when markup is present — avoids breaking tags like </strong> via `/strong`. */
+function hasHtmlMarkup(text: string): boolean {
+  return /<[a-z][\s>/]/i.test(text);
+}
+
 function renderHtml(html: string): string {
-  if (/<a\s/i.test(html)) return html;
+  if (hasHtmlMarkup(html)) return html;
   return linkifyPaths(html);
 }
 
 function renderListItem(item: string): string {
-  if (/<a\s/i.test(item)) return item;
+  if (hasHtmlMarkup(item)) return item;
   return linkifyPaths(item);
 }
 
