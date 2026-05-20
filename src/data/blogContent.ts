@@ -1,9 +1,11 @@
 import type { BlogBlock } from "./blogTypes";
+import { LOCUM_VS_PER_DIEM_BLOCKS } from "./blog/locum-vs-per-diem";
 import { PER_DIEM_VS_RECEIPTS_BLOCKS } from "./blog/per-diem-vs-itemized-receipts";
 
 export type { BlogBlock } from "./blogTypes";
 
 export const BLOG_CONTENT: Record<string, BlogBlock[]> = {
+  "locum-vs-per-diem": LOCUM_VS_PER_DIEM_BLOCKS,
   "per-diem-vs-itemized-receipts": PER_DIEM_VS_RECEIPTS_BLOCKS,
   "what-is-per-diem": [
     {

@@ -2,6 +2,33 @@ import type { BlogFaq } from "../blogTypes";
 
 /** Per-post “People also ask” Q&A (shown in the orange rubric on article pages). */
 export const BLOG_PEOPLE_ALSO_ASK: Record<string, BlogFaq[]> = {
+  "locum-vs-per-diem": [
+    {
+      question: "What does locum tenens mean in healthcare?",
+      answer:
+        "Locum tenens means a clinician temporarily fills a role for another provider or facility, usually on a contract lasting weeks or months."
+    },
+    {
+      question: "What does per diem mean for doctors or nurses?",
+      answer:
+        "In staffing, per diem usually means working shift-by-shift as needed. It is different from a federal daily travel allowance, which is also called per diem."
+    },
+    {
+      question: "Is locum work the same as travel nursing?",
+      answer:
+        "Not exactly. Both may involve travel, but locum tenens traditionally refers to physicians and similar contracts; travel nursing is its own agency assignment model with similar stipend structures."
+    },
+    {
+      question: "Why do hospitals hire locum doctors?",
+      answer:
+        "Hospitals hire locums to cover leaves, fill shortages, and keep services open during peak demand without permanent hires."
+    },
+    {
+      question: "Is per diem the same as PRN?",
+      answer:
+        "They are similar; many employers use the terms interchangeably for as-needed shifts, though policies vary by facility and role."
+    }
+  ],
   "per-diem-vs-itemized-receipts": [
     {
       question: "Can you mix per diem and itemized receipts on one trip?",

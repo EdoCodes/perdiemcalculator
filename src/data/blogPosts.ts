@@ -1,10 +1,11 @@
 import type { BlogFaq } from "./blogTypes";
 
 export type { BlogFaq };
+import { LOCUM_VS_PER_DIEM_FAQS } from "./blog/locum-vs-per-diem";
 import { PER_DIEM_VS_RECEIPTS_FAQS } from "./blog/per-diem-vs-itemized-receipts";
 import { BLOG_PEOPLE_ALSO_ASK } from "./blog/peopleAlsoAsk";
 
-export type BlogCategory = "general" | "federal" | "crew" | "education" | "trucking";
+export type BlogCategory = "general" | "federal" | "crew" | "education" | "trucking" | "healthcare";
 
 export type BlogPost = {
   slug: string;
@@ -24,6 +25,18 @@ export type BlogPost = {
 export const BLOG_INDEX = "/blog/";
 
 export const BLOG_POSTS: BlogPost[] = [
+  {
+    slug: "locum-vs-per-diem",
+    metaTitle: "Locum vs. Per Diem: Key Differences for Healthcare Professionals",
+    title: "Locum vs. Per Diem: What's the Difference?",
+    description:
+      "Learn the key differences between locum tenens and per diem work, including pay, schedule flexibility, assignment length, and which option fits your career goals best.",
+    publishedAt: "2026-05-20",
+    category: "healthcare",
+    kind: "article",
+    faqs: LOCUM_VS_PER_DIEM_FAQS,
+    peopleAlsoAsk: BLOG_PEOPLE_ALSO_ASK["locum-vs-per-diem"]
+  },
   {
     slug: "per-diem-vs-itemized-receipts",
     metaTitle: "Per Diem vs Itemized Receipts: Difference, Pros, and Best Use Cases",
@@ -103,7 +116,8 @@ const CATEGORY_LABELS: Record<BlogCategory, string> = {
   federal: "Federal GSA",
   crew: "Airline crew",
   education: "Teachers",
-  trucking: "Truck drivers"
+  trucking: "Truck drivers",
+  healthcare: "Healthcare"
 };
 
 export function blogCategoryLabel(category: BlogCategory): string {
