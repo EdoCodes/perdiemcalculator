@@ -214,16 +214,16 @@ const toc = blocks.filter((b) => b.type === "h2" && "id" in b && b.id);
       }
     </div>
 
-    <BlogPeopleAlsoAsk items={peopleAlsoAsk} class="mt-14" />
-
-    <BlogRunNumbersCta class="mt-14" />
-
     <BlogFaqAccordion
       items={faqs}
       title="Frequently asked questions"
       headingId="faq-heading"
       class="mt-14"
     />
+
+    <BlogPeopleAlsoAsk items={peopleAlsoAsk} class="mt-14" />
+
+    <BlogRunNumbersCta class="mt-14" />
 
     <p class="mt-12 text-sm text-[var(--color-ink-muted)]">
       <a href={BLOG_INDEX} class="font-semibold text-[var(--color-accent)] hover:underline">
