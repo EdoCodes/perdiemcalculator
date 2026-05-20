@@ -47,6 +47,14 @@ After any env change: **Deploys → Clear cache and deploy**.
 - `robots.txt` is generated at build from `PUBLIC_SITE_URL`.
 - After deploy, submit the sitemap index in [Google Search Console](https://search.google.com/search-console).
 
+### Contact form (Netlify)
+
+The `/contact/` page uses [Netlify Forms](https://docs.netlify.com/forms/setup/). After deploy:
+
+1. **Netlify → Site configuration → Forms → Form notifications**
+2. Add **Email notification** → `perdiemcalculator@gmail.com`
+3. Submit a test message on `/contact/` and confirm it arrives
+
 ## Local setup
 
 Copy `.env.example` → `.env` and fill keys from Supabase + GSA.

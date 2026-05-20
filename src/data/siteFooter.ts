@@ -1,3 +1,5 @@
+import { CONTACT_EMAIL } from "./siteContact";
+
 export type FooterLink = { href: string; label: string; external?: boolean };
 
 export type FooterColumn = {
@@ -28,8 +30,8 @@ export const SITE_FOOTER_COLUMNS: FooterColumn[] = [
     links: [
       { href: "/contact/", label: "Contact" },
       {
-        href: "mailto:hello@perdiemcalculator.com",
-        label: "hello@perdiemcalculator.com",
+        href: `mailto:${CONTACT_EMAIL}`,
+        label: CONTACT_EMAIL,
         external: true
       }
     ]
