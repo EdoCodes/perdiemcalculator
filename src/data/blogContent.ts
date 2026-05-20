@@ -110,6 +110,22 @@ export const BLOG_CONTENT: Record<string, BlogBlock[]> = {
     },
     {
       type: "h2",
+      text: "Police officers and law enforcement"
+    },
+    {
+      type: "p",
+      text: "Use the police travel calculator at /calculator/police/ for training, court, and deployment trips—GSA lodging and M&IE by destination ZIP with optional department nightly lodging and daily M&IE compare. Read /guides/police/ for when per diem applies and how agency policy relates to GSA."
+    },
+    {
+      type: "h2",
+      text: "Hotel managers and hospitality corporate staff"
+    },
+    {
+      type: "p",
+      text: "Use the hotel management calculator at /calculator/hotel/ for property visits, audits, and conferences—compare company reimbursement to GSA caps. See /guides/hotel/ for corporate travel and multi-property trip basics."
+    },
+    {
+      type: "h2",
       text: "Corporate travel teams"
     },
     {

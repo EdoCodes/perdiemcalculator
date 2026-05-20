@@ -1,0 +1,34 @@
+---
+import PoliceGuideShell from "../../../components/seo/PoliceGuideShell.astro";
+import { POLICE_GUIDES, policeGuideHref } from "../../../data/policeGuides";
+
+const guide = POLICE_GUIDES.find((g) => g.slug === "gsa-vs-department-policy")!;
+---
+
+<PoliceGuideShell guide={guide}>
+  <h2>Federal GSA caps as a benchmark</h2>
+  <p>
+    Many municipal, county, and state agencies reimburse overnight travel using{" "}
+    <strong>federal per diem</strong>—often GSA CONUS lodging and M&amp;IE for the destination locality. GSA
+    rates set a common ceiling for lodging and meals &amp; incidental expenses on CONUS trips.
+  </p>
+  <p>
+    Your department may publish its own schedule (flat nightly lodging, fixed daily M&amp;IE, or per-diem
+    tables by city). Compare each category separately in our{" "}
+    <a href="/calculator/police/">police travel calculator</a>.
+  </p>
+
+  <h2>When agency rates differ from GSA</h2>
+  <p>
+    Union contracts, state law, and federal grant rules can require higher or lower reimbursement. Amounts{" "}
+    <strong>above</strong> accountable-plan or policy limits may be taxable wages or require additional
+    documentation—confirm with payroll and your bargaining agreement.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={policeGuideHref("when-per-diem-applies")}>When per diem applies</a></li>
+    <li><a href="/calculator/gsa/">Federal GSA calculator</a></li>
+    <li><a href="/states/">State rate hubs</a></li>
+  </ul>
+</PoliceGuideShell>

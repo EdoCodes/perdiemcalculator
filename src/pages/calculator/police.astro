@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
+import { PolicePerDiemCalculator } from "../../components/calculator/PolicePerDiemCalculator";
+import { ProfessionPageBrand } from "../../components/profession/ProfessionLogo";
+
+const title = "Police & law enforcement travel per diem calculator | Per Diem Calculator";
+const description =
+  "Estimate GSA per diem for out-of-town training, court, and deployment travel—compare department lodging and M&IE to federal CONUS caps.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL("/calculator/police/", siteUrl).href;
+
+const appJsonLd = {
+  "@type": "WebApplication",
+  name: "Police travel per diem calculator",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  url: pageUrl,
+  description
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={appJsonLd}>
+  <section
+    class="calculator-theme calc-panel -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
+  >
+    <CalculatorProfessionBar client:load professionId="police-officer" />
+
+    <div class="mb-8 max-w-2xl">
+      <div class="mt-4">
+        <ProfessionPageBrand
+          professionId="police-officer"
+          title="Police travel per diem"
+          subtitle="Training, court, mutual aid, and deployment: GSA lodging and M&IE by destination ZIP—compare department nightly lodging and daily M&IE to federal caps."
+        />
+      </div>
+    </div>
+
+    <p class="mb-6 text-sm text-[var(--color-ink-muted)]">
+      <a href="/guides/police/" class="font-medium text-[var(--color-accent)] hover:underline">Police guides</a>
+      — when per diem applies and GSA vs department policy.
+    </p>
+
+    <PolicePerDiemCalculator client:load />
+  </section>
+</BaseLayout>

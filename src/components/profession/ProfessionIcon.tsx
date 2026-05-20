@@ -23,6 +23,10 @@ export function ProfessionIcon({ id, className = "h-8 w-8" }: Props) {
       return <HealthcareIcon className={className} />;
     case "field-sales":
       return <BriefcaseRouteIcon className={className} />;
+    case "police-officer":
+      return <PoliceShieldIcon className={className} />;
+    case "hotel-manager":
+      return <HotelBuildingIcon className={className} />;
     default:
       return <GenericTravelIcon className={className} />;
   }
@@ -197,6 +201,67 @@ function BriefcaseRouteIcon({ className }: { className: string }) {
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function PoliceShieldIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
+      <path
+        fill="currentColor"
+        fillOpacity={0.15}
+        d="M24 4 8 12v12c0 10.5 6.8 16.4 16 20 9.2-3.6 16-9.5 16-20V12L24 4Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        fill="currentColor"
+        d="M24 6.5 10 13.2v10.8c0 8.8 5.6 13.8 14 17.2 8.4-3.4 14-8.4 14-17.2V13.2L24 6.5Z"
+      />
+      <path
+        d="M24 14v12M18 20h12"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeOpacity={0.85}
+      />
+    </svg>
+  );
+}
+
+function HotelBuildingIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 48 48" fill="none" aria-hidden>
+      <rect
+        x="8"
+        y="10"
+        width="32"
+        height="30"
+        rx="2"
+        fill="currentColor"
+        fillOpacity={0.12}
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <path fill="currentColor" d="M10 12h28v26H10V12Z" fillOpacity={0.2} />
+      <rect x="14" y="16" width="6" height="5" rx="0.5" fill="currentColor" fillOpacity={0.45} />
+      <rect x="28" y="16" width="6" height="5" rx="0.5" fill="currentColor" fillOpacity={0.45} />
+      <rect x="14" y="24" width="6" height="5" rx="0.5" fill="currentColor" fillOpacity={0.45} />
+      <rect x="28" y="24" width="6" height="5" rx="0.5" fill="currentColor" fillOpacity={0.45} />
+      <path
+        fill="currentColor"
+        fillOpacity={0.65}
+        d="M20 32h8v8H20v-8Z"
+      />
+      <path
+        d="M6 40h36"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeOpacity={0.35}
       />
     </svg>
   );

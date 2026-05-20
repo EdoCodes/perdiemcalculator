@@ -163,3 +163,91 @@ export const SALES_ASSIGNMENT_CONFIG: AssignmentCalculatorConfig = {
   calculateLabel: "Calculate trip per diem",
   overCapMessage: "Over GSA cap by {amount} — excess may be taxable wages"
 };
+
+export const POLICE_ASSIGNMENT_CONFIG: AssignmentCalculatorConfig = {
+  storageProfessionId: "police-officer",
+  primaryBadge: "Law enforcement travel",
+  intro: (
+    <>
+      Estimate <strong className="text-[var(--color-ink)]">GSA per diem</strong> for out-of-town{" "}
+      training, court, mutual aid, or deployment travel—then compare your department&apos;s nightly lodging
+      and daily M&amp;IE rates to federal CONUS caps.
+    </>
+  ),
+  zipLabel: "Destination ZIP (training, court, or assignment)",
+  startDateLabel: "Travel start",
+  endDateLabel: "Travel end",
+  travelDayHelp: (
+    <>
+      Many agencies use <strong className="text-[var(--color-ink)]">full GSA M&amp;IE</strong> as a benchmark.
+      Use 75% first/last days only if your department or state policy follows federal travel-day rules.
+    </>
+  ),
+  compareMode: "daily",
+  compareSectionTitle: "Department per diem (optional — policy compare)",
+  compareHousingLabel: "Nightly lodging rate ($)",
+  compareMealsLabel: "Daily M&IE rate ($)",
+  compareHousingPlaceholder: "e.g. 150",
+  compareMealsPlaceholder: "e.g. 59",
+  compareCardTitle: "Department reimbursement vs GSA",
+  housingCompareHeading: "Lodging vs GSA lodging cap",
+  mealsCompareHeading: "M&IE vs GSA M&IE cap",
+  employerHousingRowLabel: "Department lodging (est.)",
+  employerMealsRowLabel: "Department M&IE (est.)",
+  compareGuideHref: "/guides/police/gsa-vs-department-policy/",
+  compareGuideText: "GSA vs department policy",
+  compareFooterNote: (
+    <>
+      Policies vary by agency and state. Amounts above GSA may be taxable or require receipts—confirm with
+      your department and union contract.
+    </>
+  ),
+  guidesHref: "/guides/police/",
+  guidesLinkText: "Police guides",
+  calculateLabel: "Calculate travel per diem",
+  overCapMessage: "Over GSA cap by {amount} — verify with department policy"
+};
+
+export const HOTEL_ASSIGNMENT_CONFIG: AssignmentCalculatorConfig = {
+  storageProfessionId: "hotel-manager",
+  primaryBadge: "Hotel management travel",
+  intro: (
+    <>
+      Estimate <strong className="text-[var(--color-ink)]">GSA per diem</strong> for corporate trips—property
+      openings, audits, brand conferences—then compare company nightly lodging and daily M&amp;IE to federal
+      caps.
+    </>
+  ),
+  zipLabel: "Destination ZIP (property or meeting city)",
+  startDateLabel: "Trip start",
+  endDateLabel: "Trip end",
+  travelDayHelp: (
+    <>
+      Hospitality corporate policies often mirror <strong className="text-[var(--color-ink)]">full GSA M&amp;IE</strong>.
+      Use 75% travel days only if your employer follows federal first/last-day conventions.
+    </>
+  ),
+  compareMode: "daily",
+  compareSectionTitle: "Company per diem (optional — policy compare)",
+  compareHousingLabel: "Nightly lodging reimbursement ($)",
+  compareMealsLabel: "Daily M&IE reimbursement ($)",
+  compareHousingPlaceholder: "e.g. 175",
+  compareMealsPlaceholder: "e.g. 64",
+  compareCardTitle: "Company reimbursement vs GSA",
+  housingCompareHeading: "Lodging reimbursement vs GSA lodging",
+  mealsCompareHeading: "M&IE reimbursement vs GSA M&IE",
+  employerHousingRowLabel: "Company lodging (est.)",
+  employerMealsRowLabel: "Company M&IE (est.)",
+  compareGuideHref: "/guides/hotel/corporate-travel-gsa/",
+  compareGuideText: "Corporate travel & GSA guide",
+  compareFooterNote: (
+    <>
+      Hotel brands and management companies set their own travel policies. Reimbursement above GSA may be
+      taxable under accountable-plan rules.
+    </>
+  ),
+  guidesHref: "/guides/hotel/",
+  guidesLinkText: "Hotel guides",
+  calculateLabel: "Calculate trip per diem",
+  overCapMessage: "Over GSA cap by {amount} — excess may be taxable wages"
+};

@@ -1,0 +1,35 @@
+---
+import HotelGuideShell from "../../../components/seo/HotelGuideShell.astro";
+import { HOTEL_GUIDES, hotelGuideHref } from "../../../data/hotelGuides";
+
+const guide = HOTEL_GUIDES.find((g) => g.slug === "corporate-travel-gsa")!;
+---
+
+<HotelGuideShell guide={guide}>
+  <h2>Why hospitality companies cite GSA</h2>
+  <p>
+    Hotel brands and management companies often align employee travel reimbursement with{" "}
+    <strong>IRS accountable-plan</strong> ideas and <strong>GSA CONUS per diem</strong> for the meeting or
+    property city. That gives finance a defensible cap for nightly lodging and daily M&amp;IE without
+    negotiating every market ad hoc.
+  </p>
+  <p>
+    Reimbursement <strong>above</strong> GSA for lodging or M&amp;IE may be taxable wages if your plan does not
+    allow it. Compare categories separately in our{" "}
+    <a href="/calculator/hotel/">hotel management calculator</a>.
+  </p>
+
+  <h2>Employee vs guest travel</h2>
+  <p>
+    This site covers <strong>employee</strong> corporate travel (GM visits, corporate training, brand
+    conferences)—not guest folios or OTA commissions. Your T&amp;E policy and Concur (or similar) rules
+    define substantiation and card usage.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={hotelGuideHref("multi-property-trips")}>Multi-property trips</a></li>
+    <li><a href="/guides/sales/accountable-plan-gsa/">Accountable plan &amp; GSA (field sales)</a></li>
+    <li><a href="/calculator/gsa/">Federal GSA calculator</a></li>
+  </ul>
+</HotelGuideShell>

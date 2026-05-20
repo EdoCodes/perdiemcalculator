@@ -57,6 +57,16 @@ const toneByProfession: Record<
     bg: "bg-gradient-to-br from-indigo-600 to-violet-800 shadow-lg shadow-indigo-900/30",
     fg: "text-white",
     ring: "ring-indigo-400/45"
+  },
+  "police-officer": {
+    bg: "bg-gradient-to-br from-slate-700 to-blue-900 shadow-lg shadow-slate-900/35",
+    fg: "text-white",
+    ring: "ring-blue-400/40"
+  },
+  "hotel-manager": {
+    bg: "bg-gradient-to-br from-amber-600 to-orange-800 shadow-lg shadow-amber-900/30",
+    fg: "text-white",
+    ring: "ring-amber-400/45"
   }
 };
 

@@ -1,0 +1,38 @@
+---
+import HotelGuideShell from "../../../components/seo/HotelGuideShell.astro";
+import { HOTEL_GUIDES, hotelGuideHref } from "../../../data/hotelGuides";
+
+const guide = HOTEL_GUIDES.find((g) => g.slug === "multi-property-trips")!;
+---
+
+<HotelGuideShell guide={guide}>
+  <h2>Multi-city hospitality travel</h2>
+  <p>
+    Area managers and corporate teams often string together several properties or a conference plus site
+    visits in one trip. For per diem planning, use the <strong>ZIP of each overnight stay</strong>—GSA
+    locality rates change by destination, not by your home office.
+  </p>
+  <p>
+    For a single destination and date range, our <a href="/calculator/hotel/">calculator</a> estimates total
+    lodging and M&amp;IE. Multi-leg trips may need one calculation per city if rates differ materially.
+  </p>
+
+  <h2>What to enter</h2>
+  <ul>
+    <li>Primary meeting or property <strong>ZIP</strong></li>
+    <li>Trip <strong>start and end dates</strong></li>
+    <li>Optional: company <strong>nightly lodging</strong> and <strong>daily M&amp;IE</strong> reimbursement</li>
+  </ul>
+
+  <h2>Documentation</h2>
+  <p>
+    Keep itineraries, approval emails, and expense reports. Corporate cards and accountable plans may require
+    returning unsubstantiated amounts within employer deadlines.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={hotelGuideHref("corporate-travel-gsa")}>Corporate travel &amp; GSA</a></li>
+    <li><a href="/calculator/hotel/">Hotel management calculator</a></li>
+  </ul>
+</HotelGuideShell>

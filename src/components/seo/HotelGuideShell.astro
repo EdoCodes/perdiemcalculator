@@ -1,0 +1,136 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  HOTEL_CALCULATOR_HREF,
+  HOTEL_GUIDES_INDEX,
+  HOTEL_GUIDES,
+  hotelGuideHref,
+  type HotelGuideMeta
+} from "../../data/hotelGuides";
+
+type Props = {
+  guide: HotelGuideMeta;
+  jsonLd?: Record<string, unknown>[];
+};
+
+const { guide, jsonLd = [] } = Astro.props;
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL(hotelGuideHref(guide.slug), siteUrl).href;
+
+const webPageLd = {
+  "@type": "WebPage",
+  name: guide.title,
+  description: guide.description,
+  url: pageUrl
+};
+
+const breadcrumbLd = {
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Hotel guides",
+      item: new URL(HOTEL_GUIDES_INDEX, siteUrl).href
+    },
+    { "@type": "ListItem", position: 3, name: guide.shortLabel, item: pageUrl }
+  ]
+};
+
+const related = HOTEL_GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 3);
+---
+
+<BaseLayout
+  title={`${guide.title} | Per Diem Calculator`}
+  description={guide.description}
+  jsonLd={[webPageLd, breadcrumbLd, ...jsonLd]}
+>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-accent)]" href={HOTEL_GUIDES_INDEX}>Hotel guides</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">{guide.shortLabel}</span>
+    </nav>
+
+    <h1 class="font-display mt-6 text-3xl sm:text-4xl">{guide.title}</h1>
+    <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      {guide.description}
+    </p>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href={HOTEL_CALCULATOR_HREF} class="profession-chip font-semibold">
+        Open hotel management calculator
+      </a>
+      <a href="/calculator/sales/" class="profession-chip">Field sales calculator</a>
+    </div>
+
+    <div class="prose-guide mt-10 space-y-6 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      <slot />
+    </div>
+
+    <section
+      class="mt-12 rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] p-6"
+    >
+      <h2 class="text-lg font-semibold text-[var(--color-ink)]">More for hospitality travel</h2>
+      <ul class="mt-4 space-y-2 text-sm">
+        {
+          related.map((g) => (
+            <li>
+              <a
+                class="font-medium text-[var(--color-accent)] hover:underline"
+                href={hotelGuideHref(g.slug)}
+              >
+                {g.shortLabel}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="font-medium text-[var(--color-accent)] hover:underline" href={HOTEL_GUIDES_INDEX}>
+            All hotel guides
+          </a>
+        </li>
+        <li>
+          <a class="font-medium text-[var(--color-accent)] hover:underline" href={HOTEL_CALCULATOR_HREF}>
+            Hotel per diem tool
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+      Planning aid only · Not tax, payroll, or legal advice ·
+      <a class="text-[var(--color-accent)] hover:underline" href="/methodology/">Methodology</a>
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-guide :global(h2) {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .prose-guide :global(strong) {
+    color: var(--color-ink);
+  }
+  .prose-guide :global(ul) {
+    margin-top: 0.75rem;
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-guide :global(li) {
+    margin-top: 0.35rem;
+  }
+  .prose-guide :global(a) {
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+  .prose-guide :global(a:hover) {
+    text-decoration: underline;
+  }
+</style>

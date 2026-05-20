@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { HOTEL_CALCULATOR_HREF, HOTEL_GUIDES, hotelGuideHref } from "../../../data/hotelGuides";
+
+const title = "Hotel management per diem guides | Per Diem Calculator";
+const description =
+  "Guides on GSA per diem for hospitality corporate travel, company reimbursement policy, and multi-property trip planning.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">Hotel guides</span>
+    </nav>
+
+    <h1 class="font-display mt-6 text-3xl sm:text-4xl">Hotel management per diem guides</h1>
+    <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
+      GMs, area managers, and corporate hospitality staff travel for openings, audits, and brand events. Many
+      companies benchmark reimbursement to <strong class="text-[var(--color-ink)]">federal GSA per diem</strong>.
+      Use the calculator, then read the guides below.
+    </p>
+
+    <a href={HOTEL_CALCULATOR_HREF} class="profession-chip mt-6 inline-flex font-semibold">
+      Hotel management per diem calculator
+    </a>
+
+    <ul class="mt-10 space-y-4">
+      {
+        HOTEL_GUIDES.map((g) => (
+          <li class="rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] p-5">
+            <a href={hotelGuideHref(g.slug)} class="font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)]">
+              {g.title}
+            </a>
+            <p class="mt-2 text-sm text-[var(--color-ink-muted)]">{g.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</BaseLayout>

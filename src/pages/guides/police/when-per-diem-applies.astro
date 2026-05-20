@@ -1,0 +1,39 @@
+---
+import PoliceGuideShell from "../../../components/seo/PoliceGuideShell.astro";
+import { POLICE_GUIDES, policeGuideHref } from "../../../data/policeGuides";
+
+const guide = POLICE_GUIDES.find((g) => g.slug === "when-per-diem-applies")!;
+---
+
+<PoliceGuideShell guide={guide}>
+  <h2>Common trips that trigger per diem</h2>
+  <p>
+  Law enforcement travelers often receive per diem when they are away from their{" "}
+  <strong>regular duty station</strong> overnight for official business, including:
+  </p>
+  <ul>
+    <li>Regional or state police academies and in-service training</li>
+    <li>Out-of-town court testimony or extradition travel</li>
+    <li>Mutual aid, disaster deployment, or multi-jurisdiction details</li>
+    <li>Federal task force or grant-funded assignments with federal travel rules</li>
+  </ul>
+
+  <h2>What per diem usually covers</h2>
+  <p>
+    <strong>Lodging</strong> is reimbursed per night (policy may exclude the last night if you return home
+    the same calendar day). <strong>M&amp;IE</strong> covers meals and incidental expenses for each day away.
+    Actual-expense travel with receipts is a separate policy path—your travel order should say which applies.
+  </p>
+
+  <h2>Using the calculator</h2>
+  <p>
+    Enter the training, court, or assignment <strong>ZIP</strong>, trip dates, and optional department nightly
+    lodging and daily M&amp;IE to see GSA totals and any over-cap gap.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={policeGuideHref("gsa-vs-department-policy")}>GSA vs department policy</a></li>
+    <li><a href="/calculator/police/">Police travel calculator</a></li>
+  </ul>
+</PoliceGuideShell>

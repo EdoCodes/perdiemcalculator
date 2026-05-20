@@ -112,6 +112,30 @@ export const PROFESSIONS: Profession[] = [
     available: true,
     badges: ["Accountable plan", "GSA compare"],
     highlights: ["Trip date range", "Daily employer rates", "Sales guides"]
+  },
+  {
+    id: "police-officer",
+    name: "Police officer & law enforcement",
+    shortName: "Police / LE",
+    category: "government",
+    description:
+      "Out-of-town training, court, mutual aid, and deployment travel—GSA lodging and M&IE by destination ZIP vs department per diem.",
+    href: "/calculator/police/",
+    available: true,
+    badges: ["GSA compare", "Department policy"],
+    highlights: ["Training & court travel", "Daily lodging/M&IE", "Police guides"]
+  },
+  {
+    id: "hotel-manager",
+    name: "Hotel manager & hospitality corporate",
+    shortName: "Hotel management",
+    category: "field",
+    description:
+      "Property openings, audits, and brand conferences—estimate GSA caps and compare company nightly lodging and daily M&IE reimbursement.",
+    href: "/calculator/hotel/",
+    available: true,
+    badges: ["Corporate travel", "GSA compare"],
+    highlights: ["Multi-property trips", "Company reimbursement", "Hotel guides"]
   }
 ];
 
@@ -129,5 +153,7 @@ export function getProfessionForPath(pathname: string): Profession | undefined {
   if (pathname.startsWith("/calculator/nurse")) return getProfessionById("travel-nurse");
   if (pathname.startsWith("/calculator/locum")) return getProfessionById("locum-tenens");
   if (pathname.startsWith("/calculator/sales")) return getProfessionById("field-sales");
+  if (pathname.startsWith("/calculator/police")) return getProfessionById("police-officer");
+  if (pathname.startsWith("/calculator/hotel")) return getProfessionById("hotel-manager");
   return undefined;
 }
