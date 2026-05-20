@@ -44,7 +44,7 @@ function linkifyPaths(text: string): string {
 
 /** Skip auto-linkify when markup is present — avoids breaking tags like </strong> via `/strong`. */
 function hasHtmlMarkup(text: string): boolean {
-  return /<[a-z][\s>/]/i.test(text);
+  return /<[a-z]/i.test(text);
 }
 
 function renderHtml(html: string): string {
