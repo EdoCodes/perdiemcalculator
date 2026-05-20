@@ -1,0 +1,34 @@
+---
+import SalesGuideShell from "../../../components/seo/SalesGuideShell.astro";
+import { SALES_GUIDES, salesGuideHref } from "../../../data/salesGuides";
+
+const guide = SALES_GUIDES.find((g) => g.slug === "territory-trip-basics")!;
+---
+
+<SalesGuideShell guide={guide}>
+  <h2>Multi-day territory trips</h2>
+  <p>
+    A classic field-sales trip: fly or drive to a metro, stay multiple nights, visit customers, return home.{" "}
+    <strong>Lodging</strong> is usually reimbursed per night (except often the last night if you travel home).{" "}
+    <strong>M&amp;IE</strong> applies to each calendar day away.
+  </p>
+
+  <h2>What to enter in the calculator</h2>
+  <ul>
+    <li>Customer or territory <strong>ZIP</strong> for GSA locality</li>
+    <li>Trip <strong>start and end dates</strong></li>
+    <li>Optional: your company&apos;s <strong>nightly lodging</strong> and <strong>daily M&amp;IE</strong> reimbursement</li>
+  </ul>
+
+  <h2>Documentation</h2>
+  <p>
+    Keep itineraries, lodging receipts when required, and expense reports. Accountable plans require returning
+    unsubstantiated amounts within employer deadlines.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={salesGuideHref("accountable-plan-gsa")}>Accountable plan &amp; GSA</a></li>
+    <li><a href="/calculator/sales/">Field sales calculator</a></li>
+  </ul>
+</SalesGuideShell>

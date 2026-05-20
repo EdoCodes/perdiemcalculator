@@ -92,6 +92,22 @@ export const BLOG_CONTENT: Record<string, BlogBlock[]> = {
     },
     {
       type: "h2",
+      text: "Locum tenens physicians"
+    },
+    {
+      type: "p",
+      text: "Use the locum calculator at /calculator/locum/ for facility ZIP lookup, weekly stipend vs GSA caps, and assignment dates—same framework as travel nursing. See /guides/locum/ for locum-specific guides."
+    },
+    {
+      type: "h2",
+      text: "Field sales representatives"
+    },
+    {
+      type: "p",
+      text: "Use the field sales calculator at /calculator/sales/ for territory trip GSA totals and accountable-plan compare (nightly lodging + daily M&IE vs federal caps). Read /guides/sales/ for accountable-plan and trip documentation basics."
+    },
+    {
+      type: "h2",
       text: "Corporate travel teams"
     },
     {

@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
+import { SalesPerDiemCalculator } from "../../components/calculator/SalesPerDiemCalculator";
+import { ProfessionPageBrand } from "../../components/profession/ProfessionLogo";
+
+const title = "Field sales per diem calculator | Per Diem Calculator";
+const description =
+  "Estimate GSA per diem for territory trips and compare employer lodging and M&IE reimbursement to federal accountable-plan caps.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL("/calculator/sales/", siteUrl).href;
+
+const appJsonLd = {
+  "@type": "WebApplication",
+  name: "Field sales per diem calculator",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  url: pageUrl,
+  description
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={appJsonLd}>
+  <section
+    class="calculator-theme calc-panel -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
+  >
+    <CalculatorProfessionBar client:load professionId="field-sales" />
+
+    <div class="mb-8 max-w-2xl">
+      <div class="mt-4">
+        <ProfessionPageBrand
+          professionId="field-sales"
+          title="Field sales per diem"
+          subtitle="Multi-day territory travel: GSA lodging and M&IE by destination ZIP—compare nightly lodging and daily M&IE reimbursement to federal caps."
+        />
+      </div>
+    </div>
+
+    <p class="mb-6 text-sm text-[var(--color-ink-muted)]">
+      <a href="/guides/sales/" class="font-medium text-[var(--color-accent)] hover:underline">Sales guides</a>
+      — accountable plans and territory trip basics.
+    </p>
+
+    <SalesPerDiemCalculator client:load />
+  </section>
+</BaseLayout>

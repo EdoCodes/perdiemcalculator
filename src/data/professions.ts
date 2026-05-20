@@ -1,4 +1,4 @@
-export type ProfessionCategory = "government" | "aviation" | "education" | "field";
+export type ProfessionCategory = "government" | "aviation" | "education" | "healthcare" | "field";
 
 export type Profession = {
   id: string;
@@ -20,7 +20,8 @@ export const PROFESSION_CATEGORIES: {
   { id: "government", label: "Government" },
   { id: "aviation", label: "Aviation" },
   { id: "education", label: "Education" },
-  { id: "field", label: "More soon" }
+  { id: "healthcare", label: "Healthcare" },
+  { id: "field", label: "Field & sales" }
 ];
 
 export const PROFESSIONS: Profession[] = [
@@ -80,7 +81,7 @@ export const PROFESSIONS: Profession[] = [
     id: "travel-nurse",
     name: "Travel nurse & allied health traveler",
     shortName: "Travel nurse",
-    category: "field",
+    category: "healthcare",
     description:
       "13-week assignments: GSA lodging and M&IE at the hospital city, optional 75% travel days, and weekly stipend compare.",
     href: "/calculator/nurse/",
@@ -89,15 +90,28 @@ export const PROFESSIONS: Profession[] = [
     highlights: ["Hospital ZIP lookup", "Weekly stipend vs GSA", "Travel-day toggle"]
   },
   {
+    id: "locum-tenens",
+    name: "Locum tenens physician",
+    shortName: "Locum tenens",
+    category: "healthcare",
+    description:
+      "Temporary practice assignments: GSA lodging and M&IE at the facility city, weekly stipend compare, and travel-day options.",
+    href: "/calculator/locum/",
+    available: true,
+    badges: ["GSA stipend compare", "Facility ZIP"],
+    highlights: ["Weekly housing vs GSA", "Meals vs M&IE caps", "Locum guides"]
+  },
+  {
     id: "field-sales",
     name: "Field sales representative",
     shortName: "Field sales",
     category: "field",
-    description: "Company policy and IRS accountable-plan per diem.",
-    href: "#",
-    available: false,
-    badges: ["Coming soon"],
-    highlights: []
+    description:
+      "Territory trips: GSA per diem by destination ZIP, compare nightly lodging and daily M&IE reimbursement to accountable-plan caps.",
+    href: "/calculator/sales/",
+    available: true,
+    badges: ["Accountable plan", "GSA compare"],
+    highlights: ["Trip date range", "Daily employer rates", "Sales guides"]
   }
 ];
 
@@ -113,5 +127,7 @@ export function getProfessionForPath(pathname: string): Profession | undefined {
   if (pathname.startsWith("/calculator/teacher")) return getProfessionById("education-teacher");
   if (pathname.startsWith("/calculator/trucking")) return getProfessionById("trucking");
   if (pathname.startsWith("/calculator/nurse")) return getProfessionById("travel-nurse");
+  if (pathname.startsWith("/calculator/locum")) return getProfessionById("locum-tenens");
+  if (pathname.startsWith("/calculator/sales")) return getProfessionById("field-sales");
   return undefined;
 }

@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { LOCUM_CALCULATOR_HREF, LOCUM_GUIDES, locumGuideHref } from "../../../data/locumGuides";
+
+const title = "Locum tenens per diem guides | Per Diem Calculator";
+const description =
+  "Guides on locum stipends vs GSA caps, tax home rules, and federal per diem for temporary physician assignments.";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">Locum guides</span>
+    </nav>
+
+    <h1 class="font-display mt-6 text-3xl sm:text-4xl">Locum tenens per diem guides</h1>
+    <p class="mt-4 text-lg leading-relaxed text-[var(--color-ink-muted)]">
+      Locum contracts often split pay into <strong class="text-[var(--color-ink)]">housing and meal stipends</strong>{" "}
+      benchmarked to GSA for the hospital or clinic city. Start with the calculator, then read below.
+    </p>
+
+    <a href={LOCUM_CALCULATOR_HREF} class="profession-chip mt-6 inline-flex font-semibold">
+      Locum per diem calculator
+    </a>
+
+    <ul class="mt-10 space-y-4">
+      {
+        LOCUM_GUIDES.map((g) => (
+          <li class="rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] p-5">
+            <a href={locumGuideHref(g.slug)} class="font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)]">
+              {g.title}
+            </a>
+            <p class="mt-2 text-sm text-[var(--color-ink-muted)]">{g.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</BaseLayout>

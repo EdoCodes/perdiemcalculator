@@ -1,0 +1,28 @@
+---
+import LocumGuideShell from "../../../components/seo/LocumGuideShell.astro";
+import { LOCUM_GUIDES, locumGuideHref } from "../../../data/locumGuides";
+
+const guide = LOCUM_GUIDES.find((g) => g.slug === "tax-home-basics")!;
+---
+
+<LocumGuideShell guide={guide}>
+  <h2>Tax home and temporary assignments</h2>
+  <p>
+    Locum physicians often maintain a <strong>tax home</strong> where they usually practice or live between assignments.
+    When you work a <strong>temporary</strong> locum job away from that area, duplicate lodging and meal costs may be
+    reimbursed or paid as stipends—if you meet IRS substantiation rules and stay within federal per-diem limits.
+  </p>
+
+  <h2>What to confirm with your recruiter</h2>
+  <ul>
+    <li>Expected assignment length and whether the role is treated as temporary</li>
+    <li>How housing and M&amp;IE stipends are documented on pay statements</li>
+    <li>Whether stipends are benchmarked to GSA for the facility city</li>
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={locumGuideHref("stipends-vs-gsa")}>Locum stipends vs GSA</a></li>
+    <li><a href="/calculator/locum/">Locum per diem calculator</a></li>
+  </ul>
+</LocumGuideShell>

@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
+import { LocumPerDiemCalculator } from "../../components/calculator/LocumPerDiemCalculator";
+import { ProfessionPageBrand } from "../../components/profession/ProfessionLogo";
+
+const title = "Locum tenens per diem calculator | Per Diem Calculator";
+const description =
+  "Estimate locum assignment per diem with GSA lodging and M&IE by facility ZIP. Compare weekly housing and meal stipends to federal caps.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL("/calculator/locum/", siteUrl).href;
+
+const appJsonLd = {
+  "@type": "WebApplication",
+  name: "Locum tenens per diem calculator",
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  url: pageUrl,
+  description
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={appJsonLd}>
+  <section
+    class="calculator-theme calc-panel -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
+  >
+    <CalculatorProfessionBar client:load professionId="locum-tenens" />
+
+    <div class="mb-8 max-w-2xl">
+      <div class="mt-4">
+        <ProfessionPageBrand
+          professionId="locum-tenens"
+          title="Locum tenens per diem"
+          subtitle="Physician and advanced-practice locums: GSA benchmarks at the practice city, with weekly stipend compare split by housing and meals."
+        />
+      </div>
+    </div>
+
+    <p class="mb-6 text-sm text-[var(--color-ink-muted)]">
+      <a href="/guides/locum/" class="font-medium text-[var(--color-accent)] hover:underline">Locum guides</a>
+      — stipends vs GSA and tax-home basics.
+    </p>
+
+    <LocumPerDiemCalculator client:load />
+  </section>
+</BaseLayout>

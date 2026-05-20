@@ -1,0 +1,33 @@
+---
+import LocumGuideShell from "../../../components/seo/LocumGuideShell.astro";
+import { LOCUM_GUIDES, locumGuideHref } from "../../../data/locumGuides";
+
+const guide = LOCUM_GUIDES.find((g) => g.slug === "stipends-vs-gsa")!;
+---
+
+<LocumGuideShell guide={guide}>
+  <h2>Separate caps for housing and meals</h2>
+  <p>
+    Locum agencies typically pay a <strong>housing stipend</strong> and a <strong>meals / incidentals stipend</strong>.
+    Each is compared to a different GSA limit for your practice locality—lodging totals vs M&amp;IE totals—not one
+    blended number.
+  </p>
+
+  <h2>Using the locum calculator</h2>
+  <p>
+    The <a href="/calculator/locum/">locum per diem calculator</a> loads GSA rates for your facility ZIP and assignment
+    dates. Enter weekly stipends to see whether housing or meals alone exceeds the federal benchmark.
+  </p>
+
+  <h2>Related roles</h2>
+  <p>
+    Travel nurses and allied health travelers use the same GSA framework—see the{" "}
+    <a href="/calculator/nurse/">travel nurse calculator</a> and{" "}
+    <a href="/guides/nursing/stipends-vs-gsa/">nursing stipends guide</a> for parallel examples.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={locumGuideHref("tax-home-basics")}>Tax home basics for locums</a></li>
+  </ul>
+</LocumGuideShell>

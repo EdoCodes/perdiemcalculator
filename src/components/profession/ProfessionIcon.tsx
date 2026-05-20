@@ -19,6 +19,7 @@ export function ProfessionIcon({ id, className = "h-8 w-8" }: Props) {
     case "trucking":
       return <SemiTruckIcon className={className} />;
     case "travel-nurse":
+    case "locum-tenens":
       return <HealthcareIcon className={className} />;
     case "field-sales":
       return <BriefcaseRouteIcon className={className} />;

@@ -48,9 +48,15 @@ const toneByProfession: Record<
     bg: "bg-gradient-to-br from-rose-500/20 to-pink-500/15",
     fg: "text-rose-300"
   },
+  "locum-tenens": {
+    bg: "bg-gradient-to-br from-teal-600 to-cyan-800 shadow-lg shadow-teal-900/30",
+    fg: "text-white",
+    ring: "ring-teal-400/45"
+  },
   "field-sales": {
-    bg: "bg-[var(--color-surface-muted)]",
-    fg: "text-[var(--color-ink-muted)]"
+    bg: "bg-gradient-to-br from-indigo-600 to-violet-800 shadow-lg shadow-indigo-900/30",
+    fg: "text-white",
+    ring: "ring-indigo-400/45"
   }
 };
 

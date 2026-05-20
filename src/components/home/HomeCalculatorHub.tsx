@@ -213,11 +213,6 @@ export function HomeCalculatorHub() {
           </ul>
         )}
 
-        {PROFESSIONS.some((p) => !p.available) && !query.trim() && (
-          <p className="border-t border-[var(--color-border)] px-5 py-4 text-center text-xs text-[var(--color-ink-muted)]">
-            Field sales calculator coming soon.
-          </p>
-        )}
       </div>
     </div>
   );

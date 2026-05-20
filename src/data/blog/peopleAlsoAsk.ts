@@ -71,6 +71,16 @@ export const BLOG_PEOPLE_ALSO_ASK: Record<string, BlogFaq[]> = {
       question: "How do travel nurse stipends relate to GSA per diem?",
       answer:
         "Agencies often benchmark tax-free housing and meal stipends separately against GSA lodging and M&IE for the assignment city. Use the travel nurse calculator to compare each stipend to its own federal cap."
+    },
+    {
+      question: "Do locum physicians use the same per diem rules as travel nurses?",
+      answer:
+        "Many locum contracts use the same GSA lodging and M&IE benchmarks for stipends. Use the locum calculator for facility ZIP and weekly stipend compare; rules still depend on tax home and assignment facts."
+    },
+    {
+      question: "How does field sales per diem work with GSA?",
+      answer:
+        "Employers with accountable plans often reimburse lodging and M&IE up to GSA locality rates. The field sales calculator compares nightly lodging and daily M&IE reimbursement to those federal caps."
     }
   ]
 };

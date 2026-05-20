@@ -1,0 +1,32 @@
+---
+import SalesGuideShell from "../../../components/seo/SalesGuideShell.astro";
+import { SALES_GUIDES, salesGuideHref } from "../../../data/salesGuides";
+
+const guide = SALES_GUIDES.find((g) => g.slug === "accountable-plan-gsa")!;
+---
+
+<SalesGuideShell guide={guide}>
+  <h2>Accountable plans and GSA limits</h2>
+  <p>
+    Under a typical <strong>accountable plan</strong>, your employer can reimburse lodging and M&amp;IE up to{" "}
+    <strong>federal per diem</strong> (often GSA locality rates) without treating the payment as wages—if you
+    substantiate the travel and return excess amounts.
+  </p>
+  <p>
+    Reimbursement <strong>above</strong> GSA for lodging or M&amp;IE may be taxable wages on your W-2. Compare each
+    category separately; our <a href="/calculator/sales/">field sales calculator</a> uses nightly lodging and daily
+    M&amp;IE inputs for that reason.
+  </p>
+
+  <h2>Not the same as commission pay</h2>
+  <p>
+    Per diem for overnight trips is separate from commission, draws, and car allowances. Your employee handbook defines
+    what is excludable.
+  </p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={salesGuideHref("territory-trip-basics")}>Territory trip basics</a></li>
+    <li><a href="/calculator/gsa/">Federal GSA calculator</a></li>
+  </ul>
+</SalesGuideShell>
