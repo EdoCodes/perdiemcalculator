@@ -42,7 +42,7 @@ const guides = sorted.filter((p) => p.kind === "guide");
                 <p class="text-xs font-semibold uppercase tracking-wide text-[var(--color-accent)]">
                   {blogCategoryLabel(post.category)} · {formatBlogDate(post.publishedAt)}
                 </p>
-                <h3 class="blog-heading mt-2 font-semibold text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
+                <h3 class="mt-2 font-semibold text-[var(--color-ink-muted)] hover:text-[var(--color-accent)]">
                   {post.title}
                 </h3>
                 <p class="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
@@ -70,7 +70,7 @@ const guides = sorted.filter((p) => p.kind === "guide");
                 href={blogPostHref(post)}
                 class="group flex flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-4 py-3 transition hover:border-[var(--color-border-strong)] sm:flex-row sm:items-center sm:justify-between"
               >
-                <span class="blog-heading font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
+                <span class="font-medium text-[var(--color-ink-muted)] group-hover:text-[var(--color-accent)]">
                   {post.title}
                 </span>
                 <span class="mt-1 text-xs text-[var(--color-ink-muted)] sm:mt-0">

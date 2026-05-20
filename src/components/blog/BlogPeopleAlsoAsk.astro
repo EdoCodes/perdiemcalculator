@@ -27,7 +27,7 @@ const { items, class: className } = Astro.props;
       <div class="mt-4 space-y-2">
         {items.map((item) => (
           <details class="group rounded-lg border border-[var(--color-accent)]/25 bg-[var(--color-surface-elevated)]">
-            <summary class="blog-heading cursor-pointer px-4 py-3 text-sm font-semibold text-[var(--color-ink)] marker:content-none">
+            <summary class="cursor-pointer px-4 py-3 text-sm font-semibold text-[var(--color-ink-muted)] marker:content-none hover:text-[var(--color-accent)]">
               <span class="flex items-center justify-between gap-3">
                 {item.question}
                 <span class="shrink-0 text-[var(--color-accent)] transition group-open:rotate-45" aria-hidden>

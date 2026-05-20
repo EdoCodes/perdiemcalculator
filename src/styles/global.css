@@ -535,3 +535,16 @@
 .blog-heading-link:hover {
   color: var(--color-accent);
 }
+
+/* Blog body: readable muted text; headings stay navy via .blog-heading */
+.prose-blog {
+  color: var(--color-ink-muted);
+}
+
+.dark .blog-rubric {
+  --color-accent-muted: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface-elevated));
+}
+
+.blog-rubric {
+  color: var(--color-ink-muted);
+}
