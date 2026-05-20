@@ -6,6 +6,10 @@ export type ProfessionAsset = {
 };
 
 export const PROFESSION_ASSETS: Partial<Record<string, ProfessionAsset>> = {
+  "government-federal": {
+    src: "/icons/professions/federal.png",
+    fullTile: true
+  },
   "aviation-crew": {
     src: "/icons/professions/airplane.png",
     fullTile: true
