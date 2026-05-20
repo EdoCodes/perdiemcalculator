@@ -4,9 +4,9 @@ import { CalculatorProfessionBar } from "../../components/profession/CalculatorP
 import { NursePerDiemCalculator } from "../../components/calculator/NursePerDiemCalculator";
 import { ProfessionPageBrand } from "../../components/profession/ProfessionLogo";
 
-const title = "Travel nurse per diem calculator | Per Diem Calculator";
+const title = "Travel nurse & allied health per diem calculator | Per Diem Calculator";
 const description =
-  "Estimate travel nurse assignment per diem with federal GSA lodging and M&IE by hospital ZIP. Compare agency housing and meal stipends to GSA benchmarks.";
+  "Estimate travel nurse and allied health assignment per diem with federal GSA lodging and M&IE by hospital ZIP. Compare agency housing and meal stipends to GSA benchmarks.";
 
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
 const pageUrl = new URL("/calculator/nurse/", siteUrl).href;
@@ -35,7 +35,7 @@ const faqJsonLd = {
 
 const appJsonLd = {
   "@type": "WebApplication",
-  name: "Travel nurse per diem calculator",
+  name: "Travel nurse & allied health per diem calculator",
   applicationCategory: "FinanceApplication",
   operatingSystem: "Web",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -54,8 +54,8 @@ const appJsonLd = {
       <div class="mt-4">
         <ProfessionPageBrand
           professionId="travel-nurse"
-          title="Travel nurse per diem calculator"
-          subtitle="Assignment-based estimates using GSA lodging and M&IE for your hospital city—optionally compare weekly agency housing and meal stipends to federal benchmarks."
+          title="Travel nurse & allied health per diem"
+          subtitle="RNs, therapists, and other travelers on 13-week assignments: GSA lodging and M&IE at your hospital city—optionally compare weekly agency housing and meal stipends to federal benchmarks."
         />
       </div>
     </div>

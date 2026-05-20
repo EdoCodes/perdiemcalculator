@@ -78,7 +78,7 @@ export const PROFESSIONS: Profession[] = [
   },
   {
     id: "travel-nurse",
-    name: "Travel nurse or healthcare traveler",
+    name: "Travel nurse & allied health traveler",
     shortName: "Travel nurse",
     category: "field",
     description:

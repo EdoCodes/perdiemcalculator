@@ -171,7 +171,7 @@ export function NursePerDiemCalculator() {
     <div className="space-y-8">
       <Card padding="lg" className="border-[var(--color-border-strong)]">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="accent">Travel nurse</Badge>
+          <Badge variant="accent">Travel nurse & allied health</Badge>
           <Badge variant="muted">GSA benchmark</Badge>
         </div>
         <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
