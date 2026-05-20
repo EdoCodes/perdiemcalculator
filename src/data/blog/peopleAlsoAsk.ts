@@ -53,24 +53,34 @@ export const BLOG_PEOPLE_ALSO_ASK: Record<string, BlogFaq[]> = {
   ],
   "what-is-per-diem": [
     {
-      question: "How is per diem calculated?",
+      question: "What does it mean to be paid by per diem?",
       answer:
-        "You multiply the approved daily rate by each eligible travel day. Federal GSA tables split lodging and M&IE by city; IRS transportation rates use a single daily M&IE amount for qualifying drivers."
+        "Your employer pays a fixed daily amount for eligible travel expenses—usually meals and incidentals, and sometimes lodging—instead of reimbursing every receipt. You keep any unused portion only if your plan allows it; many policies require returning excess amounts."
     },
     {
-      question: "Who qualifies for per diem?",
+      question: "What does $100 a day per diem mean?",
       answer:
-        "Employees and contractors who travel away from home overnight for business may receive per diem if their employer or client policy allows it. Tax deductibility has separate IRS rules."
+        "You may receive up to $100 for each eligible travel day toward covered costs (often M&IE, or a combined allowance if your policy rolls categories together). Compare that figure to federal GSA M&IE for your destination and to your actual meal costs."
     },
     {
-      question: "Is per diem the same as a travel stipend?",
+      question: "What does $30 per diem mean?",
       answer:
-        "Not always. A stipend can be a fixed payment regardless of travel days. Per diem is usually tied to specific trip dates and destinations."
+        "A $30 daily rate is usually a partial meal allowance or one meal tier (for example dinner only), not full federal M&IE for a city. Check whether the amount is per day, per meal, or before taxes."
     },
     {
-      question: "What is the difference between GSA and IRS per diem?",
+      question: "What does $200 a day per diem mean?",
       answer:
-        "GSA publishes federal CONUS locality rates for government travel. The IRS sets special transportation industry meal amounts for eligible over-the-road drivers—different tables and rules."
+        "That often signals a generous combined lodging-and-meals cap or a high-cost market policy. Compare it to GSA lodging plus M&IE for your trip ZIP—$200 may be below, at, or above federal benchmarks depending on the city and season."
+    },
+    {
+      question: "Is it good to get paid per diem?",
+      answer:
+        "Per diem simplifies expense reporting and can improve cash flow when rates match real costs. Downsides: if the daily rate is low you pay out of pocket, and tax treatment depends on whether your employer uses an accountable plan and whether amounts exceed policy limits."
+    },
+    {
+      question: "Does per diem get added to your paycheck?",
+      answer:
+        "It may appear as a separate reimbursement line, advance, or expense payout—not always mixed with hourly wages. Reimbursements under a qualifying accountable plan are often not taxable wages; amounts paid without substantiation or above policy may be taxable and reported on your W-2."
     }
   ],
   "choose-the-right-calculator": [
