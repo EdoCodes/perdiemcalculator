@@ -19,10 +19,9 @@ export const SITE_FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: "Sitemap",
     links: [
-      { href: "/sitemap/", label: "HTML sitemap" },
+      { href: "/sitemap/", label: "Sitemap" },
       { href: "/calculator/", label: "All calculators" },
-      { href: "/states/", label: "GSA rates by state" },
-      { href: "/sitemap-index.xml", label: "XML sitemap (for search engines)", external: true }
+      { href: "/states/", label: "GSA rates by state" }
     ]
   },
   {
