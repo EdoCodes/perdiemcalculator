@@ -418,7 +418,7 @@ export function CrewCalculatorPanel({
 
   return (
     <CrewLayout>
-      <Card padding="lg" className="border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
+      <Card padding="lg">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="accent">Airline crew</Badge>
           <Badge variant="muted">{roleLabel}</Badge>

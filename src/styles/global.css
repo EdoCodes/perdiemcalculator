@@ -160,7 +160,7 @@
     position: relative;
     border-radius: 1rem;
     border: 1px solid var(--color-border-strong);
-    background: var(--color-surface-elevated);
+    background: var(--color-surface-muted);
     padding: 1.5rem 1.375rem;
     box-shadow: 0 12px 40px -16px color-mix(in srgb, var(--color-ink) 12%, transparent);
   }
@@ -201,7 +201,7 @@
   .calculator-theme.calc-panel {
     border: 1px solid var(--color-border-strong);
     background: var(--color-surface-elevated);
-    box-shadow: 0 8px 32px -12px color-mix(in srgb, var(--color-ink) 10%, transparent);
+    box-shadow: 0 12px 40px -16px color-mix(in srgb, var(--color-ink) 14%, transparent);
   }
 
   /* Section headings with orange accent bar */

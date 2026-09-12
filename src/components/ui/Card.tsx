@@ -12,7 +12,7 @@ export function Card({
   const pad = padding === "none" ? "" : padding === "lg" ? "p-8" : "p-6";
   return (
     <div
-      className={`rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] shadow-sm shadow-black/5 dark:shadow-black/20 ${pad} ${className}`}
+      className={`rounded-2xl border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] shadow-[0_8px_24px_-12px_rgba(0,33,71,0.14)] dark:shadow-black/30 ${pad} ${className}`}
     >
       {children}
     </div>

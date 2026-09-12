@@ -19,7 +19,7 @@ import { TripSummary } from "./TripSummary";
 
 import { calcInput } from "../../lib/calcUi";
 
-export function PerDiemCalculator() {
+export function PerDiemCalculator({ embed = false }: { embed?: boolean } = {}) {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [state, setState] = useState("CA");
@@ -242,7 +242,13 @@ export function PerDiemCalculator() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
+    <div
+      className={
+        embed
+          ? "space-y-5"
+          : "grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start"
+      }
+    >
       <div className="space-y-6">
         {dbBanner ? (
           <ConnectionHelp
@@ -257,7 +263,7 @@ export function PerDiemCalculator() {
             }}
           />
         ) : null}
-        <Card>
+        <Card className="bg-[var(--color-surface-muted)]">
           <StepHeader n={1} title="Trip dates" />
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <label className="block text-sm font-medium text-[var(--color-ink)]">
@@ -281,7 +287,7 @@ export function PerDiemCalculator() {
           ) : null}
         </Card>
 
-        <Card>
+        <Card className="bg-[var(--color-surface-muted)]">
           <StepHeader n={2} title="Destination" />
           <div className="mt-4 flex flex-wrap gap-2">
             {(["picker", "zip"] as const).map((tab) => (
@@ -368,7 +374,7 @@ export function PerDiemCalculator() {
           ) : null}
         </Card>
 
-        <Card>
+        <Card className="bg-[var(--color-surface-muted)]">
           <StepHeader n={3} title="Options" />
           <details className="mt-4 group">
             <summary className="cursor-pointer text-sm font-semibold text-[var(--color-primary)]">

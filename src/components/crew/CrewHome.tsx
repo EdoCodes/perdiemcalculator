@@ -90,7 +90,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
         saved in this browser only. No account required. Clearing site data removes your log.
       </div>
 
-      <Card padding="lg" className="border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
+      <Card padding="lg">
         <h2 className="calc-section-title">Add new trip</h2>
         <p className="mt-1 text-sm text-[var(--color-ink-muted)]">
           Enter dates and layover city, then add to your log in one step.
@@ -431,7 +431,7 @@ export function CrewHome({ year, onYearChange, prefill, onPrefillConsumed }: Pro
                 const inYear = new Date(trip.tripStart + "T12:00:00").getFullYear() === year;
                 return (
                   <li key={trip.id} className={inYear ? "" : "opacity-55"}>
-                    <Card padding="md" className="border-[var(--color-border)]">
+                    <Card padding="md">
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
                           <p className="font-semibold text-[var(--color-ink)]">{trip.label}</p>

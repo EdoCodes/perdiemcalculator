@@ -44,7 +44,7 @@ export function CrewOverview({ trips, year, onNewTrip, onImport, onViewLog, onEd
         />
       </div>
 
-      <Card padding="lg" className="border-[var(--color-border)]">
+      <Card padding="lg">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold text-[var(--color-ink)]">Reports</h2>

@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
 import { PerDiemCalculator } from "../../components/calculator/PerDiemCalculator";
+import { EmbedOnYourSite } from "../../components/widget/EmbedCodeCard";
 import { ProfessionPageBrand } from "../../components/profession/ProfessionLogo";
 import GsaCalculatorSeo from "../../components/seo/GsaCalculatorSeo.astro";
 import { GSA_CALCULATOR_FAQS } from "../../data/gsaCalculatorFaqs";
@@ -48,6 +49,10 @@ const jsonLd = [
           subtitle="Federal employees and contractors: select destination and trip dates. FY2026 lodging caps and M&IE, including the 75% first- and last-day rule."
         />
       </div>
+    </div>
+
+    <div class="mb-6">
+      <EmbedOnYourSite client:load />
     </div>
 
     <PerDiemCalculator client:load />

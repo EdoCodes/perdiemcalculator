@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { HomeCalculatorHub } from "../components/home/HomeCalculatorHub";
 import HomeHowItWorks from "../components/home/HomeHowItWorks.astro";
 import { PerDiemCalculator } from "../components/calculator/PerDiemCalculator";
+import { EmbedOnYourSite } from "../components/widget/EmbedCodeCard";
 import { US_STATES } from "../data/usStates";
 import { GSA_CALCULATOR_FAQS } from "../data/gsaCalculatorFaqs";
 
@@ -65,6 +66,9 @@ const jsonLd = [
     class="calculator-theme calc-panel mt-10 -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
     aria-label="GSA per diem calculator"
   >
+    <div class="mb-4">
+      <EmbedOnYourSite client:load />
+    </div>
     <PerDiemCalculator client:load />
   </section>
 

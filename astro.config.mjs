@@ -23,6 +23,13 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
+      filter: (page) => {
+        try {
+          return !new URL(page).pathname.startsWith("/embed");
+        } catch {
+          return !page.includes("/embed");
+        }
+      },
       serialize: serializeSitemapItem,
       chunks: sitemapChunks
     })

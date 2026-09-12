@@ -33,6 +33,9 @@ function metaForPath(path: string): PageMeta {
   if (path === "/about/" || path === "/contact/") {
     return { priority: 0.5, changefreq: ChangeFreqEnum.YEARLY };
   }
+  if (path === "/widget/") {
+    return { priority: 0.7, changefreq: ChangeFreqEnum.MONTHLY };
+  }
   if (path === "/sitemap/") {
     return { priority: 0.4, changefreq: ChangeFreqEnum.MONTHLY };
   }

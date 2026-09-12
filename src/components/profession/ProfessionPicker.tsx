@@ -46,7 +46,7 @@ function ProfessionCard({
     "group relative flex h-full flex-col rounded-xl border p-5 text-left transition",
     disabled
       ? "cursor-not-allowed border-[var(--color-border)] bg-[var(--color-surface-muted)]/60 opacity-65"
-      : "cursor-pointer border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] hover:border-[var(--color-accent)]"
+      : "cursor-pointer border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] shadow-[0_8px_24px_-12px_rgba(0,33,71,0.12)] hover:border-[var(--color-accent)] hover:shadow-md"
   ].join(" ");
 
   const body = (

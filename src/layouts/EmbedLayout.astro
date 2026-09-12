@@ -1,0 +1,31 @@
+---
+import "../styles/global.css";
+
+type Props = {
+  title: string;
+  description: string;
+};
+
+const { title, description } = Astro.props;
+const canonical = Astro.site
+  ? new URL("/widget/", Astro.site).href
+  : new URL("/widget/", Astro.url.origin).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-dvh bg-[var(--color-surface-elevated)] antialiased text-[var(--color-ink)]">
+    <main class="mx-auto max-w-[680px] px-3 py-4 sm:px-4">
+      <slot />
+    </main>
+  </body>
+</html>

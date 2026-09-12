@@ -45,8 +45,8 @@ function CalculatorTile({
   const className = [
     "home-calc-card group flex flex-col items-center rounded-xl border px-4 py-6 text-center transition",
     disabled
-      ? "cursor-not-allowed border-[var(--color-border)] bg-[var(--color-surface-muted)]/50 opacity-60"
-      : "border-[var(--color-border)] bg-[var(--color-surface-elevated)] hover:border-[var(--color-accent)] hover:shadow-md"
+      ? "cursor-not-allowed border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)]/70 opacity-60"
+      : "border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] shadow-[0_8px_24px_-12px_rgba(0,33,71,0.12)] hover:border-[var(--color-accent)] hover:shadow-md"
   ].join(" ");
 
   const inner = (
@@ -158,7 +158,7 @@ export function HomeCalculatorHub() {
       </div>
 
       {lastProfession && (
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-4 py-3 text-sm sm:justify-start">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-elevated)] px-4 py-3 text-sm shadow-[0_8px_24px_-12px_rgba(0,33,71,0.12)] sm:justify-start">
           <ProfessionLogo professionId={lastProfession.id} size="sm" />
           <span className="text-[var(--color-ink-muted)]">
             Continue with{" "}

@@ -264,7 +264,7 @@ export function TeacherPerDiemCalculator() {
 
   return (
     <div className="space-y-6">
-      <Card padding="lg" className="border-[var(--color-border)] bg-[var(--color-surface-elevated)]">
+      <Card padding="lg">
         <motionTeacherHeader roleLabel={roleLabel} purposeLabel={purposeLabel} rateMode={rateMode} />
 
         <div className="mt-6 flex flex-wrap gap-2">

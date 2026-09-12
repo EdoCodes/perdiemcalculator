@@ -1,0 +1,38 @@
+---
+import EmbedLayout from "../../layouts/EmbedLayout.astro";
+import { PerDiemCalculator } from "../../components/calculator/PerDiemCalculator";
+import { DEFAULT_SITE_URL } from "../../config/sitemapSeo";
+
+const site = (Astro.site?.href ?? DEFAULT_SITE_URL).replace(/\/+$/, "");
+---
+
+<EmbedLayout
+  title="GSA per diem calculator"
+  description="FY2026 GSA lodging and M&IE calculator for embedding on other websites."
+>
+  <div class="calculator-theme">
+    <p class="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--color-accent)]">
+      Free widget
+    </p>
+    <h1 class="mt-1 text-lg font-semibold tracking-tight text-[var(--color-ink)]">
+      GSA per diem calculator
+    </h1>
+    <p class="mt-1 text-sm text-[var(--color-ink-muted)]">
+      FY2026 federal lodging + M&amp;IE, including the 75% first- and last-day rule.
+    </p>
+    <div class="mt-4">
+      <PerDiemCalculator client:load embed />
+    </div>
+    <p class="mt-5 border-t border-[var(--color-border)] pt-3 text-center text-xs text-[var(--color-ink-muted)]">
+      Planning aid only · Not payroll or tax advice ·
+      <a
+        class="font-semibold text-[var(--color-accent)] hover:underline"
+        href={`${site}/`}
+        target="_blank"
+        rel="noopener"
+      >
+        PerDiemCalculator.com
+      </a>
+    </p>
+  </div>
+</EmbedLayout>
