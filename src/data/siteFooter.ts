@@ -27,5 +27,15 @@ export const SITE_FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: "Contact us",
     links: [{ href: "/contact/", label: "Send a message" }]
+  },
+  {
+    title: "Calculator Suite",
+    links: [
+      {
+        href: "https://www.mybenefitscalculator.com",
+        label: "Visit our calculator suite for more useful free calculators",
+        external: true
+      }
+    ]
   }
 ];
