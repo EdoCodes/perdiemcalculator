@@ -176,23 +176,7 @@
   }
 
   .home-calc-panel::before {
-    content: "";
-    position: absolute;
-    top: -0.5rem;
-    left: 50%;
-    width: 1rem;
-    height: 1rem;
-    transform: translateX(-50%) rotate(45deg);
-    border-top: 1px solid var(--color-border-strong);
-    border-left: 1px solid var(--color-border-strong);
-    background: var(--color-surface-elevated);
-  }
-
-  @media (min-width: 1024px) {
-    .home-calc-panel::before {
-      left: auto;
-      right: 18%;
-    }
+    display: none;
   }
 
   .site-feature-icon {

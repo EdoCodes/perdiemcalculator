@@ -1,9 +1,9 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import StateRatesSection from "../../components/state/StateRatesSection.astro";
-import { US_STATES } from "../../data/usStates";
-import { fiscalYearForDate } from "../../lib/perdiem/fiscalYear";
-import { fetchLocalitiesByStateForBuild } from "../../lib/rates/buildTimeStateData";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import StateRatesSection from "../../../components/state/StateRatesSection.astro";
+import { US_STATES } from "../../../data/usStates";
+import { fiscalYearForDate } from "../../../lib/perdiem/fiscalYear";
+import { fetchLocalitiesByStateForBuild } from "../../../lib/rates/buildTimeStateData";
 
 export async function getStaticPaths() {
   const fy = fiscalYearForDate(new Date());
@@ -20,7 +20,7 @@ export async function getStaticPaths() {
 
 interface Props {
   state: (typeof US_STATES)[number];
-  localities: import("../../lib/rates/buildTimeStateData").StateLocalitySummary[];
+  localities: import("../../../lib/rates/buildTimeStateData").StateLocalitySummary[];
   fiscalYear: number;
 }
 
@@ -62,7 +62,7 @@ const faqJsonLd = {
       name: `How do I find per diem for a city in ${state.name}?`,
       acceptedAnswer: {
         "@type": "Answer",
-        text: `Use the PerDiemCalculator with ${state.name} pre-selected, choose a locality or enter a ZIP code, and select your trip dates. The tool applies the correct federal fiscal year and shows day-by-day lodging and M&IE.`
+        text: `Open a high-cost locality page from the table below, or use the PerDiemCalculator with ${state.name} pre-selected. Choose a locality or enter a ZIP code and your trip dates.`
       }
     },
     {
@@ -103,8 +103,8 @@ const faqJsonLd = {
         much of the state and separate, often higher, caps for designated high-cost localities.
       </p>
       <p>
-        This page summarizes published GSA data for FY {fiscalYear}. For trip-specific totals
-        (travel-day rules, meal deductions, and seasonal lodging by month), use the
+        This page summarizes published GSA data for FY {fiscalYear}. Open a locality for the monthly
+        lodging table, or use the
         <a class="font-medium text-[var(--color-primary)] hover:underline" href={calcHref}>
           CONUS calculator
         </a>
@@ -166,9 +166,9 @@ const faqJsonLd = {
           How do I look up per diem for a specific city or ZIP?
         </summary>
         <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-          Open the <a class="text-[var(--color-primary)] hover:underline" href={calcHref}>calculator</a
-          >, pick a locality from the dropdown or enter a ZIP code, and enter your travel dates. ZIP
-          lookup maps to the GSA destination ID (DID) for that area.
+          Open a locality from the table above, or use the{" "}
+          <a class="text-[var(--color-primary)] hover:underline" href={calcHref}>calculator</a>
+          with a ZIP code. ZIP lookup maps to the GSA destination ID (DID) for that area.
         </p>
       </details>
       <details

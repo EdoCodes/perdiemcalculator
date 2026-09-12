@@ -1,5 +1,9 @@
 ---
 import type { StateLocalitySummary } from "../../lib/rates/buildTimeStateData";
+import {
+  GSA_STANDARD_LODGING,
+  GSA_STANDARD_MIE
+} from "../../data/gsaCalculatorFaqs";
 import { formatUsd } from "../../lib/format";
 
 type Props = {
@@ -15,6 +19,12 @@ const { stateName, stateAbbr, fiscalYear, localities, calcHref } = Astro.props;
 const standard = localities.find((l) => l.isStandard);
 const nsas = localities.filter((l) => !l.isStandard);
 const hasData = localities.length > 0;
+const standardMie =
+  standard?.mieTotal && standard.mieTotal > 0 ? standard.mieTotal : GSA_STANDARD_MIE;
+const standardLodging =
+  standard?.peakLodging && standard.peakLodging > 0
+    ? standard.peakLodging
+    : GSA_STANDARD_LODGING;
 ---
 
 <section class="mt-10 space-y-8" aria-labelledby="rates-heading">
@@ -59,14 +69,14 @@ const hasData = localities.length > 0;
             <dl class="mt-4 grid gap-3 sm:grid-cols-2">
               <div>
                 <dt class="text-xs font-medium text-[var(--color-ink-muted)]">M&amp;IE (daily)</dt>
-                <dd class="text-xl font-bold text-[var(--color-ink)]">{formatUsd(standard.mieTotal)}</dd>
+                <dd class="text-xl font-bold text-[var(--color-ink)]">{formatUsd(standardMie)}</dd>
               </div>
               <div>
                 <dt class="text-xs font-medium text-[var(--color-ink-muted)]">
                   Peak lodging (monthly cap)
                 </dt>
                 <dd class="text-xl font-bold text-[var(--color-ink)]">
-                  {standard.peakLodging != null ? formatUsd(standard.peakLodging) : "—"}
+                  {formatUsd(standardLodging)}
                 </dd>
               </div>
             </dl>
@@ -82,8 +92,8 @@ const hasData = localities.length > 0;
               Higher-cost localities ({nsas.length})
             </h3>
             <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
-              GSA publishes elevated caps for these destinations. Lodging varies by month; peak
-              lodging is the highest monthly maximum in FY {fiscalYear}.
+              GSA publishes elevated caps for these destinations. Open a locality for the monthly
+              lodging table; peak lodging is the highest monthly maximum in FY {fiscalYear}.
             </p>
             <div class="mt-4 overflow-x-auto rounded-2xl border border-[var(--color-border)]">
               <table class="min-w-full text-left text-sm">
@@ -98,7 +108,18 @@ const hasData = localities.length > 0;
                 <tbody class="divide-y divide-[var(--color-border)]">
                   {nsas.map((loc) => (
                     <tr class="bg-[var(--color-surface-elevated)]">
-                      <td class="px-4 py-3 font-medium text-[var(--color-ink)]">{loc.city}</td>
+                      <td class="px-4 py-3 font-medium text-[var(--color-ink)]">
+                        {loc.slug ? (
+                          <a
+                            class="text-[var(--color-primary)] hover:underline"
+                            href={`/states/${stateAbbr.toLowerCase()}/${loc.slug}/`}
+                          >
+                            {loc.city}
+                          </a>
+                        ) : (
+                          loc.city
+                        )}
+                      </td>
                       <td class="px-4 py-3 text-[var(--color-ink-muted)]">{loc.county ?? "—"}</td>
                       <td class="px-4 py-3 text-[var(--color-ink)]">{formatUsd(loc.mieTotal)}</td>
                       <td class="px-4 py-3 text-[var(--color-ink)]">

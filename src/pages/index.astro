@@ -1,93 +1,92 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { HomeCalculatorHub } from "../components/home/HomeCalculatorHub";
-import { ProfessionLogo } from "../components/profession/ProfessionLogo";
+import HomeHowItWorks from "../components/home/HomeHowItWorks.astro";
+import { PerDiemCalculator } from "../components/calculator/PerDiemCalculator";
 import { US_STATES } from "../data/usStates";
+import { GSA_CALCULATOR_FAQS } from "../data/gsaCalculatorFaqs";
 
-const featureProfessions = [
-  {
-    id: "government-federal" as const,
-    title: "Federal GSA rates",
-    body: "Localities, monthly lodging caps, and M&IE synced from the federal Per Diem API."
-  },
-  {
-    id: "aviation-crew" as const,
-    title: "Airline crew",
-    body: "Per day or per hour away from base—domestic and international, with your contract rates."
-  },
-  {
-    id: "education-teacher" as const,
-    title: "Teachers & school staff",
-    body: "Conferences, field trips, and PD—daily M&IE plus lodging from your district policy."
-  }
-];
-
-const siteTagline =
-  "Built for travelers who need accurate estimates—not generic spreadsheets.";
-
-const title = "Per diem calculator for every profession";
-const description = `${siteTagline} Estimate federal GSA CONUS, airline crew, teacher, truck driver, and corporate travel ROI per diem.`;
+const title = "Per Diem Calculator 2026 — GSA Lodging & M&IE Rates";
+const description =
+  "Free 2026 GSA per diem calculator: look up CONUS lodging and M&IE by city, ZIP, or state, including the 75% first- and last-day travel rule.";
 
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
 
 const jsonLd = [
   {
-    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "GSA Per Diem Calculator",
+    alternateName: [
+      "Per diem calculator",
+      "Federal per diem calculator",
+      "CONUS per diem calculator",
+      "GSA lodging calculator",
+      "M&IE calculator"
+    ],
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Any",
+    url: siteUrl,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    description
+  },
+  {
     "@type": "WebSite",
     name: "PerDiemCalculator",
     url: siteUrl,
-    description,
-    alternateName: siteTagline
+    description
+  },
+  {
+    "@type": "FAQPage",
+    mainEntity: GSA_CALCULATOR_FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a }
+    }))
   }
 ];
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd} hero>
-  <HomeCalculatorHub client:load />
+  <section class="max-w-3xl" aria-labelledby="home-h1">
+    <h1
+      id="home-h1"
+      class="font-display text-3xl tracking-tight text-[var(--color-ink)] sm:text-4xl lg:text-[2.75rem]"
+    >
+      GSA per diem calculator
+    </h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--color-ink-muted)]">
+      Look up FY2026 federal lodging and meals &amp; incidental (M&amp;IE) rates by city, ZIP, or
+      state—including the 75% first- and last-day travel rule.
+    </p>
+  </section>
 
-  <section class="mt-20 space-y-14">
-    {
-      featureProfessions.map((item, i) => (
-        <article
-          class:list={[
-            "flex flex-col items-center gap-8 sm:gap-10",
-            i % 2 === 1 ? "sm:flex-row-reverse" : "sm:flex-row"
-          ]}
-        >
-          <div class="site-feature-icon shrink-0">
-            <ProfessionLogo professionId={item.id} size="lg" />
-          </div>
-          <div class="max-w-lg text-center sm:text-left">
-            <h2 class="font-display text-2xl sm:text-3xl">{item.title}</h2>
-            <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">{item.body}</p>
-            <a
-              href={
-                item.id === "government-federal"
-                  ? "/calculator/gsa/"
-                  : item.id === "aviation-crew"
-                    ? "/calculator/crew/"
-                    : "/calculator/teacher/"
-              }
-              class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-accent)] hover:underline"
-            >
-              Open calculator <span aria-hidden>→</span>
-            </a>
-          </div>
-        </article>
-      ))
-    }
+  <section
+    id="gsa-calculator"
+    class="calculator-theme calc-panel mt-10 -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
+    aria-label="GSA per diem calculator"
+  >
+    <PerDiemCalculator client:load />
+  </section>
+
+  <HomeHowItWorks />
+
+  <section class="mt-20" aria-labelledby="by-profession-heading">
+    <h2 id="by-profession-heading" class="font-display text-2xl sm:text-3xl">
+      Calculators by profession
+    </h2>
+    <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+      Airline crew, teachers, truck drivers, travel nurses, and more use different rate systems.
+    </p>
+    <div class="mt-8">
+      <HomeCalculatorHub client:load />
+    </div>
   </section>
 
   <section class="mt-24">
-    <h2 class="font-display text-2xl sm:text-3xl">Federal travelers: browse by state</h2>
+    <h2 class="font-display text-2xl sm:text-3xl">Browse GSA per diem rates by state</h2>
     <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
-      GSA CONUS rate hubs for government employees and contractors.
+      Locality tables for federal travelers and contractors—lodging caps and M&amp;IE by destination.
     </p>
-    <div class="mt-6 flex justify-end sm:hidden">
-      <a href="/states/" class="text-sm font-semibold text-[var(--color-accent)] hover:underline">
-        View all
-      </a>
-    </div>
     <ul class="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
       {
         US_STATES.map((s) => (
@@ -103,7 +102,7 @@ const jsonLd = [
         ))
       }
     </ul>
-    <p class="mt-6 hidden text-right sm:block">
+    <p class="mt-6 text-right">
       <a href="/states/" class="text-sm font-semibold text-[var(--color-accent)] hover:underline">
         View all states →
       </a>

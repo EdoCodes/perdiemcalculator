@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Per diem guides by profession";
+const description =
+  "Plain-language per diem guides for federal travelers, airline crew, truck drivers, travel nurses, locum tenens, field sales, police, and hotel management.";
+
+const hubs = [
+  {
+    href: "/guides/crew/",
+    title: "Airline crew",
+    body: "Contract per diem vs GSA M&IE, the 75% first/last-day rule, and multi-city layovers."
+  },
+  {
+    href: "/guides/trucking/",
+    title: "Truck drivers",
+    body: "IRS transportation industry rates, DOT 80% meal deduction, and how that differs from GSA."
+  },
+  {
+    href: "/guides/nursing/",
+    title: "Travel nurses",
+    body: "Housing and meal stipends vs GSA caps, and tax-home basics for 13-week assignments."
+  },
+  {
+    href: "/guides/locum/",
+    title: "Locum tenens",
+    body: "Stipends vs GSA lodging and M&IE, and when a tax home still matters."
+  },
+  {
+    href: "/guides/sales/",
+    title: "Field sales",
+    body: "Accountable-plan reimbursements using GSA rates, and territory trip basics."
+  },
+  {
+    href: "/guides/police/",
+    title: "Police / law enforcement",
+    body: "When per diem applies on department travel, and GSA vs agency policy."
+  },
+  {
+    href: "/guides/hotel/",
+    title: "Hotel management",
+    body: "Corporate travel against GSA lodging caps, and multi-property trips."
+  }
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="mx-auto max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-accent)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">Guides</span>
+    </nav>
+
+    <h1 class="mt-6 font-display text-3xl tracking-tight text-[var(--color-ink)] sm:text-4xl">
+      Per diem guides
+    </h1>
+    <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      Rules differ by profession. Start with a hub below, then run numbers in the matching
+      <a class="font-medium text-[var(--color-accent)] hover:underline" href="/calculator/">calculator</a>.
+    </p>
+
+    <ul class="mt-10 space-y-4">
+      {
+        hubs.map((hub) => (
+          <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-5">
+            <a
+              class="text-lg font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)]"
+              href={hub.href}
+            >
+              {hub.title}
+            </a>
+            <p class="mt-2 text-sm text-[var(--color-ink-muted)]">{hub.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
+</BaseLayout>

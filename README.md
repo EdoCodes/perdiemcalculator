@@ -21,9 +21,10 @@ Federal **GSA CONUS** per diem calculator (lodging + M&IE), state hub pages, and
 
 | Variable | Value |
 |----------|--------|
-| `PUBLIC_SITE_URL` | `https://perdiemproject.netlify.app` (or your custom domain) |
+| `PUBLIC_SITE_URL` | `https://perdiemcalculator.com` (apex — must match the live 301 target, not www) |
 | `PUBLIC_SUPABASE_URL` | `https://YOUR_PROJECT.supabase.co` |
 | `PUBLIC_SUPABASE_ANON_KEY` | Supabase **anon public** key |
+| `PUBLIC_GA_MEASUREMENT_ID` | Optional. GA4 ID (`G-…`) so you can measure visits |
 
 Do **not** add `GSA_API_KEY` or `SUPABASE_SERVICE_ROLE_KEY` to Netlify.
 
@@ -42,7 +43,7 @@ After any env change: **Deploys → Clear cache and deploy**.
 
 ### SEO / sitemap
 
-- XML: `https://www.perdiemcalculator.com/sitemap-index.xml` (split by calculators, blog, guides, states, crew).
+- XML: `https://perdiemcalculator.com/sitemap-index.xml` (split by calculators, blog, guides, states, crew).
 - HTML: `/sitemap/` for humans and internal linking.
 - `robots.txt` is generated at build from `PUBLIC_SITE_URL`.
 - After deploy, submit the sitemap index in [Google Search Console](https://search.google.com/search-console).

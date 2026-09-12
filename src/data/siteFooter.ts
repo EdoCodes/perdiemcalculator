@@ -19,6 +19,7 @@ export const SITE_FOOTER_COLUMNS: FooterColumn[] = [
     links: [
       { href: "/sitemap/", label: "Sitemap" },
       { href: "/calculator/", label: "All calculators" },
+      { href: "/guides/", label: "Guides" },
       { href: "/states/", label: "GSA rates by state" }
     ]
   },

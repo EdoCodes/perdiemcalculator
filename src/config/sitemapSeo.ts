@@ -2,7 +2,7 @@ import { ChangeFreqEnum, type SitemapItem } from "@astrojs/sitemap";
 import { BLOG_ARTICLES } from "../data/blogPosts";
 
 /** Production default when PUBLIC_SITE_URL is unset (local builds still emit a sitemap). */
-export const DEFAULT_SITE_URL = "https://www.perdiemcalculator.com";
+export const DEFAULT_SITE_URL = "https://perdiemcalculator.com";
 
 type PageMeta = {
   priority: number;
@@ -57,7 +57,11 @@ function metaForPath(path: string): PageMeta {
     return { priority: 0.85, changefreq: ChangeFreqEnum.WEEKLY };
   }
   if (path.startsWith("/states/") && path !== "/states/") {
-    return { priority: 0.7, changefreq: ChangeFreqEnum.MONTHLY };
+    const depth = path.split("/").filter(Boolean).length;
+    return {
+      priority: depth >= 3 ? 0.65 : 0.7,
+      changefreq: ChangeFreqEnum.MONTHLY
+    };
   }
   if (path.startsWith("/guides/")) {
     const depth = path.split("/").filter(Boolean).length;

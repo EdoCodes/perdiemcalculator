@@ -3,13 +3,38 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { CalculatorProfessionBar } from "../../components/profession/CalculatorProfessionBar";
 import { PerDiemCalculator } from "../../components/calculator/PerDiemCalculator";
 import { ProfessionPageBrand } from "../../components/profession/ProfessionLogo";
+import GsaCalculatorSeo from "../../components/seo/GsaCalculatorSeo.astro";
+import { GSA_CALCULATOR_FAQS } from "../../data/gsaCalculatorFaqs";
 
-const title = "Federal GSA per diem calculator | Per Diem Calculator";
+const title = "GSA Per Diem Calculator 2026 — Lodging & M&IE by City";
 const description =
-  "Calculate federal CONUS per diem with GSA lodging and M&IE rates, travel-day adjustments, and a day-by-day breakdown.";
+  "Calculate federal CONUS per diem with FY2026 GSA lodging and M&IE rates, the 75% first- and last-day rule, and a day-by-day breakdown.";
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL("/calculator/gsa/", siteUrl).href;
+
+const jsonLd = [
+  {
+    "@type": "WebApplication",
+    name: "Federal GSA per diem calculator",
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Any",
+    url: pageUrl,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    description
+  },
+  {
+    "@type": "FAQPage",
+    mainEntity: GSA_CALCULATOR_FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a }
+    }))
+  }
+];
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
   <section
     class="calculator-theme calc-panel -mx-4 rounded-2xl px-4 py-8 sm:mx-0 sm:px-8 sm:py-10"
   >
@@ -19,12 +44,14 @@ const description =
       <div class="mt-4">
         <ProfessionPageBrand
           professionId="government-federal"
-          title="Federal GSA per diem"
-          subtitle="Government employees and contractors: select destination and trip dates. Rates load from our GSA-backed database."
+          title="GSA per diem calculator"
+          subtitle="Federal employees and contractors: select destination and trip dates. FY2026 lodging caps and M&IE, including the 75% first- and last-day rule."
         />
       </div>
     </div>
 
     <PerDiemCalculator client:load />
   </section>
+
+  <GsaCalculatorSeo />
 </BaseLayout>

@@ -1,0 +1,371 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { CALENDAR_MONTHS } from "../../../data/calendarMonths";
+import { US_STATES } from "../../../data/usStates";
+import {
+  GSA_STANDARD_LODGING,
+  GSA_STANDARD_MIE
+} from "../../../data/gsaCalculatorFaqs";
+import { fiscalYearForDate } from "../../../lib/perdiem/fiscalYear";
+import {
+  fetchLocalitiesByStateForBuild,
+  type StateLocalitySummary
+} from "../../../lib/rates/buildTimeStateData";
+import { localityShortName } from "../../../lib/seo/localitySlug";
+import { getMieTier } from "../../../data/mieTiers";
+import { formatUsd } from "../../../lib/format";
+
+export async function getStaticPaths() {
+  const fy = fiscalYearForDate(new Date());
+  const localitiesByState = await fetchLocalitiesByStateForBuild(fy);
+  const paths: {
+    params: { abbr: string; locality: string };
+    props: {
+      state: (typeof US_STATES)[number];
+      locality: StateLocalitySummary;
+      fiscalYear: number;
+      nearby: StateLocalitySummary[];
+      standard: StateLocalitySummary | null;
+    };
+  }[] = [];
+
+  for (const state of US_STATES) {
+    const list = localitiesByState.get(state.abbr) ?? [];
+    const standard = list.find((l) => l.isStandard) ?? null;
+    const nsas = list.filter((l) => !l.isStandard && l.slug);
+    for (const loc of nsas) {
+      paths.push({
+        params: { abbr: state.abbr.toLowerCase(), locality: loc.slug as string },
+        props: {
+          state,
+          locality: loc,
+          fiscalYear: fy,
+          nearby: nsas.filter((n) => n.slug !== loc.slug).slice(0, 8),
+          standard
+        }
+      });
+    }
+  }
+
+  return paths;
+}
+
+interface Props {
+  state: (typeof US_STATES)[number];
+  locality: StateLocalitySummary;
+  fiscalYear: number;
+  nearby: StateLocalitySummary[];
+  standard: StateLocalitySummary | null;
+}
+
+const { state, locality, fiscalYear, nearby, standard } = Astro.props;
+
+const shortName = localityShortName(locality.city);
+const stateHref = `/states/${state.abbr.toLowerCase()}/`;
+const calcHref = locality.did
+  ? `/calculator/gsa/?state=${state.abbr}&did=${encodeURIComponent(locality.did)}`
+  : `/calculator/gsa/?state=${state.abbr}`;
+
+const lodgingByMonth = locality.lodgingByMonth ?? {};
+const octLodging = lodgingByMonth[10] ?? locality.peakLodging;
+const mie = locality.mieTotal;
+const travelDayMie = mie * 0.75;
+const exampleNights = 3;
+const exampleLodging =
+  octLodging != null ? exampleNights * octLodging : null;
+const exampleMie = 2 * mie + 2 * travelDayMie;
+const exampleTotal =
+  exampleLodging != null ? exampleLodging + exampleMie : null;
+
+const mieTier = getMieTier(fiscalYear, mie);
+const standardMie =
+  standard?.mieTotal && standard.mieTotal > 0 ? standard.mieTotal : GSA_STANDARD_MIE;
+const standardLodging =
+  standard?.peakLodging && standard.peakLodging > 0
+    ? standard.peakLodging
+    : GSA_STANDARD_LODGING;
+
+const countyNote = (() => {
+  const county = locality.county?.trim();
+  if (!county || county.includes("/") || county.length > 40) return "";
+  return county.toLowerCase().endsWith("county") ? ` (${county})` : ` (${county} County)`;
+})();
+
+const title = `${shortName}, ${state.name} GSA per diem rates (FY ${fiscalYear})`;
+const description = `FY${fiscalYear} GSA per diem for ${shortName}, ${state.abbr}: ${formatUsd(mie)} M&IE and monthly lodging caps${locality.peakLodging != null ? ` (peak ${formatUsd(locality.peakLodging)})` : ""}. Includes the 75% first- and last-day rule.`;
+
+const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageUrl = new URL(
+  `/states/${state.abbr.toLowerCase()}/${locality.slug}/`,
+  siteUrl
+).href;
+
+const jsonLd = {
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: pageUrl,
+  about: {
+    "@type": "Place",
+    name: `${shortName}, ${state.name}`
+  }
+};
+
+const faqJsonLd = {
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: `What is the GSA per diem rate for ${shortName}?`,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `For FY${fiscalYear}, GSA lists ${shortName} as a high-cost CONUS locality with ${formatUsd(mie)} daily M&IE${locality.peakLodging != null ? ` and a peak lodging cap of ${formatUsd(locality.peakLodging)}` : ""}. Lodging varies by month. First and last travel days use 75% of M&IE (${formatUsd(travelDayMie)}).`
+      }
+    },
+    {
+      "@type": "Question",
+      name: `Does every city in ${state.name} use the ${shortName} rate?`,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `No. ${shortName} applies to the GSA locality (often the key city plus listed counties). Other parts of ${state.name} use different NSAs or the standard CONUS rate (${formatUsd(standardLodging)} lodging + ${formatUsd(standardMie)} M&IE).`
+      }
+    },
+    {
+      "@type": "Question",
+      name: `How do I calculate a ${shortName} trip total?`,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: `Use the GSA per diem calculator with ${state.name} and this locality selected. Lodging is counted per night; M&IE is 100% on full days and 75% on the first and last calendar days.`
+      }
+    }
+  ]
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={[jsonLd, faqJsonLd]}>
+  <article class="max-w-3xl">
+    <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+      <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-primary)]" href="/states/">States</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-[var(--color-primary)]" href={stateHref}>{state.name}</a>
+      <span class="mx-2">/</span>
+      <span class="text-[var(--color-ink)]">{shortName}</span>
+    </nav>
+
+    <h1 class="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+      {shortName} per diem rates
+    </h1>
+    <p class="mt-2 text-sm font-medium text-[var(--color-primary)]">
+      {state.name} · FY {fiscalYear} · GSA high-cost locality
+    </p>
+    {
+      locality.city !== shortName ? (
+        <p class="mt-2 text-sm text-[var(--color-ink-muted)]">GSA locality name: {locality.city}</p>
+      ) : null
+    }
+
+    <div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+      <p>
+        Official travel to <strong class="text-[var(--color-ink)]">{shortName}</strong>{countyNote}
+        uses a GSA non-standard area rate—higher than the statewide CONUS default of
+        {formatUsd(standardLodging)} lodging + {formatUsd(standardMie)} M&amp;IE.
+      </p>
+      <p>
+        Daily M&amp;IE is <strong class="text-[var(--color-ink)]">{formatUsd(mie)}</strong>. First and
+        last travel days are paid at 75% ({formatUsd(travelDayMie)}). Lodging is a monthly maximum
+        (before tax), not a prorated daily amount.
+      </p>
+    </div>
+
+    <dl class="mt-8 grid gap-4 sm:grid-cols-2">
+      <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-5">
+        <dt class="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+          M&amp;IE (full day)
+        </dt>
+        <dd class="mt-1 text-2xl font-bold text-[var(--color-ink)]">{formatUsd(mie)}</dd>
+      </div>
+      <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-5">
+        <dt class="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+          Peak lodging (FY {fiscalYear})
+        </dt>
+        <dd class="mt-1 text-2xl font-bold text-[var(--color-ink)]">
+          {locality.peakLodging != null ? formatUsd(locality.peakLodging) : "—"}
+        </dd>
+      </div>
+    </dl>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href={calcHref}
+        class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[var(--color-primary-hover)]"
+      >
+        Calculate {shortName} per diem
+      </a>
+      <a
+        href={stateHref}
+        class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
+      >
+        All {state.abbr} localities
+      </a>
+    </div>
+
+    {
+      exampleTotal != null && octLodging != null ? (
+        <section class="mt-10 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6">
+          <h2 class="text-lg font-semibold text-[var(--color-ink)]">
+            Example: 3-night trip (October lodging)
+          </h2>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+            Four travel days: two at 75% M&amp;IE and two at 100%, plus three nights at the October
+            cap of {formatUsd(octLodging)}.
+          </p>
+          <ul class="mt-4 space-y-1 text-sm text-[var(--color-ink-muted)]">
+            <li>Lodging: 3 × {formatUsd(octLodging)} = {formatUsd(exampleLodging ?? 0)}</li>
+            <li>
+              M&amp;IE: 2 × {formatUsd(travelDayMie)} + 2 × {formatUsd(mie)} = {formatUsd(exampleMie)}
+            </li>
+            <li class="font-semibold text-[var(--color-ink)]">
+              Estimated total: {formatUsd(exampleTotal)}
+            </li>
+          </ul>
+        </section>
+      ) : null
+    }
+
+    <section class="mt-10" aria-labelledby="monthly-heading">
+      <h2 id="monthly-heading" class="text-xl font-semibold text-[var(--color-ink)]">
+        Monthly lodging caps (FY {fiscalYear})
+      </h2>
+      <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+        Caps are before lodging tax. Use the month of each night, not the month you book.
+      </p>
+      <div class="mt-4 overflow-x-auto rounded-2xl border border-[var(--color-border)]">
+        <table class="min-w-full text-left text-sm">
+          <thead class="border-b border-[var(--color-border)] bg-[var(--color-surface-muted)]">
+            <tr>
+              <th class="px-4 py-3 font-semibold text-[var(--color-ink)]">Month</th>
+              <th class="px-4 py-3 font-semibold text-[var(--color-ink)]">Max lodging</th>
+              <th class="px-4 py-3 font-semibold text-[var(--color-ink)]">Full-day total</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[var(--color-border)]">
+            {
+              CALENDAR_MONTHS.map(({ month, label }) => {
+                const lodging = lodgingByMonth[month];
+                return (
+                  <tr class="bg-[var(--color-surface-elevated)]">
+                    <td class="px-4 py-3 text-[var(--color-ink)]">{label}</td>
+                    <td class="px-4 py-3 font-medium text-[var(--color-ink)]">
+                      {lodging != null ? formatUsd(lodging) : "—"}
+                    </td>
+                    <td class="px-4 py-3 text-[var(--color-ink-muted)]">
+                      {lodging != null ? formatUsd(lodging + mie) : "—"}
+                    </td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {
+      mieTier ? (
+        <section class="mt-10">
+          <h2 class="text-xl font-semibold text-[var(--color-ink)]">M&amp;IE breakdown</h2>
+          <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+            Used when a government-provided meal is deducted. First/last day = {formatUsd(travelDayMie)}.
+          </p>
+          <dl class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div class="rounded-xl border border-[var(--color-border)] p-3">
+              <dt class="text-xs text-[var(--color-ink-muted)]">Breakfast</dt>
+              <dd class="font-semibold text-[var(--color-ink)]">{formatUsd(mieTier.breakfast)}</dd>
+            </div>
+            <div class="rounded-xl border border-[var(--color-border)] p-3">
+              <dt class="text-xs text-[var(--color-ink-muted)]">Lunch</dt>
+              <dd class="font-semibold text-[var(--color-ink)]">{formatUsd(mieTier.lunch)}</dd>
+            </div>
+            <div class="rounded-xl border border-[var(--color-border)] p-3">
+              <dt class="text-xs text-[var(--color-ink-muted)]">Dinner</dt>
+              <dd class="font-semibold text-[var(--color-ink)]">{formatUsd(mieTier.dinner)}</dd>
+            </div>
+            <div class="rounded-xl border border-[var(--color-border)] p-3">
+              <dt class="text-xs text-[var(--color-ink-muted)]">Incidentals</dt>
+              <dd class="font-semibold text-[var(--color-ink)]">{formatUsd(mieTier.incidentals)}</dd>
+            </div>
+          </dl>
+        </section>
+      ) : null
+    }
+
+    <section class="mt-12 space-y-4" aria-labelledby="loc-faq">
+      <h2 id="loc-faq" class="text-xl font-semibold text-[var(--color-ink)]">
+        Frequently asked questions
+      </h2>
+      <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4">
+        <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">
+          What is the GSA per diem rate for {shortName}?
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+          For FY {fiscalYear}, this locality pays {formatUsd(mie)} M&amp;IE
+          {locality.peakLodging != null
+            ? ` and up to ${formatUsd(locality.peakLodging)} lodging in peak months`
+            : ""}
+          . Use the monthly table for the exact lodging cap.
+        </p>
+      </details>
+      <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4">
+        <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">
+          How does the 75% first and last day rule apply here?
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+          On the first and last calendar days, M&amp;IE is {formatUsd(travelDayMie)} (75% of{" "}
+          {formatUsd(mie)}). Lodging is never prorated.
+        </p>
+      </details>
+      <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4">
+        <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">
+          Is this an official GSA page?
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+          No. Verify amounts on
+          <a
+            class="text-[var(--color-primary)] hover:underline"
+            href="https://www.gsa.gov/travel/plan-book/per-diem-rates">GSA per diem rates</a
+          >
+          and your agency’s FTR rules.
+        </p>
+      </details>
+    </section>
+
+    {
+      nearby.length > 0 ? (
+        <section class="mt-12">
+          <h2 class="text-xl font-semibold text-[var(--color-ink)]">
+            Other {state.name} high-cost localities
+          </h2>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {nearby.map((n) => (
+              <li>
+                <a
+                  class="inline-flex rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary)] hover:border-[var(--color-primary)]/40"
+                  href={`/states/${state.abbr.toLowerCase()}/${n.slug}/`}
+                >
+                  {localityShortName(n.city)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null
+    }
+
+    <p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+      Planning aid only · Not affiliated with GSA ·
+      <a class="text-[var(--color-primary)] hover:underline" href="/methodology/">Methodology</a>
+    </p>
+  </article>
+</BaseLayout>

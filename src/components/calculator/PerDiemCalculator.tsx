@@ -30,7 +30,7 @@ export function PerDiemCalculator() {
   const [locationTab, setLocationTab] = useState<"picker" | "zip">("picker");
 
   const [localities, setLocalities] = useState<LocalityListItem[]>([]);
-  const [loadingLocalities, setLoadingLocalities] = useState(false);
+  const [loadingLocalities, setLoadingLocalities] = useState(() => isSupabaseConfigured());
   const [calculating, setCalculating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<TripResult | null>(null);
@@ -79,10 +79,14 @@ export function PerDiemCalculator() {
     };
   }, [envConfigured]);
 
+  const pendingDidRef = useRef<string | null>(null);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const st = params.get("state");
+    const didParam = params.get("did");
     if (st) setState(st.toUpperCase());
+    if (didParam) pendingDidRef.current = didParam;
   }, []);
 
   useEffect(() => {
@@ -98,6 +102,14 @@ export function PerDiemCalculator() {
         if (latest.state !== reqState || latest.pickerFy !== reqFy) return;
         setLocalities(rows);
         setLocalityId((currentId) => {
+          const pendingDid = pendingDidRef.current;
+          if (pendingDid) {
+            const match = rows.find((r) => r.did === pendingDid);
+            if (match) {
+              pendingDidRef.current = null;
+              return match.id;
+            }
+          }
           const stillValid = rows.some((r) => r.id === currentId);
           if (rows.length && (!currentId || !stillValid)) {
             return (rows.find((r) => r.isStandard) ?? rows[0]).id;
@@ -109,7 +121,10 @@ export function PerDiemCalculator() {
         if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load localities");
       })
       .finally(() => {
-        if (!cancelled) setLoadingLocalities(false);
+        if (cancelled) return;
+        const latest = fetchContextRef.current;
+        if (latest.state !== reqState || latest.pickerFy !== reqFy) return;
+        setLoadingLocalities(false);
       });
     return () => {
       cancelled = true;
@@ -313,7 +328,7 @@ export function PerDiemCalculator() {
                   {loadingLocalities ? (
                     <option>Loading…</option>
                   ) : localities.length === 0 ? (
-                    <option>No localities — run GSA sync</option>
+                    <option>Choose a state to load GSA localities</option>
                   ) : (
                     localities.map((l) => (
                       <option key={l.id} value={l.id}>

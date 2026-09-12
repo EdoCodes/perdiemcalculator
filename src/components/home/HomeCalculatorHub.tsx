@@ -122,7 +122,6 @@ export function HomeCalculatorHub() {
     });
   }, [query, allItems]);
 
-  const availableCount = allItems.length;
   const lastProfession = lastId
     ? PROFESSIONS.find((p) => p.id === lastId && p.available)
     : undefined;
@@ -130,24 +129,7 @@ export function HomeCalculatorHub() {
   return (
     <div className="home-hero">
       <div className="home-hero__top">
-        <div className="home-hero__copy">
-          <p className="text-sm font-medium text-[var(--color-ink-muted)]">perdiemcalculator.com</p>
-          <h1 className="home-hero__title font-display mt-2 text-[var(--color-ink)]">
-            <span className="block text-2xl font-semibold sm:text-3xl">Your trip in</span>
-            <span className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-              <span className="text-4xl font-bold text-[var(--color-accent)] sm:text-5xl lg:text-6xl">
-                {availableCount}
-              </span>
-              <span className="text-3xl font-bold sm:text-4xl lg:text-5xl">free calculators</span>
-            </span>
-          </h1>
-          <p className="mt-4 max-w-md text-sm leading-relaxed text-[var(--color-ink-muted)] sm:text-base">
-            GSA federal, airline crew, teachers, truck drivers, and corporate travel ROI—pick a
-            calculator tuned to how you get paid.
-          </p>
-        </div>
-
-        <label className="home-hero__search block shrink-0">
+        <label className="home-hero__search block w-full max-w-md shrink-0">
           <span className="sr-only">Search calculators</span>
           <div className="home-search-pill relative">
             <svg

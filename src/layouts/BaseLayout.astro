@@ -21,19 +21,11 @@ const navLink =
 const navActive = "text-sm font-semibold text-[var(--color-accent)]";
 const path = Astro.url.pathname;
 
-const onCalculator =
-  path.startsWith("/calculator") || path === "/";
+const onCalculator = path.startsWith("/calculator");
 const onStates = path.startsWith("/states");
-const onMethodology = path.startsWith("/methodology");
-const onCrewGuides =
-  path.startsWith("/guides/crew") || path.startsWith("/crew/");
-const onTruckingGuides = path.startsWith("/guides/trucking");
-const onNursingGuides = path.startsWith("/guides/nursing");
-const onLocumGuides = path.startsWith("/guides/locum");
-const onSalesGuides = path.startsWith("/guides/sales");
-const onPoliceGuides = path.startsWith("/guides/police");
-const onHotelGuides = path.startsWith("/guides/hotel");
+const onGuides = path.startsWith("/guides") || path.startsWith("/crew/");
 const onBlog = path.startsWith("/blog");
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID?.trim() ?? "";
 ---
 
 <!doctype html>
@@ -56,6 +48,21 @@ const onBlog = path.startsWith("/blog");
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    {
+      gaId ? (
+        <>
+          <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+          <script is:inline define:vars={{ gaId }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              window.dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+            gtag("config", gaId);
+          </script>
+        </>
+      ) : null
+    }
     <script is:inline>
       (function () {
         const stored = localStorage.getItem("theme");
@@ -97,22 +104,21 @@ const onBlog = path.startsWith("/blog");
             <span
               class="mt-0.5 text-[0.6875rem] font-medium tracking-wide text-[var(--color-ink-muted)] sm:text-xs"
             >
-              Per diem calculated with precision
+              GSA per diem calculator
             </span>
           </span>
         </a>
-        <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <nav class="flex flex-wrap items-center gap-x-5 gap-y-2" aria-label="Main">
           <a href="/calculator/" class={onCalculator ? navActive : navLink}>Calculators</a>
           <a href="/states/" class={onStates ? navActive : navLink}>States</a>
-          <a href="/guides/crew/" class={onCrewGuides ? navActive : navLink}>Crew guides</a>
-          <a href="/guides/trucking/" class={onTruckingGuides ? navActive : navLink}>Trucker guides</a>
-          <a href="/guides/nursing/" class={onNursingGuides ? navActive : navLink}>Nurse guides</a>
-          <a href="/guides/locum/" class={onLocumGuides ? navActive : navLink}>Locum guides</a>
-          <a href="/guides/sales/" class={onSalesGuides ? navActive : navLink}>Sales guides</a>
-          <a href="/guides/police/" class={onPoliceGuides ? navActive : navLink}>Police guides</a>
-          <a href="/guides/hotel/" class={onHotelGuides ? navActive : navLink}>Hotel guides</a>
+          <a href="/guides/" class={onGuides ? navActive : navLink}>Guides</a>
           <a href="/blog/" class={onBlog ? navActive : navLink}>Blog</a>
-          <a href="/methodology/" class={onMethodology ? navActive : navLink}>Methodology</a>
+          <a
+            href="/#gsa-calculator"
+            class="rounded-lg bg-[var(--color-accent)] px-3 py-1.5 text-sm font-semibold text-white hover:opacity-90"
+          >
+            Calculate
+          </a>
           <ThemeToggle client:load />
         </nav>
       </div>
