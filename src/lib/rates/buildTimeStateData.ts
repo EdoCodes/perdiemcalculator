@@ -20,6 +20,11 @@ export type StateLocalitySummary = {
   lodgingByMonth?: Record<number, number>;
 };
 
+export type ZipDidMapping = {
+  did: string;
+  state: string;
+};
+
 function readSupabaseEnv(): { url: string; key: string } {
   const fromProcess =
     typeof process !== "undefined"
@@ -172,6 +177,57 @@ async function loadLocalitiesByState(
 
   for (const list of map.values()) {
     assignNsaSlugs(list);
+  }
+
+  return map;
+}
+
+let cachedZipsByFy = new Map<number, Promise<Map<string, ZipDidMapping>>>();
+
+/** ZIP → GSA DID for a fiscal year (build-time city pages). */
+export async function fetchZipDidMapForBuild(
+  fiscalYear: number
+): Promise<Map<string, ZipDidMapping>> {
+  const existing = cachedZipsByFy.get(fiscalYear);
+  if (existing) return existing;
+  const pending = loadZipDidMap(fiscalYear);
+  cachedZipsByFy.set(fiscalYear, pending);
+  return pending;
+}
+
+async function loadZipDidMap(fiscalYear: number): Promise<Map<string, ZipDidMapping>> {
+  const map = new Map<string, ZipDidMapping>();
+  if (!canFetchAtBuild()) return map;
+
+  const { url, key } = readSupabaseEnv();
+  const supabase = createClient(url, key);
+  const pageSize = 1000;
+  let from = 0;
+
+  for (;;) {
+    const { data, error } = await supabase
+      .from("zip_locality")
+      .select("zip, did, state")
+      .eq("fiscal_year", fiscalYear)
+      .range(from, from + pageSize - 1);
+
+    if (error) {
+      console.warn("[state-pages] zip_locality fetch failed:", error.message);
+      break;
+    }
+    if (!data?.length) break;
+
+    for (const row of data) {
+      const zip = String(row.zip ?? "").padStart(5, "0").slice(0, 5);
+      const did = String(row.did ?? "");
+      const state = String(row.state ?? "").toUpperCase();
+      if (zip.length === 5 && did && state) {
+        map.set(zip, { did, state });
+      }
+    }
+
+    if (data.length < pageSize) break;
+    from += pageSize;
   }
 
   return map;

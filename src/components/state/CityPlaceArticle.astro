@@ -1,0 +1,228 @@
+---
+import { localityShortName } from "../../lib/seo/localitySlug";
+import { formatUsd } from "../../lib/format";
+import type { CityPageProps } from "../../lib/seo/stateLocalityPaths";
+import {
+  GSA_STANDARD_LODGING,
+  GSA_STANDARD_MIE
+} from "../../data/gsaCalculatorFaqs";
+
+type Props = CityPageProps;
+
+const { state, locality, fiscalYear, nearby, standard, place, nearbyCities } = Astro.props;
+
+const assignedName = locality.isStandard
+  ? "standard CONUS"
+  : localityShortName(locality.city);
+const isNsa = !locality.isStandard && Boolean(locality.slug);
+const stateHref = `/states/${state.abbr.toLowerCase()}/`;
+const nsaHref =
+  isNsa && locality.slug ? `${stateHref}${locality.slug}/` : null;
+const calcHref = locality.did
+  ? `/calculator/gsa/?state=${state.abbr}&did=${encodeURIComponent(locality.did)}`
+  : `/calculator/gsa/?state=${state.abbr}`;
+
+const mie = locality.mieTotal;
+const travelDayMie = mie * 0.75;
+const lodging = locality.peakLodging;
+const exampleNights = 3;
+const exampleLodging = lodging != null ? exampleNights * lodging : null;
+const exampleMie = 2 * mie + 2 * travelDayMie;
+const exampleTotal = exampleLodging != null ? exampleLodging + exampleMie : null;
+
+const standardMie =
+  standard?.mieTotal && standard.mieTotal > 0 ? standard.mieTotal : GSA_STANDARD_MIE;
+const standardLodging =
+  standard?.peakLodging && standard.peakLodging > 0
+    ? standard.peakLodging
+    : GSA_STANDARD_LODGING;
+
+const countyLabel = place.county.toLowerCase().includes("county")
+  ? place.county
+  : `${place.county} County`;
+---
+
+<nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
+  <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
+  <span class="mx-2">/</span>
+  <a class="hover:text-[var(--color-primary)]" href="/states/">States</a>
+  <span class="mx-2">/</span>
+  <a class="hover:text-[var(--color-primary)]" href={stateHref}>{state.name}</a>
+  <span class="mx-2">/</span>
+  <span class="text-[var(--color-ink)]">{place.name}</span>
+</nav>
+
+<h1 class="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
+  {place.name} per diem rates
+</h1>
+<p class="mt-2 text-sm font-medium text-[var(--color-primary)]">
+  {countyLabel} · ZIP {place.zip} · FY {fiscalYear}
+</p>
+
+<div class="mt-6 space-y-4 text-base leading-relaxed text-[var(--color-ink-muted)]">
+  <p>
+    Official travel to <strong class="text-[var(--color-ink)]">{place.name}</strong> in
+    {countyLabel} (sample ZIP {place.zip}) is not its own GSA key city.
+    GSA maps this ZIP to
+    {
+      isNsa ? (
+        <>
+          the <strong class="text-[var(--color-ink)]">{assignedName}</strong> high-cost
+          locality
+        </>
+      ) : (
+        <>
+          the <strong class="text-[var(--color-ink)]">standard CONUS</strong> rate for{" "}
+          {state.name}
+        </>
+      )
+    }
+    : {formatUsd(mie)} M&amp;IE
+    {lodging != null ? ` and peak lodging ${formatUsd(lodging)}` : ""}.
+  </p>
+  <p>
+    First and last travel days use 75% of M&amp;IE ({formatUsd(travelDayMie)}). Lodging is a
+    monthly maximum (before tax). Statewide default CONUS is {formatUsd(standardLodging)}{" "}
+    lodging + {formatUsd(standardMie)} M&amp;IE when no higher locality applies.
+  </p>
+</div>
+
+<dl class="mt-8 grid gap-4 sm:grid-cols-2">
+  <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-5">
+    <dt class="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+      Assigned M&amp;IE
+    </dt>
+    <dd class="mt-1 text-2xl font-bold text-[var(--color-ink)]">{formatUsd(mie)}</dd>
+  </div>
+  <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-5">
+    <dt class="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+      Peak lodging
+    </dt>
+    <dd class="mt-1 text-2xl font-bold text-[var(--color-ink)]">
+      {lodging != null ? formatUsd(lodging) : "—"}
+    </dd>
+  </div>
+</dl>
+
+<div class="mt-8 flex flex-wrap gap-3">
+  <a
+    href={calcHref}
+    class="inline-flex items-center justify-center rounded-xl bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[var(--color-primary-hover)]"
+  >
+    Calculate {place.name} per diem
+  </a>
+  {
+    nsaHref ? (
+      <a
+        href={nsaHref}
+        class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
+      >
+        {assignedName} monthly table
+      </a>
+    ) : (
+      <a
+        href={stateHref}
+        class="inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)]"
+      >
+        All {state.abbr} localities
+      </a>
+    )
+  }
+</div>
+
+{
+  exampleTotal != null && lodging != null ? (
+    <section class="mt-10 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] p-6">
+      <h2 class="text-lg font-semibold text-[var(--color-ink)]">
+        Example: 3-night trip in {place.name}
+      </h2>
+      <p class="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+        Four travel days at the assigned {assignedName} caps: two at 75% M&amp;IE and two at
+        100%, plus three nights at peak lodging {formatUsd(lodging)}.
+      </p>
+      <ul class="mt-4 space-y-1 text-sm text-[var(--color-ink-muted)]">
+        <li>Lodging: 3 × {formatUsd(lodging)} = {formatUsd(exampleLodging ?? 0)}</li>
+        <li>
+          M&amp;IE: 2 × {formatUsd(travelDayMie)} + 2 × {formatUsd(mie)} = {formatUsd(exampleMie)}
+        </li>
+        <li class="font-semibold text-[var(--color-ink)]">
+          Estimated total: {formatUsd(exampleTotal)}
+        </li>
+      </ul>
+    </section>
+  ) : null
+}
+
+<section class="mt-12 space-y-4" aria-labelledby="city-faq">
+  <h2 id="city-faq" class="text-xl font-semibold text-[var(--color-ink)]">
+    Frequently asked questions
+  </h2>
+  <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4">
+    <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">
+      What is the GSA per diem rate for {place.name}?
+    </summary>
+    <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+      GSA does not publish a separate key-city rate named {place.name}. ZIP {place.zip} maps to
+      {isNsa ? ` ${assignedName}` : " standard CONUS"}: {formatUsd(mie)} M&amp;IE
+      {lodging != null ? ` and peak lodging ${formatUsd(lodging)}` : ""}.
+    </p>
+  </details>
+  <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-5 py-4">
+    <summary class="cursor-pointer font-semibold text-[var(--color-ink)]">
+      How do I calculate a trip to {place.name}?
+    </summary>
+    <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)]">
+      Open the GSA calculator with this locality selected, or enter ZIP {place.zip}. First and
+      last days are 75% of M&amp;IE.
+    </p>
+  </details>
+</section>
+
+{
+  nearbyCities.length > 0 ? (
+    <section class="mt-12">
+      <h2 class="text-xl font-semibold text-[var(--color-ink)]">
+        Other cities in {countyLabel}
+      </h2>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {nearbyCities.map((c) => (
+          <li>
+            <a
+              class="inline-flex rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary)] hover:border-[var(--color-primary)]/40"
+              href={`${stateHref}${c.slug}/`}
+            >
+              {c.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null
+}
+
+{
+  nearby.length > 0 ? (
+    <section class="mt-12">
+      <h2 class="text-xl font-semibold text-[var(--color-ink)]">
+        Nearby {state.name} high-cost localities
+      </h2>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {nearby.map((n) => (
+          <li>
+            <a
+              class="inline-flex rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary)] hover:border-[var(--color-primary)]/40"
+              href={`${stateHref}${n.slug}/`}
+            >
+              {localityShortName(n.city)}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null
+}
+
+<p class="mt-10 text-sm text-[var(--color-ink-muted)]">
+  Planning aid only · ZIP maps to a GSA destination ID ·
+  <a class="text-[var(--color-primary)] hover:underline" href="/methodology/">Methodology</a>
+</p>

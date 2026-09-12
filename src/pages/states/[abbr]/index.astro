@@ -3,35 +3,55 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import StateRatesSection from "../../../components/state/StateRatesSection.astro";
 import { US_STATES } from "../../../data/usStates";
 import { fiscalYearForDate } from "../../../lib/perdiem/fiscalYear";
-import { fetchLocalitiesByStateForBuild } from "../../../lib/rates/buildTimeStateData";
+import {
+  fetchLocalitiesByStateForBuild,
+  fetchZipDidMapForBuild
+} from "../../../lib/rates/buildTimeStateData";
+import { cityPlacePagesForState } from "../../../lib/seo/stateLocalityPaths";
+import type { CityPlacePage } from "../../../lib/seo/cityPlaces";
 
 export async function getStaticPaths() {
   const fy = fiscalYearForDate(new Date());
   const localitiesByState = await fetchLocalitiesByStateForBuild(fy);
-  return US_STATES.map((state) => ({
-    params: { abbr: state.abbr.toLowerCase() },
-    props: {
-      state,
-      localities: localitiesByState.get(state.abbr) ?? [],
-      fiscalYear: fy
-    }
-  }));
+  const zipDid = await fetchZipDidMapForBuild(fy);
+  return US_STATES.map((state) => {
+    const localities = localitiesByState.get(state.abbr) ?? [];
+    return {
+      params: { abbr: state.abbr.toLowerCase() },
+      props: {
+        state,
+        localities,
+        fiscalYear: fy,
+        cityPages: cityPlacePagesForState(state.abbr, localities, zipDid)
+      }
+    };
+  });
 }
 
 interface Props {
   state: (typeof US_STATES)[number];
   localities: import("../../../lib/rates/buildTimeStateData").StateLocalitySummary[];
   fiscalYear: number;
+  cityPages: CityPlacePage[];
 }
 
-const { state, localities, fiscalYear } = Astro.props;
+const { state, localities, fiscalYear, cityPages } = Astro.props;
 
 const nsaCount = localities.filter((l) => !l.isStandard).length;
 const title = `${state.name} GSA per diem rates (FY ${fiscalYear})`;
-const description = `Official GSA CONUS per diem for ${state.name}: standard rate, ${nsaCount} higher-cost localities, M&IE and lodging caps for federal fiscal year ${fiscalYear}.`;
+const description = `Official GSA CONUS per diem for ${state.name}: standard rate, ${nsaCount} higher-cost localities${cityPages.length ? `, and ${cityPages.length} city pages mapped by ZIP` : ""}, M&IE and lodging caps for federal fiscal year ${fiscalYear}.`;
 const calcHref = `/calculator/gsa/?state=${state.abbr}`;
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
 const pageUrl = new URL(`/states/${state.abbr.toLowerCase()}/`, siteUrl).href;
+
+const citiesByLetter = new Map<string, CityPlacePage[]>();
+for (const page of cityPages) {
+  const letter = (page.name[0] ?? "#").toUpperCase();
+  const group = citiesByLetter.get(letter) ?? [];
+  group.push(page);
+  citiesByLetter.set(letter, group);
+}
+const cityLetters = [...citiesByLetter.keys()].sort();
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -142,6 +162,41 @@ const faqJsonLd = {
       localities={localities}
       calcHref={calcHref}
     />
+
+    {
+      cityPages.length > 0 ? (
+        <section class="mt-12" aria-labelledby="cities-heading">
+          <h2 id="cities-heading" class="text-xl font-semibold text-[var(--color-ink)]">
+            Cities in {state.name} ({cityPages.length})
+          </h2>
+          <p class="mt-2 text-sm text-[var(--color-ink-muted)]">
+            Each city page uses a sample ZIP to map onto a GSA locality (high-cost NSA or standard
+            CONUS). Key-city URLs like Los Angeles stay on the locality table above.
+          </p>
+          <div class="mt-6 space-y-6">
+            {cityLetters.map((letter) => (
+              <div>
+                <h3 class="text-sm font-semibold uppercase tracking-wide text-[var(--color-ink-muted)]">
+                  {letter}
+                </h3>
+                <ul class="mt-2 flex flex-wrap gap-2">
+                  {(citiesByLetter.get(letter) ?? []).map((city) => (
+                    <li>
+                      <a
+                        class="inline-flex rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-elevated)] px-3 py-1.5 text-sm font-medium text-[var(--color-primary)] hover:border-[var(--color-primary)]/40"
+                        href={`/states/${state.abbr.toLowerCase()}/${city.slug}/`}
+                      >
+                        {city.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null
+    }
 
     <section class="mt-12 space-y-4" aria-labelledby="faq-heading">
       <h2 id="faq-heading" class="text-xl font-semibold text-[var(--color-ink)]">

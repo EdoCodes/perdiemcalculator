@@ -1,66 +1,33 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import CityPlaceArticle from "../../../components/state/CityPlaceArticle.astro";
 import { CALENDAR_MONTHS } from "../../../data/calendarMonths";
-import { US_STATES } from "../../../data/usStates";
 import {
   GSA_STANDARD_LODGING,
   GSA_STANDARD_MIE
 } from "../../../data/gsaCalculatorFaqs";
 import { fiscalYearForDate } from "../../../lib/perdiem/fiscalYear";
-import {
-  fetchLocalitiesByStateForBuild,
-  type StateLocalitySummary
-} from "../../../lib/rates/buildTimeStateData";
 import { localityShortName } from "../../../lib/seo/localitySlug";
 import { getMieTier } from "../../../data/mieTiers";
 import { formatUsd } from "../../../lib/format";
+import {
+  buildLocalityStaticPaths,
+  type LocalityPageProps
+} from "../../../lib/seo/stateLocalityPaths";
 
 export async function getStaticPaths() {
   const fy = fiscalYearForDate(new Date());
-  const localitiesByState = await fetchLocalitiesByStateForBuild(fy);
-  const paths: {
-    params: { abbr: string; locality: string };
-    props: {
-      state: (typeof US_STATES)[number];
-      locality: StateLocalitySummary;
-      fiscalYear: number;
-      nearby: StateLocalitySummary[];
-      standard: StateLocalitySummary | null;
-    };
-  }[] = [];
-
-  for (const state of US_STATES) {
-    const list = localitiesByState.get(state.abbr) ?? [];
-    const standard = list.find((l) => l.isStandard) ?? null;
-    const nsas = list.filter((l) => !l.isStandard && l.slug);
-    for (const loc of nsas) {
-      paths.push({
-        params: { abbr: state.abbr.toLowerCase(), locality: loc.slug as string },
-        props: {
-          state,
-          locality: loc,
-          fiscalYear: fy,
-          nearby: nsas.filter((n) => n.slug !== loc.slug).slice(0, 8),
-          standard
-        }
-      });
-    }
-  }
-
-  return paths;
+  return buildLocalityStaticPaths(fy);
 }
 
-interface Props {
-  state: (typeof US_STATES)[number];
-  locality: StateLocalitySummary;
-  fiscalYear: number;
-  nearby: StateLocalitySummary[];
-  standard: StateLocalitySummary | null;
-}
+type Props = LocalityPageProps;
 
-const { state, locality, fiscalYear, nearby, standard } = Astro.props;
+const props = Astro.props;
+const { state, locality, fiscalYear, nearby, standard } = props;
+const isCity = props.kind === "city";
+const place = isCity ? props.place : null;
 
-const shortName = localityShortName(locality.city);
+const shortName = isCity && place ? place.name : localityShortName(locality.city);
 const stateHref = `/states/${state.abbr.toLowerCase()}/`;
 const calcHref = locality.did
   ? `/calculator/gsa/?state=${state.abbr}&did=${encodeURIComponent(locality.did)}`
@@ -91,12 +58,19 @@ const countyNote = (() => {
   return county.toLowerCase().endsWith("county") ? ` (${county})` : ` (${county} County)`;
 })();
 
-const title = `${shortName}, ${state.name} GSA per diem rates (FY ${fiscalYear})`;
-const description = `FY${fiscalYear} GSA per diem for ${shortName}, ${state.abbr}: ${formatUsd(mie)} M&IE and monthly lodging caps${locality.peakLodging != null ? ` (peak ${formatUsd(locality.peakLodging)})` : ""}. Includes the 75% first- and last-day rule.`;
+const title =
+  isCity && place
+    ? `${place.name}, ${state.name} per diem rates (FY ${fiscalYear})`
+    : `${shortName}, ${state.name} GSA per diem rates (FY ${fiscalYear})`;
+const description =
+  isCity && place
+    ? `FY${fiscalYear} GSA per diem for ${place.name}, ${place.county} County, ZIP ${place.zip}: ${formatUsd(mie)} M&IE${locality.peakLodging != null ? ` and peak lodging ${formatUsd(locality.peakLodging)}` : ""}, mapped from GSA ZIP tables.`
+    : `FY${fiscalYear} GSA per diem for ${shortName}, ${state.abbr}: ${formatUsd(mie)} M&IE and monthly lodging caps${locality.peakLodging != null ? ` (peak ${formatUsd(locality.peakLodging)})` : ""}. Includes the 75% first- and last-day rule.`;
 
 const siteUrl = Astro.site?.href ?? Astro.url.origin;
+const pageSlug = (isCity && place ? place.slug : locality.slug) ?? "";
 const pageUrl = new URL(
-  `/states/${state.abbr.toLowerCase()}/${locality.slug}/`,
+  `/states/${state.abbr.toLowerCase()}/${pageSlug}/`,
   siteUrl
 ).href;
 
@@ -113,10 +87,30 @@ const jsonLd = {
 
 const faqJsonLd = {
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: `What is the GSA per diem rate for ${shortName}?`,
+  mainEntity:
+    isCity && place
+      ? [
+          {
+            "@type": "Question",
+            name: `What is the GSA per diem rate for ${place.name}?`,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: `GSA does not list ${place.name} as its own key city. ZIP ${place.zip} maps to ${locality.isStandard ? "standard CONUS" : localityShortName(locality.city)}: ${formatUsd(mie)} M&IE${locality.peakLodging != null ? ` and peak lodging ${formatUsd(locality.peakLodging)}` : ""}.`
+            }
+          },
+          {
+            "@type": "Question",
+            name: `How do I calculate a ${place.name} trip total?`,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: `Use the GSA per diem calculator with ${state.name} and this ZIP or locality selected. Lodging is per night; M&IE is 100% on full days and 75% on the first and last calendar days.`
+            }
+          }
+        ]
+      : [
+          {
+            "@type": "Question",
+            name: `What is the GSA per diem rate for ${shortName}?`,
       acceptedAnswer: {
         "@type": "Answer",
         text: `For FY${fiscalYear}, GSA lists ${shortName} as a high-cost CONUS locality with ${formatUsd(mie)} daily M&IE${locality.peakLodging != null ? ` and a peak lodging cap of ${formatUsd(locality.peakLodging)}` : ""}. Lodging varies by month. First and last travel days use 75% of M&IE (${formatUsd(travelDayMie)}).`
@@ -144,6 +138,20 @@ const faqJsonLd = {
 
 <BaseLayout title={title} description={description} jsonLd={[jsonLd, faqJsonLd]}>
   <article class="max-w-3xl">
+    {
+      isCity && props.kind === "city" ? (
+        <CityPlaceArticle
+          kind="city"
+          state={props.state}
+          locality={props.locality}
+          fiscalYear={props.fiscalYear}
+          nearby={props.nearby}
+          standard={props.standard}
+          place={props.place}
+          nearbyCities={props.nearbyCities}
+        />
+      ) : (
+        <>
     <nav class="text-sm text-[var(--color-ink-muted)]" aria-label="Breadcrumb">
       <a class="hover:text-[var(--color-primary)]" href="/">Home</a>
       <span class="mx-2">/</span>
@@ -367,5 +375,8 @@ const faqJsonLd = {
       Planning aid only · Not affiliated with GSA ·
       <a class="text-[var(--color-primary)] hover:underline" href="/methodology/">Methodology</a>
     </p>
+        </>
+      )
+    }
   </article>
 </BaseLayout>

@@ -21,13 +21,13 @@
 
 - [ ] **Do not generate 40k ZIP URLs.** `zip_locality` is a lookup table, not a page inventory.
 - [done] Phase A: ~298 NSA URLs at `/states/[abbr]/[locality-slug]/` (419 total pages). Monthly lodging + M&IE + 75% example + calculator `?did=`. CONUS `$110+$68` fallback; no “X County” suffix. User confirmed 2026-09-11 — shipping to `origin/main` (Netlify should auto-deploy).
-- [ ] Phase B: Census places (~32k cities/CDPs, same class of list Section 8 uses) mapped to a GSA locality via ZIP/county. Each page shows that city’s assigned locality, county, sample ZIP, 75% example, nearby NSAs, and a prefilled calculator.
+- [pending confirmation] Phase B **California pilot**: 1,210 city URLs under `/states/ca/[slug]/` (1,629 total pages). ZIP → GSA DID; skip NSA slug collisions (`los-angeles` stays the locality table). City pages cite county + ZIP + assigned rate (NSA or standard CONUS) without cloning the 12-month table. GSC sitemap submit is still a user step.
 - [ ] Guardrail: if a city only restates statewide standard CONUS with no county/ZIP/nearby-NSA specifics, do not ship it (doorway/duplicate risk).
 - [ ] Keep current homepage look unless the user asks to restore the old 10-calculator hub (still in git).
 
 # Executor's Feedback or Assistance Requests
 
-- **Phase A confirmed (2026-09-11).** Shipping to GitHub. After Netlify goes live, resubmit `https://perdiemcalculator.com/sitemap-index.xml` in GSC. Phase B (~32k Census cities) still waiting.
+- **Phase B CA pilot ready for review (2026-09-12).** 1,210 California city pages locally; not pushed. Confirm, then ship to GitHub so Netlify deploys. Still do not generate 40k ZIP URLs or remaining states until this batch indexes cleanly.
 - Standard CONUS rows in Supabase can have `mie_total` / lodging of `0`; display now falls back to FY2026 `$110 + $68`. Worth fixing in the GSA sync later so the DB matches GSA.
 - Set `PUBLIC_SITE_URL` in Netlify (and locally via `.env`) so canonical URLs and `@astrojs/sitemap` use your real domain.
 - Create a Supabase project and share (or add) `PUBLIC_SUPABASE_URL` + `PUBLIC_SUPABASE_ANON_KEY` in Netlify so the UI can read cached rates.
